@@ -106,89 +106,101 @@ end
 
 local function ESPPlayer(targetPlayer)
     if not isESPActive then return end
+    if targetPlayer == player then return end  
     if not targetPlayer.Character then return end
     local character = targetPlayer.Character
     local head = character:FindFirstChild("Head")
     if not head then return end
 
-    local outlineHighlight = Instance.new("Highlight")
-    outlineHighlight.Name = "OutlineHighlight"
-    outlineHighlight.Adornee = character
-    outlineHighlight.FillTransparency = 1
-    outlineHighlight.OutlineTransparency = 0
-    outlineHighlight.OutlineColor = Color3.fromRGB(255, 255, 0)
-    outlineHighlight.Parent = character
+    
+    if not character:FindFirstChild("ESP") then
+        local outlineHighlight = Instance.new("Highlight")
+        outlineHighlight.Name = "OutlineHighlight"
+        outlineHighlight.Adornee = character
+        outlineHighlight.FillTransparency = 1
+        outlineHighlight.OutlineTransparency = 0
+        outlineHighlight.OutlineColor = Color3.fromRGB(255, 255, 0)
+        outlineHighlight.Parent = character
 
-    local espGui = Instance.new("BillboardGui")
-    espGui.Name = "ESP"
-    espGui.Adornee = head
-    espGui.Size = UDim2.new(6, 0, 2, 0)
-    espGui.StudsOffset = Vector3.new(0, 3, 0)
-    espGui.AlwaysOnTop = true
+        local espGui = Instance.new("BillboardGui")
+        espGui.Name = "ESP"
+        espGui.Adornee = head
+        espGui.Size = UDim2.new(6, 0, 2, 0)
+        espGui.StudsOffset = Vector3.new(0, 3, 0)
+        espGui.AlwaysOnTop = true
 
-    local nameLabel = Instance.new("TextLabel")
-    nameLabel.Size = UDim2.new(1, 0, 0.3, 0)
-    nameLabel.BackgroundTransparency = 1
-    nameLabel.TextColor3 = Color3.new(1, 1, 1)
-    nameLabel.TextStrokeTransparency = 0.5
-    nameLabel.TextScaled = true
-    nameLabel.Font = Enum.Font.SourceSansBold
-    nameLabel.Parent = espGui
+        local nameLabel = Instance.new("TextLabel")
+        nameLabel.Size = UDim2.new(1, 0, 0.3, 0)
+        nameLabel.BackgroundTransparency = 1
+        nameLabel.TextColor3 = Color3.new(1, 1, 1)
+        nameLabel.TextStrokeTransparency = 0.5
+        nameLabel.TextScaled = true
+        nameLabel.Font = Enum.Font.SourceSansBold
+        nameLabel.Parent = espGui
 
-    local healthBar = Instance.new("Frame")
-    healthBar.Size = UDim2.new(1, 0, 0.15, 0)
-    healthBar.Position = UDim2.new(0, 0, 0.8, 0)
-    healthBar.BackgroundColor3 = Color3.new(0, 0, 0)
-    healthBar.BorderSizePixel = 0
-    healthBar.Parent = espGui
+        local healthBar = Instance.new("Frame")
+        healthBar.Size = UDim2.new(1, 0, 0.15, 0)
+        healthBar.Position = UDim2.new(0, 0, 0.8, 0)
+        healthBar.BackgroundColor3 = Color3.new(0, 0, 0)
+        healthBar.BorderSizePixel = 0
+        healthBar.Parent = espGui
 
-    local healthFill = Instance.new("Frame")
-    healthFill.Size = UDim2.new(1, 0, 1, 0)
-    healthFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-    healthFill.BorderSizePixel = 0
-    healthFill.Parent = healthBar
+        local healthFill = Instance.new("Frame")
+        healthFill.Size = UDim2.new(1, 0, 1, 0)
+        healthFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        healthFill.BorderSizePixel = 0
+        healthFill.Parent = healthBar
 
-    local function updateESP()
-        if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") then
-            local humanoid = character.Humanoid
-            local rootPart = character.HumanoidRootPart
-            healthFill.Size = UDim2.new(humanoid.Health / humanoid.MaxHealth, 0, 1, 0)
-            local distance = (player.Character.HumanoidRootPart.Position - rootPart.Position).Magnitude
-            nameLabel.Text = targetPlayer.Name .. " (" .. math.floor(distance) .. " studs)"
-            if distance < 20 then
-                outlineHighlight.OutlineColor = Color3.fromRGB(255, 0, 0)
-            else
-                outlineHighlight.OutlineColor = Color3.fromRGB(255, 255, 0)
+        
+
+        local function updateESP()
+            if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") then
+                local humanoid = character.Humanoid
+                local rootPart = character.HumanoidRootPart
+                healthFill.Size = UDim2.new(humanoid.Health / humanoid.MaxHealth, 0, 1, 0)
+                local distance = (player.Character.HumanoidRootPart.Position - rootPart.Position).Magnitude
+                nameLabel.Text = targetPlayer.Name .. " (" .. math.floor(distance) .. " studs)"
+                if distance < 20 then
+                    outlineHighlight.OutlineColor = Color3.fromRGB(255, 0, 0)
+                else
+                    outlineHighlight.OutlineColor = Color3.fromRGB(255, 255, 0)
+                end
             end
         end
-    end
 
-    character.Humanoid.HealthChanged:Connect(updateESP)
-    game:GetService("RunService").RenderStepped:Connect(updateESP)
-    espGui.Parent = head
+        
+        character.Humanoid.HealthChanged:Connect(updateESP)
+        game:GetService("RunService").RenderStepped:Connect(updateESP)
+
+        
+        espGui.Parent = head
+        
+        character:SetAttribute("ESP", true)
+    end
 end
+
 
 local function toggleESP(state)
     isESPActive = state
     for _, targetPlayer in pairs(game.Players:GetPlayers()) do
         if targetPlayer ~= player then
             if state then
-
-                ESPPlayer(targetPlayer)
+                ESPPlayer(targetPlayer)  
             else
-
-                if targetPlayer.Character then
-                    local head = targetPlayer.Character:FindFirstChild("Head")
-                    if head then
-                        local espGui = head:FindFirstChild("ESP")
-                        if espGui then
-                            espGui:Destroy()
-                        end
+                
+                local character = targetPlayer.Character
+                if character then
+                    local espGui = character:FindFirstChild("Head") and character.Head:FindFirstChild("ESP")
+                    if espGui then
+                        espGui:Destroy()
                     end
-                    local outlineHighlight = targetPlayer.Character:FindFirstChild("OutlineHighlight")
-                    if outlineHighlight then
-                        outlineHighlight:Destroy()
+                    
+                    local highlight = character:FindFirstChild("OutlineHighlight")
+                    if highlight then
+                        highlight:Destroy()
                     end
+                    
+                    character:SetAttribute("ESP", nil)
                 end
             end
         end
