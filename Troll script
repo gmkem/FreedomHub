@@ -1,0 +1,344 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+
+local currentPOVPlayer = nil
+local currentWarpPlayer = nil
+local isPOVActive = false
+local isSpeedActive = false
+local isNoclipActive = false
+local isRotating = false
+local rotationSpeed = 50
+local isESPActive = false
+
+local function setPOV(targetPlayer)
+    if targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
+        camera.CameraSubject = targetPlayer.Character.Head
+        camera.CameraType = Enum.CameraType.Custom
+    end
+end
+
+local function resetPOV()
+    camera.CameraSubject = player.Character.Humanoid
+    camera.CameraType = Enum.CameraType.Custom
+end
+
+local function toggleSpeed(state)
+    if state then
+        player.Character.Humanoid.WalkSpeed = 100
+        isSpeedActive = true
+    else
+        player.Character.Humanoid.WalkSpeed = 16
+        isSpeedActive = false
+    end
+end
+
+local function toggleNoclip(state)
+    isNoclipActive = state
+    game:GetService("RunService").Stepped:Connect(function()
+        if isNoclipActive and player.Character then
+            for _, part in pairs(player.Character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        elseif player.Character then
+            for _, part in pairs(player.Character:GetChildren()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = true
+                end
+            end
+        end
+    end)
+end
+
+local function warpToPlayer(targetPlayer)
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character:SetPrimaryPartCFrame(targetPlayer.Character.HumanoidRootPart.CFrame)
+    end
+end
+
+local function giveWarpItem()
+    local tool = Instance.new("Tool")
+    tool.Name = "วาปไปจุดที่เลือก"
+    tool.RequiresHandle = true
+    tool.Parent = player.Backpack
+
+    local handle = Instance.new("Part")
+    handle.Size = Vector3.new(1, 1, 1)
+    handle.Anchored = false
+    handle.CanCollide = false
+    handle.Name = "Handle"
+    handle.Parent = tool
+
+    tool.Activated:Connect(function()
+        local mouse = player:GetMouse()
+        local targetPosition = mouse.Hit.p
+        player.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+    end)
+end
+
+local function startRotation(speed)
+    isRotating = true
+    local humanoid = player.Character:FindFirstChild("Humanoid")
+    if humanoid then
+        while isRotating do
+            player.Character:SetPrimaryPartCFrame(player.Character.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(speed), 0))
+            wait(0.01)
+        end
+    end
+end
+
+local function stopRotation()
+    isRotating = false
+end
+
+local function updatePlayerList()
+    local playersList = {}
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player then
+            table.insert(playersList, otherPlayer.Name)
+        end
+    end
+    return playersList
+end
+
+local function ESPPlayer(targetPlayer)
+    if not isESPActive then return end
+    if not targetPlayer.Character then return end
+    local character = targetPlayer.Character
+    local head = character:FindFirstChild("Head")
+    if not head then return end
+
+    local outlineHighlight = Instance.new("Highlight")
+    outlineHighlight.Name = "OutlineHighlight"
+    outlineHighlight.Adornee = character
+    outlineHighlight.FillTransparency = 1
+    outlineHighlight.OutlineTransparency = 0
+    outlineHighlight.OutlineColor = Color3.fromRGB(255, 255, 0)
+    outlineHighlight.Parent = character
+
+    local espGui = Instance.new("BillboardGui")
+    espGui.Name = "ESP"
+    espGui.Adornee = head
+    espGui.Size = UDim2.new(6, 0, 2, 0)
+    espGui.StudsOffset = Vector3.new(0, 3, 0)
+    espGui.AlwaysOnTop = true
+
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Size = UDim2.new(1, 0, 0.3, 0)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.TextColor3 = Color3.new(1, 1, 1)
+    nameLabel.TextStrokeTransparency = 0.5
+    nameLabel.TextScaled = true
+    nameLabel.Font = Enum.Font.SourceSansBold
+    nameLabel.Parent = espGui
+
+    local healthBar = Instance.new("Frame")
+    healthBar.Size = UDim2.new(1, 0, 0.15, 0)
+    healthBar.Position = UDim2.new(0, 0, 0.8, 0)
+    healthBar.BackgroundColor3 = Color3.new(0, 0, 0)
+    healthBar.BorderSizePixel = 0
+    healthBar.Parent = espGui
+
+    local healthFill = Instance.new("Frame")
+    healthFill.Size = UDim2.new(1, 0, 1, 0)
+    healthFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    healthFill.BorderSizePixel = 0
+    healthFill.Parent = healthBar
+
+    local function updateESP()
+        if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") then
+            local humanoid = character.Humanoid
+            local rootPart = character.HumanoidRootPart
+            healthFill.Size = UDim2.new(humanoid.Health / humanoid.MaxHealth, 0, 1, 0)
+            local distance = (player.Character.HumanoidRootPart.Position - rootPart.Position).Magnitude
+            nameLabel.Text = targetPlayer.Name .. " (" .. math.floor(distance) .. " studs)"
+            if distance < 20 then
+                outlineHighlight.OutlineColor = Color3.fromRGB(255, 0, 0)
+            else
+                outlineHighlight.OutlineColor = Color3.fromRGB(255, 255, 0)
+            end
+        end
+    end
+
+    character.Humanoid.HealthChanged:Connect(updateESP)
+    game:GetService("RunService").RenderStepped:Connect(updateESP)
+    espGui.Parent = head
+end
+
+local function toggleESP(state)
+    isESPActive = state
+    for _, targetPlayer in pairs(game.Players:GetPlayers()) do
+        if targetPlayer ~= player then
+            if state then
+
+                ESPPlayer(targetPlayer)
+            else
+
+                if targetPlayer.Character then
+                    local head = targetPlayer.Character:FindFirstChild("Head")
+                    if head then
+                        local espGui = head:FindFirstChild("ESP")
+                        if espGui then
+                            espGui:Destroy()
+                        end
+                    end
+                    local outlineHighlight = targetPlayer.Character:FindFirstChild("OutlineHighlight")
+                    if outlineHighlight then
+                        outlineHighlight:Destroy()
+                    end
+                end
+            end
+        end
+    end
+end
+
+local Window = OrionLib:MakeWindow({
+    Name = "FREEDOM HUB",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "OrionPOVConfig"
+})
+
+local Tab1 = Window:MakeTab({
+    Name = "เมนู",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local playerDropdown1 = Tab1:AddDropdown({
+    Name = "เลือกผู้เล่นเพื่อดู POV",
+    Options = updatePlayerList(),
+    Default = "",
+    Searchable = true,
+    Callback = function(selectedPlayerName)
+        local targetPlayer = game.Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer then
+            currentPOVPlayer = targetPlayer
+        end
+    end
+})
+
+local function refreshPlayerDropdown()
+    while true do
+        wait(5)
+        playerDropdown1:Refresh(updatePlayerList(), true)
+    end
+end
+
+spawn(refreshPlayerDropdown)
+
+Tab1:AddToggle({
+    Name = "เปิด/ปิด POV",
+    Default = false,
+    Callback = function(state)
+        if state then
+            if currentPOVPlayer then
+                setPOV(currentPOVPlayer)
+                isPOVActive = true
+            end
+        else
+            resetPOV()
+            isPOVActive = false
+        end
+    end
+})
+
+Tab1:AddToggle({
+    Name = "วิ่งเร็ว",
+    Default = false,
+    Callback = function(state)
+        toggleSpeed(state)
+    end
+})
+
+Tab1:AddToggle({
+    Name = "กระโดดสูง",
+    Default = false,
+    Callback = function(state)
+        if state then
+            local humanoid = player.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                humanoid.JumpHeight = 100
+            end
+        else
+            local humanoid = player.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                humanoid.JumpHeight = 7
+            end
+        end
+    end
+})
+
+Tab1:AddToggle({
+    Name = "Noclip",
+    Default = false,
+    Callback = function(state)
+        toggleNoclip(state)
+    end
+})
+
+Tab1:AddToggle({
+    Name = "หมุนตัวอยู่กับที่",
+    Default = false,
+    Callback = function(state)
+        if state then
+            startRotation(50)
+        else
+            stopRotation()
+        end
+    end
+})
+
+local Tab2 = Window:MakeTab({
+    Name = "วาป",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local playerDropdown2 = Tab2:AddDropdown({
+    Name = "เลือกผู้เล่นเพื่อวาปไปหา",
+    Options = updatePlayerList(),
+    Default = "",
+    Searchable = true,
+    Callback = function(selectedPlayerName)
+        local targetPlayer = game.Players:FindFirstChild(selectedPlayerName)
+        if targetPlayer then
+            currentWarpPlayer = targetPlayer
+        end
+    end
+})
+
+Tab2:AddButton({
+    Name = "วาปไปหาผู้เล่น",
+    Callback = function()
+        if currentWarpPlayer then
+            warpToPlayer(currentWarpPlayer)
+        end
+    end
+})
+
+Tab2:AddButton({
+    Name = "เสกไอเทมวาป",
+    Callback = function()
+        giveWarpItem()
+    end
+})
+
+local Tab3 = Window:MakeTab({
+    Name = "ESP",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+Tab3:AddToggle({
+    Name = "ESP player",
+    Default = false,
+    Callback = function(state)
+        toggleESP(state)
+    end
+})
+
+OrionLib:Init()
