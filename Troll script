@@ -11,6 +11,37 @@ local isNoclipActive = false
 local isRotating = false
 local rotationSpeed = 100
 local isESPActive = false
+local jumpPower = 100
+local isJumpEnabled = false
+
+local function applyJumpPower()
+    if isJumpEnabled then
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoid = character:WaitForChild("Humanoid")
+
+        for _, obj in pairs(character:GetChildren()) do
+            if obj:IsA("BodyVelocity") then
+                obj:Destroy()
+            end
+        end
+
+        local bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.MaxForce = Vector3.new(400000, 400000, 400000)
+        bodyVelocity.Velocity = Vector3.new(0, jumpPower, 0)
+        bodyVelocity.Parent = character:WaitForChild("HumanoidRootPart")
+
+        game:GetService("Debris"):AddItem(bodyVelocity, 0.1)
+    end
+end
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+humanoid.Jumping:Connect(function()
+    applyJumpPower()
+end)
 
 local function setPOV(targetPlayer)
     if targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
@@ -112,7 +143,7 @@ local function ESPPlayer(targetPlayer)
     local head = character:FindFirstChild("Head")
     if not head then return end
 
-    
+
     if not character:FindFirstChild("ESP") then
         local outlineHighlight = Instance.new("Highlight")
         outlineHighlight.Name = "OutlineHighlight"
@@ -151,7 +182,7 @@ local function ESPPlayer(targetPlayer)
         healthFill.BorderSizePixel = 0
         healthFill.Parent = healthBar
 
-        
+
 
         local function updateESP()
             if character and character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") then
@@ -168,13 +199,13 @@ local function ESPPlayer(targetPlayer)
             end
         end
 
-        
+
         character.Humanoid.HealthChanged:Connect(updateESP)
         game:GetService("RunService").RenderStepped:Connect(updateESP)
 
-        
+
         espGui.Parent = head
-        
+
         character:SetAttribute("ESP", true)
     end
 end
@@ -187,19 +218,19 @@ local function toggleESP(state)
             if state then
                 ESPPlayer(targetPlayer)  
             else
-                
+
                 local character = targetPlayer.Character
                 if character then
                     local espGui = character:FindFirstChild("Head") and character.Head:FindFirstChild("ESP")
                     if espGui then
                         espGui:Destroy()
                     end
-                    
+
                     local highlight = character:FindFirstChild("OutlineHighlight")
                     if highlight then
                         highlight:Destroy()
                     end
-                    
+
                     character:SetAttribute("ESP", nil)
                 end
             end
@@ -270,17 +301,7 @@ Tab1:AddToggle({
     Name = "กระโดดสูง",
     Default = false,
     Callback = function(state)
-        if state then
-            local humanoid = player.Character:FindFirstChild("Humanoid")
-            if humanoid then
-                humanoid.JumpHeight = 100
-            end
-        else
-            local humanoid = player.Character:FindFirstChild("Humanoid")
-            if humanoid then
-                humanoid.JumpHeight = 7
-            end
-        end
+        isJumpEnabled = state
     end
 })
 
