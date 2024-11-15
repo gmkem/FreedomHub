@@ -9,7 +9,7 @@ local isPOVActive = false
 local isSpeedActive = false
 local isNoclipActive = false
 local isRotating = false
-local rotationSpeed = 50
+local rotationSpeed = 100
 local isESPActive = false
 
 local function setPOV(targetPlayer)
