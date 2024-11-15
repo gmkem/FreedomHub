@@ -55,15 +55,34 @@ local function resetPOV()
     camera.CameraType = Enum.CameraType.Custom
 end
 
-local function toggleSpeed(state)
-    if state then
-        player.Character.Humanoid.WalkSpeed = 100
-        isSpeedActive = true
-    else
-        player.Character.Humanoid.WalkSpeed = 16
-        isSpeedActive = false
+local function enableSpeedBoost()
+    local humanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = 100
     end
 end
+
+local function disableSpeedBoost()
+    local humanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = 16
+    end
+end
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    local humanoid = game.Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+    if humanoid then
+        if isSpeedActive then
+            if humanoid.WalkSpeed ~= 100 then
+                enableSpeedBoost()
+            end
+        else
+            if humanoid.WalkSpeed ~= 16 then
+                disableSpeedBoost()
+            end
+        end
+    end
+end)
 
 local function toggleNoclip(state)
     isNoclipActive = state
@@ -92,7 +111,7 @@ end
 
 local function giveWarpItem()
     local tool = Instance.new("Tool")
-    tool.Name = "วาปไปจุดที่เลือก"
+    tool.Name = "เลือกจุดวาป"
     tool.RequiresHandle = true
     tool.Parent = player.Backpack
 
@@ -293,7 +312,7 @@ Tab1:AddToggle({
     Name = "วิ่งเร็ว",
     Default = false,
     Callback = function(state)
-        toggleSpeed(state)
+        isSpeedActive = state
     end
 })
 
@@ -306,7 +325,7 @@ Tab1:AddToggle({
 })
 
 Tab1:AddToggle({
-    Name = "Noclip",
+    Name = "Noclip(เดินทะลุ)",
     Default = false,
     Callback = function(state)
         toggleNoclip(state)
@@ -314,7 +333,7 @@ Tab1:AddToggle({
 })
 
 Tab1:AddToggle({
-    Name = "หมุนตัวอยู่กับที่",
+    Name = "หมุนตัว",
     Default = false,
     Callback = function(state)
         if state then
