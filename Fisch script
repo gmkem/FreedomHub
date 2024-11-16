@@ -21,35 +21,35 @@ AllFuncs = {}
 AllFuncs['Farm Fish'] = function()
     local RodName = ReplicatedStorage:WaitForChild("playerstats")[LocalPlayer.Name].Stats.rod.Value
     local Rod
-    
+
     while Config['Farm Fish'] and task.wait() do
         Rod = Backpack:FindFirstChild(RodName)
         if Rod then
             LocalPlayer.Character.Humanoid:EquipTool(Rod)
         end
-        
+
         if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character[RodName]:FindFirstChild("bobber") then
             local XyzClone = ReplicatedStorage.resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
             XyzClone.Parent = PlayerGui:WaitForChild("hud").safezone:WaitForChild("backpack")
             XyzClone.Name = "Lure"
             XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
-            
+
             repeat
                 pcall(function()
                     PlayerGui.shakeui.safezone.button.Size = UDim2.new(1001, 0, 1001, 0)
                     VirtualUser:Button1Down(Vector2.new(1, 1))
                     VirtualUser:Button1Up(Vector2.new(1, 1))
                 end)
-                
+
                 local lurePercent = tostring(math.floor(LocalPlayer.Character[RodName].values.lure.Value * 100) / 100)
                 XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. lurePercent .. "%"
                 RunService.Heartbeat:Wait()
             until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character[RodName].values.bite.Value or not Config['Farm Fish']
-            
+
             XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
             task.wait(1.5)
             XyzClone:Destroy()
-            
+
             while LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character[RodName].values.bite.Value and Config['Farm Fish'] do
                 ReplicatedStorage.events.reelfinished:FireServer(1e18, true)
                 task.wait(0.5)
@@ -68,7 +68,19 @@ local function savePosition()
     if character and character:FindFirstChild("HumanoidRootPart") then
         Config['SavedPosition'] = character.HumanoidRootPart.Position
         Config['SavedOrientation'] = character.HumanoidRootPart.CFrame - character.HumanoidRootPart.Position
-        print("ตำแหน่งและทิศทางถูกบันทึก!")
+        OrionLib:MakeNotification({
+            Name = "พิกัดถูกบันทึก!",
+            Content = "พิกัดและทิศทางของคุณถูกบันทึกเรียบร้อยแล้ว.",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
+    else
+        OrionLib:MakeNotification({
+            Name = "บันทึกไม่สำเร็จ!",
+            Content = "ไม่พบตัวละครหรือ HumanoidRootPart.",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
     end
 end
 
@@ -82,7 +94,12 @@ local function teleportToSavedPosition()
             end
         end
     else
-        print("ไม่มีตำแหน่งที่บันทึกไว้!")
+        OrionLib:MakeNotification({
+            Name = "ไม่มีพิกัดที่บันทึกไว้!",
+            Content = "กรุณาบันทึกพิกัดก่อนทำการเลือกพิกัด.",
+            Image = "rbxassetid://4483345998",
+            Time = 5
+        })
     end
 end
 
@@ -93,7 +110,7 @@ local AutomationTab = Window:MakeTab({
 })
 
 AutomationTab:AddToggle({
-    Name = "Auto Fish",
+    Name = "ตกปลาอัตโนมัติ",
     Default = false,
     Callback = function(Value)
         Config['Farm Fish'] = Value
@@ -104,7 +121,7 @@ AutomationTab:AddToggle({
 })
 
 AutomationTab:AddToggle({
-    Name = "Auto Teleport",
+    Name = "เลือกพิกัด",
     Default = false,
     Callback = function(Value)
         Config['AutoTeleport'] = Value
@@ -115,9 +132,55 @@ AutomationTab:AddToggle({
 })
 
 AutomationTab:AddButton({
-    Name = "Save Position & Orientation",
+    Name = "บันทึกพิกัด",
     Callback = function()
         savePosition()
+    end
+})
+
+AutomationTab:AddButton({
+    Name = "ขายปลาทั้งหมด",
+    Callback = function()
+        local npc = workspace.world.npcs:FindFirstChild("Marc Merchant")
+        if npc and npc:FindFirstChild("merchant") and npc.merchant:FindFirstChild("sellall") then
+            npc.merchant.sellall:InvokeServer()
+            OrionLib:MakeNotification({
+                Name = "ขายปลาทั้งหมดสำเร็จ!",
+                Content = "ปลาทั้งหมดถูกขายเรียบร้อยแล้ว.",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        else
+            OrionLib:MakeNotification({
+                Name = "ขายปลาล้มเหลว!",
+                Content = "ไม่พบ 'Marc Merchant' หรือฟังก์ชัน 'sellall'.",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
+    end
+})
+
+AutomationTab:AddButton({
+    Name = "ขายปลาทีละตัว(ต้องถือไว้)",
+    Callback = function()
+        local npc = workspace.world.npcs:FindFirstChild("Marc Merchant")
+        if npc and npc:FindFirstChild("merchant") and npc.merchant:FindFirstChild("sell") then
+            npc.merchant.sell:InvokeServer()
+            OrionLib:MakeNotification({
+                Name = "ขายปลาสำเร็จ!",
+                Content = "ปลาหนึ่งตัวถูกขายเรียบร้อยแล้ว.",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        else
+            OrionLib:MakeNotification({
+                Name = "ขายปลาล้มเหลว!",
+                Content = "ไม่พบ 'Marc Merchant' หรือฟังก์ชัน 'sell'.",
+                Image = "rbxassetid://4483345998",
+                Time = 5
+            })
+        end
     end
 })
 
