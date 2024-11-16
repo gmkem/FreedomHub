@@ -1,0 +1,124 @@
+local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+local Window = OrionLib:MakeWindow({Name = "Fishing Automation", HidePremium = false, SaveConfig = true, ConfigFolder = "FishingConfig"})
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local VirtualUser = game:GetService("VirtualUser")
+local RunService = game:GetService("RunService")
+
+Config = {
+    ['Farm Fish'] = false,
+    ['SavedPosition'] = nil,
+    ['SavedOrientation'] = nil,
+    ['TeleportToSavedPosition'] = false,
+    ['AutoTeleport'] = false
+}
+
+AllFuncs = {}
+AllFuncs['Farm Fish'] = function()
+    local RodName = ReplicatedStorage:WaitForChild("playerstats")[LocalPlayer.Name].Stats.rod.Value
+    local Rod
+    
+    while Config['Farm Fish'] and task.wait() do
+        Rod = Backpack:FindFirstChild(RodName)
+        if Rod then
+            LocalPlayer.Character.Humanoid:EquipTool(Rod)
+        end
+        
+        if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character[RodName]:FindFirstChild("bobber") then
+            local XyzClone = ReplicatedStorage.resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
+            XyzClone.Parent = PlayerGui:WaitForChild("hud").safezone:WaitForChild("backpack")
+            XyzClone.Name = "Lure"
+            XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
+            
+            repeat
+                pcall(function()
+                    PlayerGui.shakeui.safezone.button.Size = UDim2.new(1001, 0, 1001, 0)
+                    VirtualUser:Button1Down(Vector2.new(1, 1))
+                    VirtualUser:Button1Up(Vector2.new(1, 1))
+                end)
+                
+                local lurePercent = tostring(math.floor(LocalPlayer.Character[RodName].values.lure.Value * 100) / 100)
+                XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. lurePercent .. "%"
+                RunService.Heartbeat:Wait()
+            until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character[RodName].values.bite.Value or not Config['Farm Fish']
+            
+            XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
+            task.wait(1.5)
+            XyzClone:Destroy()
+            
+            while LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character[RodName].values.bite.Value and Config['Farm Fish'] do
+                ReplicatedStorage.events.reelfinished:FireServer(1e18, true)
+                task.wait(0.5)
+            end
+        else
+            pcall(function()
+                LocalPlayer.Character[RodName].events.cast:FireServer(1e18)
+            end)
+            task.wait(2)
+        end
+    end
+end
+
+local function savePosition()
+    local character = LocalPlayer.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        Config['SavedPosition'] = character.HumanoidRootPart.Position
+        Config['SavedOrientation'] = character.HumanoidRootPart.CFrame - character.HumanoidRootPart.Position
+        print("ตำแหน่งและทิศทางถูกบันทึก!")
+    end
+end
+
+local function teleportToSavedPosition()
+    if Config['SavedPosition'] and Config['SavedOrientation'] then
+        local character = LocalPlayer.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            while Config['AutoTeleport'] do
+                character.HumanoidRootPart.CFrame = CFrame.new(Config['SavedPosition']) * Config['SavedOrientation']
+                task.wait(0.5)
+            end
+        end
+    else
+        print("ไม่มีตำแหน่งที่บันทึกไว้!")
+    end
+end
+
+local AutomationTab = Window:MakeTab({
+    Name = "Automation",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+AutomationTab:AddToggle({
+    Name = "Auto Fish",
+    Default = false,
+    Callback = function(Value)
+        Config['Farm Fish'] = Value
+        if Value then
+            spawn(AllFuncs['Farm Fish'])
+        end
+    end
+})
+
+AutomationTab:AddToggle({
+    Name = "Auto Teleport",
+    Default = false,
+    Callback = function(Value)
+        Config['AutoTeleport'] = Value
+        if Value then
+            teleportToSavedPosition()
+        end
+    end
+})
+
+AutomationTab:AddButton({
+    Name = "Save Position & Orientation",
+    Callback = function()
+        savePosition()
+    end
+})
+
+OrionLib:Init()
