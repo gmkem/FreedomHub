@@ -1,1 +1,1 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/gmkem/FreedomHub/refs/heads/main/Fisch%20script",true))();
+loadstring(game:HttpGet("https://raw.githubusercontent.com/gmkem/FreedomHub/refs/heads/main/Fisch",true))();
