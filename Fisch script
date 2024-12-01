@@ -1,5 +1,5 @@
 local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
-local Window = OrionLib:MakeWindow({Name = "Fishing Automation", HidePremium = false, SaveConfig = true, ConfigFolder = "FishingConfig"})
+local Window = OrionLib:MakeWindow({Name = "FREEDOM HUB", HidePremium = false, SaveConfig = true, ConfigFolder = "FishingConfig"})
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
@@ -141,7 +141,7 @@ AutomationTab:AddButton({
 AutomationTab:AddButton({
     Name = "ขายปลาทั้งหมด",
     Callback = function()
-        local npc = workspace.world.npcs:FindFirstChild("Marc Merchant")
+        local npc = workspace.world.npcs:FindFirstChild("Mann Merchant")
         if npc and npc:FindFirstChild("merchant") and npc.merchant:FindFirstChild("sellall") then
             npc.merchant.sellall:InvokeServer()
             OrionLib:MakeNotification({
@@ -153,7 +153,7 @@ AutomationTab:AddButton({
         else
             OrionLib:MakeNotification({
                 Name = "ขายปลาล้มเหลว!",
-                Content = "ไม่พบ 'Marc Merchant' หรือฟังก์ชัน 'sellall'.",
+                Content = "ไม่พบ 'Mann Merchant' หรือฟังก์ชัน 'sellall'.",
                 Image = "rbxassetid://4483345998",
                 Time = 5
             })
@@ -164,7 +164,7 @@ AutomationTab:AddButton({
 AutomationTab:AddButton({
     Name = "ขายปลาทีละตัว(ต้องถือไว้)",
     Callback = function()
-        local npc = workspace.world.npcs:FindFirstChild("Marc Merchant")
+        local npc = workspace.world.npcs:FindFirstChild("Mann Merchant")
         if npc and npc:FindFirstChild("merchant") and npc.merchant:FindFirstChild("sell") then
             npc.merchant.sell:InvokeServer()
             OrionLib:MakeNotification({
@@ -176,7 +176,7 @@ AutomationTab:AddButton({
         else
             OrionLib:MakeNotification({
                 Name = "ขายปลาล้มเหลว!",
-                Content = "ไม่พบ 'Marc Merchant' หรือฟังก์ชัน 'sell'.",
+                Content = "ไม่พบ 'Mann Merchant' หรือฟังก์ชัน 'sell'.",
                 Image = "rbxassetid://4483345998",
                 Time = 5
             })
