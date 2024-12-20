@@ -1,133 +1,128 @@
 local FreedomHub = {}
 
--- UI Initialization
-FreedomHub.__index = FreedomHub
-FreedomHub.MainGui = nil
-
-function FreedomHub:Initialize()
-    -- Create ScreenGui
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "FreedomHub"
-    screenGui.ResetOnSpawn = false
-    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-
-    self.MainGui = screenGui
-end
-
+-- สร้างหน้าต่างหลัก
 function FreedomHub:MakeWindow(config)
-    config = config or {}
-    local name = config.Name or "Freedom Hub"
+    local Window = {}
+    Window.Title = config.Name or "Freedom Hub"
+    Window.Theme = config.Theme or "Light"
+    Window.Tabs = {}
+
+    -- UI Framework เริ่มต้น
+    local ScreenGui = Instance.new("ScreenGui")
+    local MainFrame = Instance.new("Frame")
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     
-    -- Create Main Window
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Name = "MainFrame"
-    mainFrame.Size = UDim2.new(0, 400, 0, 500)
-    mainFrame.Position = UDim2.new(0.5, -200, 0.5, -250)
-    mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    mainFrame.BorderSizePixel = 0
-    mainFrame.Parent = self.MainGui
-
-    -- Title
-    local title = Instance.new("TextLabel")
-    title.Name = "Title"
-    title.Text = name
-    title.Size = UDim2.new(1, 0, 0, 50)
-    title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.Font = Enum.Font.SourceSansBold
-    title.TextScaled = true
-    title.Parent = mainFrame
-
-    return mainFrame
-end
-
-function FreedomHub:CreateTab(parent, tabName)
-    local tabFrame = Instance.new("Frame")
-    tabFrame.Name = tabName or "Tab"
-    tabFrame.Size = UDim2.new(1, 0, 1, -50)
-    tabFrame.Position = UDim2.new(0, 0, 0, 50)
-    tabFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    tabFrame.Visible = true
-    tabFrame.Parent = parent
-
-    return tabFrame
-end
-
-function FreedomHub:AddButton(tab, config)
-    local button = Instance.new("TextButton")
-    button.Name = config.Name or "Button"
-    button.Text = config.Name or "Button"
-    button.Size = UDim2.new(1, -20, 0, 40)
-    button.Position = UDim2.new(0, 10, 0, 10)
-    button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Font = Enum.Font.SourceSans
-    button.TextScaled = true
-    button.Parent = tab
-
-    button.MouseButton1Click:Connect(function()
-        if config.Callback then
-            pcall(config.Callback)
+    MainFrame.Parent = ScreenGui
+    MainFrame.Size = UDim2.new(0, 400, 0, 300)
+    MainFrame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+    
+    function Window:CreateTab(tabConfig)
+        local Tab = {}
+        Tab.Name = tabConfig.Name or "Tab"
+        Tab.Elements = {}
+        
+        local TabButton = Instance.new("TextButton")
+        TabButton.Parent = MainFrame
+        TabButton.Text = Tab.Name
+        TabButton.Size = UDim2.new(0, 100, 0, 30)
+        TabButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+        
+        -- เพิ่มปุ่ม
+        function Tab:AddButton(buttonConfig)
+            local Button = {}
+            Button.Name = buttonConfig.Name or "Button"
+            Button.Callback = buttonConfig.Callback or function() end
+            
+            local ButtonUI = Instance.new("TextButton")
+            ButtonUI.Parent = MainFrame
+            ButtonUI.Text = Button.Name
+            ButtonUI.Size = UDim2.new(0, 150, 0, 40)
+            ButtonUI.Position = UDim2.new(0, 20, 0, (#Tab.Elements * 50) + 40)
+            ButtonUI.BackgroundColor3 = Color3.new(0.4, 0.4, 0.4)
+            
+            ButtonUI.MouseButton1Click:Connect(function()
+                Button.Callback()
+            end)
+            
+            table.insert(Tab.Elements, Button)
         end
-    end)
-end
-
-function FreedomHub:AddToggle(tab, config)
-    local frame = Instance.new("Frame")
-    frame.Name = config.Name or "Toggle"
-    frame.Size = UDim2.new(1, -20, 0, 40)
-    frame.Position = UDim2.new(0, 10, 0, 60)
-    frame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    frame.Parent = tab
-
-    local toggle = Instance.new("TextButton")
-    toggle.Name = "Toggle"
-    toggle.Size = UDim2.new(0, 30, 0, 30)
-    toggle.Position = UDim2.new(0, 5, 0, 5)
-    toggle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    toggle.Parent = frame
-
-    local label = Instance.new("TextLabel")
-    label.Text = config.Name or "Toggle"
-    label.Size = UDim2.new(1, -40, 1, 0)
-    label.Position = UDim2.new(0, 40, 0, 0)
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.BackgroundTransparency = 1
-    label.Font = Enum.Font.SourceSans
-    label.TextScaled = true
-    label.Parent = frame
-
-    local isToggled = false
-
-    toggle.MouseButton1Click:Connect(function()
-        isToggled = not isToggled
-        toggle.BackgroundColor3 = isToggled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-        if config.Callback then
-            pcall(config.Callback, isToggled)
+        
+        -- เพิ่ม Toggle
+        function Tab:AddToggle(toggleConfig)
+            local Toggle = {}
+            Toggle.Name = toggleConfig.Name or "Toggle"
+            Toggle.State = toggleConfig.Default or false
+            Toggle.Callback = toggleConfig.Callback or function() end
+            
+            local ToggleUI = Instance.new("TextButton")
+            ToggleUI.Parent = MainFrame
+            ToggleUI.Text = Toggle.Name .. ": " .. tostring(Toggle.State)
+            ToggleUI.Size = UDim2.new(0, 150, 0, 40)
+            ToggleUI.Position = UDim2.new(0, 20, 0, (#Tab.Elements * 50) + 40)
+            ToggleUI.BackgroundColor3 = Color3.new(0.4, 0.4, 0.4)
+            
+            ToggleUI.MouseButton1Click:Connect(function()
+                Toggle.State = not Toggle.State
+                ToggleUI.Text = Toggle.Name .. ": " .. tostring(Toggle.State)
+                Toggle.Callback(Toggle.State)
+            end)
+            
+            table.insert(Tab.Elements, Toggle)
         end
-    end)
+
+        -- เพิ่ม Slider
+        function Tab:AddSlider(sliderConfig)
+            local Slider = {}
+            Slider.Name = sliderConfig.Name or "Slider"
+            Slider.Min = sliderConfig.Min or 0
+            Slider.Max = sliderConfig.Max or 100
+            Slider.Default = sliderConfig.Default or 50
+            Slider.Callback = sliderConfig.Callback or function() end
+            
+            local SliderFrame = Instance.new("Frame")
+            local SliderButton = Instance.new("TextButton")
+            local SliderValue = Instance.new("TextLabel")
+            
+            SliderFrame.Parent = MainFrame
+            SliderFrame.Size = UDim2.new(0, 200, 0, 50)
+            SliderFrame.Position = UDim2.new(0, 20, 0, (#Tab.Elements * 60) + 40)
+            SliderFrame.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+            
+            SliderButton.Parent = SliderFrame
+            SliderButton.Size = UDim2.new(0, 20, 0, 20)
+            SliderButton.Position = UDim2.new((Slider.Default - Slider.Min) / (Slider.Max - Slider.Min), 0, 0.5, -10)
+            SliderButton.BackgroundColor3 = Color3.new(0.6, 0.6, 0.6)
+            
+            SliderValue.Parent = SliderFrame
+            SliderValue.Size = UDim2.new(0, 50, 0, 20)
+            SliderValue.Position = UDim2.new(1, -60, 0, 15)
+            SliderValue.Text = tostring(Slider.Default)
+            
+            SliderButton.MouseButton1Down:Connect(function()
+                local Mouse = game.Players.LocalPlayer:GetMouse()
+                local MoveConnection
+                
+                MoveConnection = Mouse.Move:Connect(function()
+                    local RelativeX = math.clamp(Mouse.X - SliderFrame.AbsolutePosition.X, 0, SliderFrame.AbsoluteSize.X)
+                    local Value = math.floor(Slider.Min + (RelativeX / SliderFrame.AbsoluteSize.X) * (Slider.Max - Slider.Min))
+                    SliderButton.Position = UDim2.new(RelativeX / SliderFrame.AbsoluteSize.X, -10, 0.5, -10)
+                    SliderValue.Text = tostring(Value)
+                    Slider.Callback(Value)
+                end)
+                
+                game:GetService("UserInputService").InputEnded:Wait()
+                MoveConnection:Disconnect()
+            end)
+            
+            table.insert(Tab.Elements, Slider)
+        end
+        
+        table.insert(Window.Tabs, Tab)
+        return Tab
+    end
+
+    return Window
 end
 
-function FreedomHub:AddDropdown(tab, config)
-    local dropdown = Instance.new("Frame")
-    dropdown.Name = config.Name or "Dropdown"
-    dropdown.Size = UDim2.new(1, -20, 0, 40)
-    dropdown.Position = UDim2.new(0, 10, 0, 110)
-    dropdown.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    dropdown.Parent = tab
-
-    local dropdownText = Instance.new("TextLabel")
-    dropdownText.Text = config.Name or "Dropdown"
-    dropdownText.Size = UDim2.new(1, -20, 1, 0)
-    dropdownText.Position = UDim2.new(0, 10, 0, 0)
-    dropdownText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    dropdownText.BackgroundTransparency = 1
-    dropdownText.Font = Enum.Font.SourceSans
-    dropdownText.TextScaled = true
-    dropdownText.Parent = dropdown
-end
-
--- Initialize Library
-FreedomHub:Initialize()
 return FreedomHub
