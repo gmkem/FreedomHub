@@ -1,167 +1,133 @@
 local FreedomHub = {}
 
--- ระบบธีม
-FreedomHub.Themes = {
-    Default = {
-        Main = Color3.fromRGB(25, 25, 25),
-        Second = Color3.fromRGB(32, 32, 32),
-        Stroke = Color3.fromRGB(60, 60, 60),
-        Divider = Color3.fromRGB(60, 60, 60),
-        Text = Color3.fromRGB(240, 240, 240),
-        TextDark = Color3.fromRGB(150, 150, 150),
-    }
-}
+-- UI Initialization
+FreedomHub.__index = FreedomHub
+FreedomHub.MainGui = nil
 
-FreedomHub.SelectedTheme = "Default"
+function FreedomHub:Initialize()
+    -- Create ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "FreedomHub"
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- ฟังก์ชันเปลี่ยนธีม
-function FreedomHub:SetTheme(themeName)
-    if self.Themes[themeName] then
-        self.SelectedTheme = themeName
-    else
-        warn("ธีมที่เลือกไม่มีอยู่")
-    end
+    self.MainGui = screenGui
 end
 
--- ฟังก์ชันสร้างหน้าต่าง
-function FreedomHub:CreateWindow(properties)
-    local screenGui = Instance.new("ScreenGui")
+function FreedomHub:MakeWindow(config)
+    config = config or {}
+    local name = config.Name or "Freedom Hub"
+    
+    -- Create Main Window
     local mainFrame = Instance.new("Frame")
-    
-    screenGui.Name = properties.Name or "FreedomHub"
-    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    
     mainFrame.Name = "MainFrame"
-    mainFrame.Size = properties.Size or UDim2.new(0.4, 0, 0.6, 0)
-    mainFrame.Position = properties.Position or UDim2.new(0.3, 0, 0.2, 0)
-    mainFrame.BackgroundColor3 = self.Themes[self.SelectedTheme].Main
+    mainFrame.Size = UDim2.new(0, 400, 0, 500)
+    mainFrame.Position = UDim2.new(0.5, -200, 0.5, -250)
+    mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     mainFrame.BorderSizePixel = 0
-    mainFrame.Parent = screenGui
-    
-    -- ระบบ Drag (ลากหน้าต่าง)
-    local dragging, dragInput, dragStart, startPos
-    mainFrame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = mainFrame.Position
+    mainFrame.Parent = self.MainGui
 
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
-    end)
-
-    mainFrame.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement then
-            dragInput = input
-        end
-    end)
-
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if input == dragInput and dragging then
-            local delta = input.Position - dragStart
-            mainFrame.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
-        end
-    end)
+    -- Title
+    local title = Instance.new("TextLabel")
+    title.Name = "Title"
+    title.Text = name
+    title.Size = UDim2.new(1, 0, 0, 50)
+    title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.Font = Enum.Font.SourceSansBold
+    title.TextScaled = true
+    title.Parent = mainFrame
 
     return mainFrame
 end
 
--- ฟังก์ชันสร้างปุ่ม
-function FreedomHub:CreateButton(properties, onClick)
+function FreedomHub:CreateTab(parent, tabName)
+    local tabFrame = Instance.new("Frame")
+    tabFrame.Name = tabName or "Tab"
+    tabFrame.Size = UDim2.new(1, 0, 1, -50)
+    tabFrame.Position = UDim2.new(0, 0, 0, 50)
+    tabFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    tabFrame.Visible = true
+    tabFrame.Parent = parent
+
+    return tabFrame
+end
+
+function FreedomHub:AddButton(tab, config)
     local button = Instance.new("TextButton")
-    button.Name = properties.Name or "Button"
-    button.Size = properties.Size or UDim2.new(0.8, 0, 0.1, 0)
-    button.Position = properties.Position or UDim2.new(0.1, 0, 0.1, 0)
-    button.BackgroundColor3 = self.Themes[self.SelectedTheme].Second
-    button.TextColor3 = self.Themes[self.SelectedTheme].Text
-    button.Text = properties.Text or "Button"
+    button.Name = config.Name or "Button"
+    button.Text = config.Name or "Button"
+    button.Size = UDim2.new(1, -20, 0, 40)
+    button.Position = UDim2.new(0, 10, 0, 10)
+    button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.Font = Enum.Font.SourceSans
-    button.TextSize = 14
-    button.BorderSizePixel = 0
-    button.Parent = properties.Parent
+    button.TextScaled = true
+    button.Parent = tab
 
-    if onClick then
-        button.MouseButton1Click:Connect(onClick)
-    end
-
-    return button
-end
-
--- ฟังก์ชันสร้างข้อความ
-function FreedomHub:CreateLabel(properties)
-    local label = Instance.new("TextLabel")
-    label.Name = properties.Name or "Label"
-    label.Size = properties.Size or UDim2.new(0.8, 0, 0.1, 0)
-    label.Position = properties.Position or UDim2.new(0.1, 0, 0.2, 0)
-    label.BackgroundTransparency = 1
-    label.TextColor3 = self.Themes[self.SelectedTheme].Text
-    label.Text = properties.Text or "Label"
-    label.Font = Enum.Font.SourceSans
-    label.TextSize = 14
-    label.Parent = properties.Parent
-
-    return label
-end
-
--- ฟังก์ชันสร้างแถบเลื่อน (Slider)
-function FreedomHub:CreateSlider(properties, onValueChanged)
-    local sliderFrame = Instance.new("Frame")
-    local sliderBar = Instance.new("Frame")
-    local sliderKnob = Instance.new("Frame")
-
-    sliderFrame.Name = properties.Name or "Slider"
-    sliderFrame.Size = properties.Size or UDim2.new(0.8, 0, 0.1, 0)
-    sliderFrame.Position = properties.Position or UDim2.new(0.1, 0, 0.3, 0)
-    sliderFrame.BackgroundColor3 = self.Themes[self.SelectedTheme].Divider
-    sliderFrame.BorderSizePixel = 0
-    sliderFrame.Parent = properties.Parent
-
-    sliderBar.Size = UDim2.new(1, 0, 0.5, 0)
-    sliderBar.Position = UDim2.new(0, 0, 0.25, 0)
-    sliderBar.BackgroundColor3 = self.Themes[self.SelectedTheme].Stroke
-    sliderBar.Parent = sliderFrame
-
-    sliderKnob.Size = UDim2.new(0, 10, 1, 0)
-    sliderKnob.Position = UDim2.new(0, 0, 0, 0)
-    sliderKnob.BackgroundColor3 = self.Themes[self.SelectedTheme].Text
-    sliderKnob.Parent = sliderFrame
-
-    -- การเลื่อน Slider
-    sliderKnob.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local connection
-            connection = game:GetService("UserInputService").InputChanged:Connect(function(moveInput)
-                if moveInput.UserInputType == Enum.UserInputType.MouseMovement then
-                    local mouseX = moveInput.Position.X
-                    local sliderPosition = sliderFrame.AbsolutePosition.X
-                    local sliderWidth = sliderFrame.AbsoluteSize.X
-                    local newPosition = math.clamp((mouseX - sliderPosition) / sliderWidth, 0, 1)
-
-                    sliderKnob.Position = UDim2.new(newPosition, 0, 0, 0)
-                    if onValueChanged then
-                        onValueChanged(newPosition)
-                    end
-                end
-            end)
-
-            game:GetService("UserInputService").InputEnded:Connect(function(endInput)
-                if endInput.UserInputType == Enum.UserInputType.MouseButton1 then
-                    connection:Disconnect()
-                end
-            end)
+    button.MouseButton1Click:Connect(function()
+        if config.Callback then
+            pcall(config.Callback)
         end
     end)
-
-    return sliderFrame
 end
 
+function FreedomHub:AddToggle(tab, config)
+    local frame = Instance.new("Frame")
+    frame.Name = config.Name or "Toggle"
+    frame.Size = UDim2.new(1, -20, 0, 40)
+    frame.Position = UDim2.new(0, 10, 0, 60)
+    frame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    frame.Parent = tab
+
+    local toggle = Instance.new("TextButton")
+    toggle.Name = "Toggle"
+    toggle.Size = UDim2.new(0, 30, 0, 30)
+    toggle.Position = UDim2.new(0, 5, 0, 5)
+    toggle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+    toggle.Parent = frame
+
+    local label = Instance.new("TextLabel")
+    label.Text = config.Name or "Toggle"
+    label.Size = UDim2.new(1, -40, 1, 0)
+    label.Position = UDim2.new(0, 40, 0, 0)
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.SourceSans
+    label.TextScaled = true
+    label.Parent = frame
+
+    local isToggled = false
+
+    toggle.MouseButton1Click:Connect(function()
+        isToggled = not isToggled
+        toggle.BackgroundColor3 = isToggled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+        if config.Callback then
+            pcall(config.Callback, isToggled)
+        end
+    end)
+end
+
+function FreedomHub:AddDropdown(tab, config)
+    local dropdown = Instance.new("Frame")
+    dropdown.Name = config.Name or "Dropdown"
+    dropdown.Size = UDim2.new(1, -20, 0, 40)
+    dropdown.Position = UDim2.new(0, 10, 0, 110)
+    dropdown.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    dropdown.Parent = tab
+
+    local dropdownText = Instance.new("TextLabel")
+    dropdownText.Text = config.Name or "Dropdown"
+    dropdownText.Size = UDim2.new(1, -20, 1, 0)
+    dropdownText.Position = UDim2.new(0, 10, 0, 0)
+    dropdownText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    dropdownText.BackgroundTransparency = 1
+    dropdownText.Font = Enum.Font.SourceSans
+    dropdownText.TextScaled = true
+    dropdownText.Parent = dropdown
+end
+
+-- Initialize Library
+FreedomHub:Initialize()
 return FreedomHub
