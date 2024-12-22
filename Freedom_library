@@ -1,128 +1,235 @@
-local FreedomHub = {}
+local UIS = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
--- สร้างหน้าต่างหลัก
-function FreedomHub:MakeWindow(config)
-    local Window = {}
-    Window.Title = config.Name or "Freedom Hub"
-    Window.Theme = config.Theme or "Light"
-    Window.Tabs = {}
+-- GUI Creation
+local ScreenGui = Instance.new("ScreenGui")
+local ToggleButton = Instance.new("TextButton")
+local MainFrame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TopBar = Instance.new("Frame")
+local TabsHolder = Instance.new("Frame")
+local TabContainer = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
 
-    -- UI Framework เริ่มต้น
-    local ScreenGui = Instance.new("ScreenGui")
-    local MainFrame = Instance.new("Frame")
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    
-    MainFrame.Parent = ScreenGui
-    MainFrame.Size = UDim2.new(0, 400, 0, 300)
-    MainFrame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
-    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
-    
-    function Window:CreateTab(tabConfig)
-        local Tab = {}
-        Tab.Name = tabConfig.Name or "Tab"
-        Tab.Elements = {}
-        
-        local TabButton = Instance.new("TextButton")
-        TabButton.Parent = MainFrame
-        TabButton.Text = Tab.Name
-        TabButton.Size = UDim2.new(0, 100, 0, 30)
-        TabButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
-        
-        -- เพิ่มปุ่ม
-        function Tab:AddButton(buttonConfig)
-            local Button = {}
-            Button.Name = buttonConfig.Name or "Button"
-            Button.Callback = buttonConfig.Callback or function() end
-            
-            local ButtonUI = Instance.new("TextButton")
-            ButtonUI.Parent = MainFrame
-            ButtonUI.Text = Button.Name
-            ButtonUI.Size = UDim2.new(0, 150, 0, 40)
-            ButtonUI.Position = UDim2.new(0, 20, 0, (#Tab.Elements * 50) + 40)
-            ButtonUI.BackgroundColor3 = Color3.new(0.4, 0.4, 0.4)
-            
-            ButtonUI.MouseButton1Click:Connect(function()
-                Button.Callback()
-            end)
-            
-            table.insert(Tab.Elements, Button)
-        end
-        
-        -- เพิ่ม Toggle
-        function Tab:AddToggle(toggleConfig)
-            local Toggle = {}
-            Toggle.Name = toggleConfig.Name or "Toggle"
-            Toggle.State = toggleConfig.Default or false
-            Toggle.Callback = toggleConfig.Callback or function() end
-            
-            local ToggleUI = Instance.new("TextButton")
-            ToggleUI.Parent = MainFrame
-            ToggleUI.Text = Toggle.Name .. ": " .. tostring(Toggle.State)
-            ToggleUI.Size = UDim2.new(0, 150, 0, 40)
-            ToggleUI.Position = UDim2.new(0, 20, 0, (#Tab.Elements * 50) + 40)
-            ToggleUI.BackgroundColor3 = Color3.new(0.4, 0.4, 0.4)
-            
-            ToggleUI.MouseButton1Click:Connect(function()
-                Toggle.State = not Toggle.State
-                ToggleUI.Text = Toggle.Name .. ": " .. tostring(Toggle.State)
-                Toggle.Callback(Toggle.State)
-            end)
-            
-            table.insert(Tab.Elements, Toggle)
-        end
-
-        -- เพิ่ม Slider
-        function Tab:AddSlider(sliderConfig)
-            local Slider = {}
-            Slider.Name = sliderConfig.Name or "Slider"
-            Slider.Min = sliderConfig.Min or 0
-            Slider.Max = sliderConfig.Max or 100
-            Slider.Default = sliderConfig.Default or 50
-            Slider.Callback = sliderConfig.Callback or function() end
-            
-            local SliderFrame = Instance.new("Frame")
-            local SliderButton = Instance.new("TextButton")
-            local SliderValue = Instance.new("TextLabel")
-            
-            SliderFrame.Parent = MainFrame
-            SliderFrame.Size = UDim2.new(0, 200, 0, 50)
-            SliderFrame.Position = UDim2.new(0, 20, 0, (#Tab.Elements * 60) + 40)
-            SliderFrame.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
-            
-            SliderButton.Parent = SliderFrame
-            SliderButton.Size = UDim2.new(0, 20, 0, 20)
-            SliderButton.Position = UDim2.new((Slider.Default - Slider.Min) / (Slider.Max - Slider.Min), 0, 0.5, -10)
-            SliderButton.BackgroundColor3 = Color3.new(0.6, 0.6, 0.6)
-            
-            SliderValue.Parent = SliderFrame
-            SliderValue.Size = UDim2.new(0, 50, 0, 20)
-            SliderValue.Position = UDim2.new(1, -60, 0, 15)
-            SliderValue.Text = tostring(Slider.Default)
-            
-            SliderButton.MouseButton1Down:Connect(function()
-                local Mouse = game.Players.LocalPlayer:GetMouse()
-                local MoveConnection
-                
-                MoveConnection = Mouse.Move:Connect(function()
-                    local RelativeX = math.clamp(Mouse.X - SliderFrame.AbsolutePosition.X, 0, SliderFrame.AbsoluteSize.X)
-                    local Value = math.floor(Slider.Min + (RelativeX / SliderFrame.AbsoluteSize.X) * (Slider.Max - Slider.Min))
-                    SliderButton.Position = UDim2.new(RelativeX / SliderFrame.AbsoluteSize.X, -10, 0.5, -10)
-                    SliderValue.Text = tostring(Value)
-                    Slider.Callback(Value)
-                end)
-                
-                game:GetService("UserInputService").InputEnded:Wait()
-                MoveConnection:Disconnect()
-            end)
-            
-            table.insert(Tab.Elements, Slider)
-        end
-        
-        table.insert(Window.Tabs, Tab)
-        return Tab
-    end
-
-    return Window
+-- Protect GUI for Executors
+if syn and syn.protect_gui then
+    syn.protect_gui(ScreenGui)
+elseif gethui then
+    ScreenGui.Parent = gethui()
+else
+    ScreenGui.Parent = game.CoreGui
 end
 
-return FreedomHub
+-- ScreenGui Properties
+ScreenGui.Name = "ImprovedUILibrary"
+ScreenGui.ResetOnSpawn = false
+
+-- Toggle Button
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Parent = ScreenGui
+ToggleButton.Size = UDim2.new(0, 50, 0, 50)
+ToggleButton.Position = UDim2.new(0.05, 0, 0.85, 0)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 140, 255)
+ToggleButton.Text = "☰"
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.TextSize = 20
+
+local ToggleCorner = Instance.new("UICorner", ToggleButton)
+ToggleCorner.CornerRadius = UDim.new(1, 0)
+
+-- Main Frame
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.Size = UDim2.new(0, 450, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -225, 0.5, -150)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Visible = false
+MainFrame.ClipsDescendants = true
+
+UICorner.Parent = MainFrame
+UICorner.CornerRadius = UDim.new(0, 15)
+
+-- Top Bar
+TopBar.Name = "TopBar"
+TopBar.Parent = MainFrame
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+TopBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+local TopBarCorner = Instance.new("UICorner", TopBar)
+TopBarCorner.CornerRadius = UDim.new(0, 15)
+
+-- Tabs Holder
+TabsHolder.Name = "TabsHolder"
+TabsHolder.Parent = MainFrame
+TabsHolder.Size = UDim2.new(0, 80, 1, -40)
+TabsHolder.Position = UDim2.new(0, 0, 0, 40)
+TabsHolder.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+
+local TabsCorner = Instance.new("UICorner", TabsHolder)
+TabsCorner.CornerRadius = UDim.new(0, 10)
+
+UIListLayout.Parent = TabsHolder
+UIListLayout.FillDirection = Enum.FillDirection.Vertical
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 5)
+
+-- Tab Container
+TabContainer.Name = "TabContainer"
+TabContainer.Parent = MainFrame
+TabContainer.Size = UDim2.new(1, -80, 1, -40)
+TabContainer.Position = UDim2.new(0, 80, 0, 40)
+TabContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+
+local TabCorner = Instance.new("UICorner", TabContainer)
+TabCorner.CornerRadius = UDim.new(0, 10)
+
+-- Drag Functionality
+local function makeDraggable(frame, handle)
+    local dragging = false
+    local dragInput, mousePos, framePos
+
+    handle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            mousePos = input.Position
+            framePos = frame.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    handle.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - mousePos
+            frame.Position = UDim2.new(
+                framePos.X.Scale,
+                framePos.X.Offset + delta.X,
+                framePos.Y.Scale,
+                framePos.Y.Offset + delta.Y
+            )
+        end
+    end)
+end
+
+-- Apply Draggable
+makeDraggable(MainFrame, TopBar)
+makeDraggable(ToggleButton, ToggleButton)
+
+-- Toggle Functionality
+ToggleButton.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+end)
+
+-- Example Tab Creation
+local function createTab(name)
+    local TabButton = Instance.new("TextButton")
+    TabButton.Name = name .. "Button"
+    TabButton.Parent = TabsHolder
+    TabButton.Size = UDim2.new(1, -10, 0, 40)
+    TabButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    TabButton.Text = name
+    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TabButton.TextSize = 18
+    TabButton.Font = Enum.Font.Gotham
+
+    local TabFrame = Instance.new("Frame")
+    TabFrame.Name = name .. "Frame"
+    TabFrame.Parent = TabContainer
+    TabFrame.Size = UDim2.new(1, 0, 1, 0)
+    TabFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    TabFrame.Visible = false
+
+    local TabUICorner = Instance.new("UICorner", TabFrame)
+    TabUICorner.CornerRadius = UDim.new(0, 10)
+
+    TabButton.MouseButton1Click:Connect(function()
+        for _, frame in pairs(TabContainer:GetChildren()) do
+            if frame:IsA("Frame") then
+                frame.Visible = false
+            end
+        end
+        TabFrame.Visible = true
+    end)
+
+    return TabFrame
+end
+
+
+
+-- Define Tap buttons with toggle functionality
+local currentTap = 1  -- Default selected Tap
+
+local function createTapButton(index, label, callback)
+    local button = Instance.new("TextButton")
+    button.Text = label
+    button.BackgroundColor3 = index == currentTap and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(50, 50, 50)
+    button.MouseButton1Click:Connect(function()
+        currentTap = index
+        callback()
+    end)
+    return button
+end
+
+-- Toggle switch module
+local function createToggleSwitch()
+    local toggle = Instance.new("Frame")
+    local switch = Instance.new("TextButton")
+    local isOn = false
+
+    switch.Text = "Off"
+    switch.MouseButton1Click:Connect(function()
+        isOn = not isOn
+        switch.Text = isOn and "On" or "Off"
+        switch.BackgroundColor3 = isOn and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+    end)
+
+    toggle:AddChild(switch)
+    return toggle
+end
+
+-- Input text module
+local function createInputField()
+    local inputField = Instance.new("TextBox")
+    inputField.PlaceholderText = "Input text"
+    return inputField
+end
+
+-- Dropdown module
+local function createDropdown(options)
+    local dropdown = Instance.new("Frame")
+    local button = Instance.new("TextButton")
+    button.Text = "Select"
+    dropdown:AddChild(button)
+    
+    for _, option in ipairs(options) do
+        local optionButton = Instance.new("TextButton")
+        optionButton.Text = option
+        optionButton.MouseButton1Click:Connect(function()
+            button.Text = option
+        end)
+        dropdown:AddChild(optionButton)
+    end
+    return dropdown
+end
+
+-- Slider module
+local function createSlider()
+    local slider = Instance.new("Frame")
+    local valueDisplay = Instance.new("TextLabel")
+    valueDisplay.Text = "0"
+
+    local sliderInput = Instance.new("TextButton")
+    sliderInput.MouseButton1Click:Connect(function()
+        -- Logic to update slider value
+    end)
+
+    slider:AddChild(valueDisplay)
+    slider:AddChild(sliderInput)
+    return slider
+end
