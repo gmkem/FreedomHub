@@ -2,49 +2,52 @@ local UILibrary = {}
 
 -- สร้างหน้าต่างหลัก
 function UILibrary:CreateWindow(config)
+    -- การตั้งค่าเบื้องต้น
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
-    local UICorner = Instance.new("UICorner")
-    local TabsHolder = Instance.new("Frame")
+    local TitleBar = Instance.new("TextLabel")
+    local TabHolder = Instance.new("Frame")
     local TabContainer = Instance.new("Frame")
     local UIListLayout = Instance.new("UIListLayout")
 
-    -- Parent
-    ScreenGui.Name = config.Name or "UI_Library"
+    ScreenGui.Name = config.Name or "CustomUI"
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    -- Main Frame
     MainFrame.Name = "MainFrame"
-    MainFrame.Size = UDim2.new(0, config.Width or 500, 0, config.Height or 400)
-    MainFrame.Position = UDim2.new(0.5, -(config.Width or 500) / 2, 0.5, -(config.Height or 400) / 2)
-    MainFrame.BackgroundColor3 = config.BackgroundColor or Color3.fromRGB(30, 30, 30)
+    MainFrame.Size = UDim2.new(0, 600, 0, 400)
+    MainFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BorderSizePixel = 0
     MainFrame.Parent = ScreenGui
 
-    -- UICorner
-    UICorner.CornerRadius = UDim.new(0, 10)
-    UICorner.Parent = MainFrame
+    TitleBar.Name = "TitleBar"
+    TitleBar.Size = UDim2.new(1, 0, 0, 50)
+    TitleBar.BackgroundColor3 = Color3.fromRGB(45, 130, 230)
+    TitleBar.Text = config.Title or "UI Library"
+    TitleBar.TextColor3 = Color3.new(1, 1, 1)
+    TitleBar.Font = Enum.Font.SourceSansBold
+    TitleBar.TextSize = 20
+    TitleBar.Parent = MainFrame
 
-    -- Tabs Holder
-    TabsHolder.Name = "TabsHolder"
-    TabsHolder.Size = UDim2.new(0, 120, 1, 0)
-    TabsHolder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    TabsHolder.Parent = MainFrame
+    TabHolder.Name = "TabHolder"
+    TabHolder.Size = UDim2.new(0, 150, 1, -50)
+    TabHolder.Position = UDim2.new(0, 0, 0, 50)
+    TabHolder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    TabHolder.Parent = MainFrame
 
-    -- Tab Container
     TabContainer.Name = "TabContainer"
-    TabContainer.Size = UDim2.new(1, -120, 1, 0)
-    TabContainer.Position = UDim2.new(0, 120, 0, 0)
-    TabContainer.BackgroundTransparency = 1
+    TabContainer.Size = UDim2.new(1, -150, 1, -50)
+    TabContainer.Position = UDim2.new(0, 150, 0, 50)
+    TabContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
     TabContainer.Parent = MainFrame
 
-    -- UIListLayout
-    UIListLayout.Parent = TabsHolder
+    UIListLayout.Parent = TabHolder
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
     local Window = {
         ScreenGui = ScreenGui,
         MainFrame = MainFrame,
-        TabsHolder = TabsHolder,
+        TabHolder = TabHolder,
         TabContainer = TabContainer,
         Tabs = {}
     }
@@ -52,31 +55,28 @@ function UILibrary:CreateWindow(config)
     return setmetatable(Window, { __index = UILibrary })
 end
 
--- เพิ่ม Tab ใหม่
-function UILibrary:AddTab(name)
+-- เพิ่มแท็บใหม่
+function UILibrary:AddTab(window, tabName)
     local TabButton = Instance.new("TextButton")
     local TabFrame = Instance.new("Frame")
 
-    -- Tab Button
-    TabButton.Name = name
-    TabButton.Text = name
-    TabButton.Size = UDim2.new(1, 0, 0, 40)
+    TabButton.Name = tabName
+    TabButton.Text = tabName
+    TabButton.Size = UDim2.new(1, 0, 0, 50)
     TabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TabButton.Font = Enum.Font.SourceSans
+    TabButton.Font = Enum.Font.SourceSansBold
     TabButton.TextSize = 16
-    TabButton.Parent = self.TabsHolder
+    TabButton.Parent = window.TabHolder
 
-    -- Tab Frame
-    TabFrame.Name = name
+    TabFrame.Name = tabName
     TabFrame.Size = UDim2.new(1, 0, 1, 0)
     TabFrame.BackgroundTransparency = 1
     TabFrame.Visible = false
-    TabFrame.Parent = self.TabContainer
+    TabFrame.Parent = window.TabContainer
 
-    -- สลับ Tab เมื่อกดปุ่ม
     TabButton.MouseButton1Click:Connect(function()
-        for _, frame in pairs(self.TabContainer:GetChildren()) do
+        for _, frame in pairs(window.TabContainer:GetChildren()) do
             if frame:IsA("Frame") then
                 frame.Visible = false
             end
@@ -84,34 +84,205 @@ function UILibrary:AddTab(name)
         TabFrame.Visible = true
     end)
 
-    self.Tabs[name] = TabFrame
-    return TabFrame
+    local Tab = {
+        Frame = TabFrame,
+        Elements = {}
+    }
+
+    window.Tabs[tabName] = Tab
+    return Tab
 end
 
--- เพิ่มปุ่มใน Tab
-function UILibrary:AddButton(tabName, buttonConfig)
-    local Tab = self.Tabs[tabName]
-    if not Tab then
-        warn("Tab not found: " .. tabName)
-        return
-    end
-
+-- เพิ่มปุ่ม
+function UILibrary:AddButton(tab, text, callback)
     local Button = Instance.new("TextButton")
-    Button.Name = buttonConfig.Name or "Button"
-    Button.Text = buttonConfig.Text or "Click Me"
+    Button.Text = text
     Button.Size = UDim2.new(0, 200, 0, 50)
-    Button.Position = UDim2.new(0.5, -100, 0, #Tab:GetChildren() * 60)
-    Button.BackgroundColor3 = buttonConfig.Color or Color3.fromRGB(60, 60, 60)
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Font = Enum.Font.SourceSans
-    Button.TextSize = 14
-    Button.Parent = Tab
+    Button.BackgroundColor3 = Color3.fromRGB(45, 130, 230)
+    Button.TextColor3 = Color3.new(1, 1, 1)
+    Button.Font = Enum.Font.SourceSansBold
+    Button.TextSize = 16
+    Button.Parent = tab.Frame
 
-    Button.MouseButton1Click:Connect(buttonConfig.Callback or function()
-        print(Button.Text .. " clicked!")
+    Button.MouseButton1Click:Connect(callback)
+    table.insert(tab.Elements, Button)
+    return Button
+end
+
+-- เพิ่ม Toggle
+function UILibrary:AddToggle(tab, text, defaultState, callback)
+    local ToggleFrame = Instance.new("Frame")
+    local ToggleLabel = Instance.new("TextLabel")
+    local CheckBox = Instance.new("TextButton")
+
+    ToggleFrame.Size = UDim2.new(0, 200, 0, 50)
+    ToggleFrame.BackgroundTransparency = 1
+    ToggleFrame.Parent = tab.Frame
+
+    ToggleLabel.Text = text
+    ToggleLabel.Size = UDim2.new(0.8, 0, 1, 0)
+    ToggleLabel.TextColor3 = Color3.new(1, 1, 1)
+    ToggleLabel.Font = Enum.Font.SourceSans
+    ToggleLabel.TextSize = 16
+    ToggleLabel.Parent = ToggleFrame
+
+    CheckBox.Size = UDim2.new(0.2, 0, 1, 0)
+    CheckBox.Position = UDim2.new(0.8, 0, 0, 0)
+    CheckBox.BackgroundColor3 = defaultState and Color3.fromRGB(45, 130, 230) or Color3.fromRGB(100, 100, 100)
+    CheckBox.Text = ""
+    CheckBox.Parent = ToggleFrame
+
+    CheckBox.MouseButton1Click:Connect(function()
+        defaultState = not defaultState
+        CheckBox.BackgroundColor3 = defaultState and Color3.fromRGB(45, 130, 230) or Color3.fromRGB(100, 100, 100)
+        callback(defaultState)
     end)
 
-    return Button
+    table.insert(tab.Elements, ToggleFrame)
+    return ToggleFrame
+end
+
+-- เพิ่ม Slider
+function UILibrary:AddSlider(tab, text, min, max, default, callback)
+    local SliderFrame = Instance.new("Frame")
+    local SliderLabel = Instance.new("TextLabel")
+    local SliderBar = Instance.new("Frame")
+    local SliderButton = Instance.new("TextButton")
+
+    SliderFrame.Size = UDim2.new(0, 200, 0, 50)
+    SliderFrame.BackgroundTransparency = 1
+    SliderFrame.Parent = tab.Frame
+
+    SliderLabel.Text = text .. ": " .. tostring(default)
+    SliderLabel.Size = UDim2.new(1, 0, 0.5, 0)
+    SliderLabel.TextColor3 = Color3.new(1, 1, 1)
+    SliderLabel.Font = Enum.Font.SourceSans
+    SliderLabel.TextSize = 16
+    SliderLabel.Parent = SliderFrame
+
+    SliderBar.Size = UDim2.new(1, 0, 0.5, 0)
+    SliderBar.Position = UDim2.new(0, 0, 0.5, 0)
+    SliderBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    SliderBar.Parent = SliderFrame
+
+    SliderButton.Size = UDim2.new(0, 20, 1, 0)
+    SliderButton.Position = UDim2.new((default - min) / (max - min), -10, 0, 0)
+    SliderButton.BackgroundColor3 = Color3.fromRGB(45, 130, 230)
+    SliderButton.Text = ""
+    SliderButton.Parent = SliderBar
+
+    SliderButton.MouseButton1Down:Connect(function()
+        local Mouse = game.Players.LocalPlayer:GetMouse()
+        local Connection
+        Connection = Mouse.Move:Connect(function()
+            local Scale = math.clamp((Mouse.X - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X, 0, 1)
+            local Value = math.floor(min + (max - min) * Scale)
+            SliderLabel.Text = text .. ": " .. tostring(Value)
+            SliderButton.Position = UDim2.new(Scale, -10, 0, 0)
+            callback(Value)
+        end)
+        game:GetService("UserInputService").InputEnded:Wait()
+        Connection:Disconnect()
+    end)
+
+    table.insert(tab.Elements, SliderFrame)
+    return SliderFrame
+end
+
+function UILibrary:AddDropdown(tab, text, options, callback)
+    local DropdownFrame = Instance.new("Frame")
+    local DropdownLabel = Instance.new("TextLabel")
+    local DropdownButton = Instance.new("TextButton")
+    local OptionFrame = Instance.new("ScrollingFrame")
+    local UIListLayout = Instance.new("UIListLayout")
+
+    DropdownFrame.Size = UDim2.new(0, 250, 0, 50)
+    DropdownFrame.BackgroundTransparency = 1
+    DropdownFrame.Parent = tab.Frame
+
+    DropdownLabel.Text = text
+    DropdownLabel.Size = UDim2.new(0.7, 0, 1, 0)
+    DropdownLabel.TextColor3 = Color3.new(1, 1, 1)
+    DropdownLabel.Font = Enum.Font.SourceSans
+    DropdownLabel.TextSize = 16
+    DropdownLabel.Parent = DropdownFrame
+
+    DropdownButton.Size = UDim2.new(0.3, 0, 1, 0)
+    DropdownButton.Position = UDim2.new(0.7, 0, 0, 0)
+    DropdownButton.Text = "▼"
+    DropdownButton.BackgroundColor3 = Color3.fromRGB(45, 130, 230)
+    DropdownButton.TextColor3 = Color3.new(1, 1, 1)
+    DropdownButton.Font = Enum.Font.SourceSansBold
+    DropdownButton.TextSize = 16
+    DropdownButton.Parent = DropdownFrame
+
+    OptionFrame.Size = UDim2.new(1, 0, 0, #options * 30)
+    OptionFrame.Position = UDim2.new(0, 0, 1, 0)
+    OptionFrame.Visible = false
+    OptionFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    OptionFrame.ScrollBarThickness = 8
+    OptionFrame.Parent = DropdownFrame
+
+    UIListLayout.Parent = OptionFrame
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    for _, option in ipairs(options) do
+        local OptionButton = Instance.new("TextButton")
+        OptionButton.Text = option
+        OptionButton.Size = UDim2.new(1, 0, 0, 30)
+        OptionButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        OptionButton.TextColor3 = Color3.new(1, 1, 1)
+        OptionButton.Font = Enum.Font.SourceSans
+        OptionButton.TextSize = 16
+        OptionButton.Parent = OptionFrame
+
+        OptionButton.MouseButton1Click:Connect(function()
+            DropdownLabel.Text = text .. ": " .. option
+            callback(option)
+            OptionFrame.Visible = false
+        end)
+    end
+
+    DropdownButton.MouseButton1Click:Connect(function()
+        OptionFrame.Visible = not OptionFrame.Visible
+    end)
+
+    table.insert(tab.Elements, DropdownFrame)
+    return DropdownFrame
+end
+
+function UILibrary:ShowNotification(title, message)
+    local NotificationFrame = Instance.new("Frame")
+    local TitleLabel = Instance.new("TextLabel")
+    local MessageLabel = Instance.new("TextLabel")
+
+    NotificationFrame.Size = UDim2.new(0, 300, 0, 100)
+    NotificationFrame.Position = UDim2.new(0.5, -150, 0.1, 0)
+    NotificationFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    NotificationFrame.BorderSizePixel = 0
+    NotificationFrame.AnchorPoint = Vector2.new(0.5, 0)
+    NotificationFrame.Parent = game.Players.LocalPlayer.PlayerGui:FindFirstChild("ScreenGui")
+
+    TitleLabel.Text = title
+    TitleLabel.Size = UDim2.new(1, 0, 0.3, 0)
+    TitleLabel.TextColor3 = Color3.new(1, 1, 1)
+    TitleLabel.Font = Enum.Font.SourceSansBold
+    TitleLabel.TextSize = 20
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Parent = NotificationFrame
+
+    MessageLabel.Text = message
+    MessageLabel.Size = UDim2.new(1, 0, 0.7, 0)
+    MessageLabel.Position = UDim2.new(0, 0, 0.3, 0)
+    MessageLabel.TextColor3 = Color3.new(1, 1, 1)
+    MessageLabel.Font = Enum.Font.SourceSans
+    MessageLabel.TextSize = 16
+    MessageLabel.BackgroundTransparency = 1
+    MessageLabel.Parent = NotificationFrame
+
+    game:GetService("TweenService"):Create(NotificationFrame, TweenInfo.new(0.3), { Position = UDim2.new(0.5, -150, -0.1, 0) }):Play()
+    wait(3)
+    NotificationFrame:Destroy()
 end
 
 return UILibrary
