@@ -1,12 +1,10 @@
 local UILibrary = {}
 
--- Function: สร้างหน้าต่างหลัก
+-- สร้างหน้าต่างหลัก
 function UILibrary:CreateWindow(config)
     local ScreenGui = Instance.new("ScreenGui")
-    local ToggleButton = Instance.new("TextButton")
     local MainFrame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
-    local TopBar = Instance.new("Frame")
     local TabsHolder = Instance.new("Frame")
     local TabContainer = Instance.new("Frame")
     local UIListLayout = Instance.new("UIListLayout")
@@ -15,72 +13,46 @@ function UILibrary:CreateWindow(config)
     ScreenGui.Name = config.Name or "UI_Library"
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    -- Toggle Button
-    ToggleButton.Name = "ToggleButton"
-    ToggleButton.Size = UDim2.new(0, 100, 0, 50)
-    ToggleButton.Position = UDim2.new(0, 10, 0, 10)
-    ToggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    ToggleButton.Text = "Toggle UI"
-    ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ToggleButton.Font = Enum.Font.SourceSans
-    ToggleButton.TextSize = 14
-    ToggleButton.Parent = ScreenGui
-
     -- Main Frame
     MainFrame.Name = "MainFrame"
     MainFrame.Size = UDim2.new(0, config.Width or 500, 0, config.Height or 400)
     MainFrame.Position = UDim2.new(0.5, -(config.Width or 500) / 2, 0.5, -(config.Height or 400) / 2)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    MainFrame.Visible = true
+    MainFrame.BackgroundColor3 = config.BackgroundColor or Color3.fromRGB(30, 30, 30)
     MainFrame.Parent = ScreenGui
 
     -- UICorner
     UICorner.CornerRadius = UDim.new(0, 10)
     UICorner.Parent = MainFrame
 
-    -- Top Bar
-    TopBar.Name = "TopBar"
-    TopBar.Size = UDim2.new(1, 0, 0, 40)
-    TopBar.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    TopBar.Parent = MainFrame
-
     -- Tabs Holder
     TabsHolder.Name = "TabsHolder"
-    TabsHolder.Size = UDim2.new(0, 100, 1, -40)
-    TabsHolder.Position = UDim2.new(0, 0, 0, 40)
+    TabsHolder.Size = UDim2.new(0, 120, 1, 0)
     TabsHolder.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     TabsHolder.Parent = MainFrame
 
     -- Tab Container
     TabContainer.Name = "TabContainer"
-    TabContainer.Size = UDim2.new(1, -100, 1, -40)
-    TabContainer.Position = UDim2.new(0, 100, 0, 40)
+    TabContainer.Size = UDim2.new(1, -120, 1, 0)
+    TabContainer.Position = UDim2.new(0, 120, 0, 0)
     TabContainer.BackgroundTransparency = 1
     TabContainer.Parent = MainFrame
 
     -- UIListLayout
-    UIListLayout.Name = "UIListLayout"
-    UIListLayout.FillDirection = Enum.FillDirection.Vertical
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     UIListLayout.Parent = TabsHolder
-
-    -- Toggle Visibility
-    ToggleButton.MouseButton1Click:Connect(function()
-        MainFrame.Visible = not MainFrame.Visible
-    end)
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
     local Window = {
         ScreenGui = ScreenGui,
         MainFrame = MainFrame,
-        TabContainer = TabContainer,
         TabsHolder = TabsHolder,
+        TabContainer = TabContainer,
         Tabs = {}
     }
 
     return setmetatable(Window, { __index = UILibrary })
 end
 
--- Function: สร้าง Tab ใหม่
+-- เพิ่ม Tab ใหม่
 function UILibrary:AddTab(name)
     local TabButton = Instance.new("TextButton")
     local TabFrame = Instance.new("Frame")
@@ -102,7 +74,7 @@ function UILibrary:AddTab(name)
     TabFrame.Visible = false
     TabFrame.Parent = self.TabContainer
 
-    -- สลับ Tab
+    -- สลับ Tab เมื่อกดปุ่ม
     TabButton.MouseButton1Click:Connect(function()
         for _, frame in pairs(self.TabContainer:GetChildren()) do
             if frame:IsA("Frame") then
@@ -116,7 +88,7 @@ function UILibrary:AddTab(name)
     return TabFrame
 end
 
--- Function: เพิ่มปุ่มใน Tab
+-- เพิ่มปุ่มใน Tab
 function UILibrary:AddButton(tabName, buttonConfig)
     local Tab = self.Tabs[tabName]
     if not Tab then
@@ -129,7 +101,7 @@ function UILibrary:AddButton(tabName, buttonConfig)
     Button.Text = buttonConfig.Text or "Click Me"
     Button.Size = UDim2.new(0, 200, 0, 50)
     Button.Position = UDim2.new(0.5, -100, 0, #Tab:GetChildren() * 60)
-    Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    Button.BackgroundColor3 = buttonConfig.Color or Color3.fromRGB(60, 60, 60)
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.Font = Enum.Font.SourceSans
     Button.TextSize = 14
