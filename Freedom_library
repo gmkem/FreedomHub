@@ -1,66 +1,123 @@
--- UI Library แบบกระทัดรัดและสวยงาม
-local Library = {}
-local UIS = game:GetService("UserInputService")
+local OrionLibrary = {}
 
-function Library:CreateWindow(title)
+function OrionLibrary:CreateWindow(windowTitle)
     local ScreenGui = Instance.new("ScreenGui")
-    local Frame = Instance.new("Frame")
+    local MainFrame = Instance.new("Frame")
     local Title = Instance.new("TextLabel")
-    local TabContainer = Instance.new("Frame")
+    local TabsContainer = Instance.new("Frame")
     local UIListLayout = Instance.new("UIListLayout")
-
-    ScreenGui.Name = "CustomUI"
-    ScreenGui.Parent = game.CoreGui
-
-    Frame.Name = "MainFrame"
-    Frame.Parent = ScreenGui
-    Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    Frame.BorderSizePixel = 0
-    Frame.Position = UDim2.new(0.35, 0, 0.3, 0)
-    Frame.Size = UDim2.new(0, 300, 0, 200)
-
-    Title.Name = "Title"
-    Title.Parent = Frame
-    Title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    Title.BorderSizePixel = 0
-    Title.Size = UDim2.new(1, 0, 0, 30)
-    Title.Font = Enum.Font.SourceSans
-    Title.Text = title or "Custom UI"
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.TextSize = 18
-
-    TabContainer.Name = "TabContainer"
-    TabContainer.Parent = Frame
-    TabContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    TabContainer.BorderSizePixel = 0
-    TabContainer.Position = UDim2.new(0, 0, 0, 30)
-    TabContainer.Size = UDim2.new(1, 0, 1, -30)
-
-    UIListLayout.Parent = TabContainer
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Padding = UDim.new(0, 5)
-
     local Tabs = {}
 
-    function Tabs:CreateButton(buttonName, callback)
-        local Button = Instance.new("TextButton")
-        Button.Name = buttonName
-        Button.Parent = TabContainer
-        Button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        Button.BorderSizePixel = 0
-        Button.Size = UDim2.new(1, -10, 0, 30)
-        Button.Font = Enum.Font.SourceSans
-        Button.Text = buttonName
-        Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Button.TextSize = 16
-        Button.MouseButton1Click:Connect(function()
-            if callback then
-                pcall(callback)
-            end
-        end)
-    end
+    -- ScreenGui
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.Name = "OrionUI"
 
-    return Tabs
+    -- MainFrame
+    MainFrame.Parent = ScreenGui
+    MainFrame.Size = UDim2.new(0.35, 0, 0.6, 0)
+    MainFrame.Position = UDim2.new(0.325, 0, 0.2, 0)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BorderSizePixel = 0
+
+    -- Title
+    Title.Parent = MainFrame
+    Title.Size = UDim2.new(1, 0, 0.1, 0)
+    Title.Text = windowTitle
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 18
+    Title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+    -- TabsContainer
+    TabsContainer.Parent = MainFrame
+    TabsContainer.Size = UDim2.new(0.2, 0, 0.9, 0)
+    TabsContainer.Position = UDim2.new(0, 0, 0.1, 0)
+    TabsContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    TabsContainer.BorderSizePixel = 0
+
+    -- UIListLayout for Tabs
+    UIListLayout.Parent = TabsContainer
+    UIListLayout.FillDirection = Enum.FillDirection.Vertical
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    -- Return the Window
+    local Window = {
+        MainFrame = MainFrame,
+        TabsContainer = TabsContainer,
+        Tabs = Tabs
+    }
+    setmetatable(Window, { __index = self })
+    return Window
 end
 
-return Library
+function OrionLibrary:CreateTab(tabName)
+    local TabButton = Instance.new("TextButton")
+    TabButton.Parent = self.TabsContainer
+    TabButton.Size = UDim2.new(1, 0, 0.1, 0)
+    TabButton.Text = tabName
+    TabButton.Font = Enum.Font.Gotham
+    TabButton.TextSize = 16
+    TabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TabButton.BorderSizePixel = 0
+
+    -- Add Tab Page
+    local TabPage = Instance.new("ScrollingFrame")
+    TabPage.Parent = self.MainFrame
+    TabPage.Size = UDim2.new(0.8, 0, 0.9, 0)
+    TabPage.Position = UDim2.new(0.2, 0, 0.1, 0)
+    TabPage.BackgroundTransparency = 1
+    TabPage.Visible = false
+
+    -- Tab Button Functionality
+    TabButton.MouseButton1Click:Connect(function()
+        for _, tab in pairs(self.Tabs) do
+            tab.TabPage.Visible = false
+        end
+        TabPage.Visible = true
+    end)
+
+    -- Register Tab
+    table.insert(self.Tabs, {
+        TabButton = TabButton,
+        TabPage = TabPage
+    })
+
+    return TabPage
+end
+
+function OrionLibrary:CreateToggle(parent, toggleName, callback)
+    local Toggle = Instance.new("Frame")
+    local Label = Instance.new("TextLabel")
+    local Switch = Instance.new("TextButton")
+    local Toggled = false
+
+    -- Toggle Container
+    Toggle.Parent = parent
+    Toggle.Size = UDim2.new(1, 0, 0.1, 0)
+    Toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+    -- Label
+    Label.Parent = Toggle
+    Label.Size = UDim2.new(0.8, 0, 1, 0)
+    Label.Text = toggleName
+    Label.Font = Enum.Font.Gotham
+    Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+    -- Switch Button
+    Switch.Parent = Toggle
+    Switch.Size = UDim2.new(0.2, 0, 1, 0)
+    Switch.Position = UDim2.new(0.8, 0, 0, 0)
+    Switch.Text = "Off"
+    Switch.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
+
+    -- Toggle Functionality
+    Switch.MouseButton1Click:Connect(function()
+        Toggled = not Toggled
+        Switch.Text = Toggled and "On" or "Off"
+        Switch.BackgroundColor3 = Toggled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+        callback(Toggled)
+    end)
+end
+
+return OrionLibrary
