@@ -1,123 +1,125 @@
-local OrionLibrary = {}
+local UILibrary = {}
 
-function OrionLibrary:CreateWindow(windowTitle)
+-- สร้างหน้าต่างหลัก
+function UILibrary:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
     local Title = Instance.new("TextLabel")
-    local TabsContainer = Instance.new("Frame")
-    local UIListLayout = Instance.new("UIListLayout")
-    local Tabs = {}
 
-    -- ScreenGui
+    ScreenGui.Name = "CustomUILibrary"
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    ScreenGui.Name = "OrionUI"
 
-    -- MainFrame
+    MainFrame.Size = UDim2.new(0.4, 0, 0.6, 0)
+    MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
     MainFrame.Parent = ScreenGui
-    MainFrame.Size = UDim2.new(0.35, 0, 0.6, 0)
-    MainFrame.Position = UDim2.new(0.325, 0, 0.2, 0)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    MainFrame.BorderSizePixel = 0
 
-    -- Title
-    Title.Parent = MainFrame
     Title.Size = UDim2.new(1, 0, 0.1, 0)
-    Title.Text = windowTitle
+    Title.Position = UDim2.new(0, 0, 0, 0)
+    Title.Text = title or "UI Library"
+    Title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     Title.TextColor3 = Color3.fromRGB(255, 255, 255)
     Title.Font = Enum.Font.GothamBold
-    Title.TextSize = 18
-    Title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Title.TextScaled = true
+    Title.Parent = MainFrame
 
-    -- TabsContainer
-    TabsContainer.Parent = MainFrame
-    TabsContainer.Size = UDim2.new(0.2, 0, 0.9, 0)
-    TabsContainer.Position = UDim2.new(0, 0, 0.1, 0)
-    TabsContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    TabsContainer.BorderSizePixel = 0
-
-    -- UIListLayout for Tabs
-    UIListLayout.Parent = TabsContainer
-    UIListLayout.FillDirection = Enum.FillDirection.Vertical
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-    -- Return the Window
-    local Window = {
-        MainFrame = MainFrame,
-        TabsContainer = TabsContainer,
-        Tabs = Tabs
-    }
-    setmetatable(Window, { __index = self })
-    return Window
+    return { ScreenGui = ScreenGui, MainFrame = MainFrame }
 end
 
-function OrionLibrary:CreateTab(tabName)
-    local TabButton = Instance.new("TextButton")
-    TabButton.Parent = self.TabsContainer
-    TabButton.Size = UDim2.new(1, 0, 0.1, 0)
-    TabButton.Text = tabName
-    TabButton.Font = Enum.Font.Gotham
-    TabButton.TextSize = 16
-    TabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TabButton.BorderSizePixel = 0
-
-    -- Add Tab Page
-    local TabPage = Instance.new("ScrollingFrame")
-    TabPage.Parent = self.MainFrame
-    TabPage.Size = UDim2.new(0.8, 0, 0.9, 0)
-    TabPage.Position = UDim2.new(0.2, 0, 0.1, 0)
-    TabPage.BackgroundTransparency = 1
-    TabPage.Visible = false
-
-    -- Tab Button Functionality
-    TabButton.MouseButton1Click:Connect(function()
-        for _, tab in pairs(self.Tabs) do
-            tab.TabPage.Visible = false
-        end
-        TabPage.Visible = true
-    end)
-
-    -- Register Tab
-    table.insert(self.Tabs, {
-        TabButton = TabButton,
-        TabPage = TabPage
-    })
-
-    return TabPage
-end
-
-function OrionLibrary:CreateToggle(parent, toggleName, callback)
-    local Toggle = Instance.new("Frame")
+-- Toggle (เปิด/ปิด)
+function UILibrary:CreateToggle(parent, labelText, callback)
+    local ToggleFrame = Instance.new("Frame")
     local Label = Instance.new("TextLabel")
-    local Switch = Instance.new("TextButton")
-    local Toggled = false
+    local ToggleButton = Instance.new("TextButton")
+    local UICorner = Instance.new("UICorner")
 
-    -- Toggle Container
-    Toggle.Parent = parent
-    Toggle.Size = UDim2.new(1, 0, 0.1, 0)
-    Toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    ToggleFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
+    ToggleFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
+    ToggleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    ToggleFrame.Parent = parent
 
-    -- Label
-    Label.Parent = Toggle
-    Label.Size = UDim2.new(0.8, 0, 1, 0)
-    Label.Text = toggleName
-    Label.Font = Enum.Font.Gotham
+    Label.Size = UDim2.new(0.7, 0, 1, 0)
+    Label.Position = UDim2.new(0, 10, 0, 0)
+    Label.Text = labelText or "Toggle"
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Label.BackgroundTransparency = 1
+    Label.Font = Enum.Font.Gotham
+    Label.TextScaled = true
+    Label.Parent = ToggleFrame
 
-    -- Switch Button
-    Switch.Parent = Toggle
-    Switch.Size = UDim2.new(0.2, 0, 1, 0)
-    Switch.Position = UDim2.new(0.8, 0, 0, 0)
-    Switch.Text = "Off"
-    Switch.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
+    ToggleButton.Size = UDim2.new(0.2, 0, 0.8, 0)
+    ToggleButton.Position = UDim2.new(0.75, 0, 0.1, 0)
+    ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    ToggleButton.Text = "Off"
+    ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleButton.Font = Enum.Font.Gotham
+    ToggleButton.TextScaled = true
+    ToggleButton.Parent = ToggleFrame
 
-    -- Toggle Functionality
-    Switch.MouseButton1Click:Connect(function()
-        Toggled = not Toggled
-        Switch.Text = Toggled and "On" or "Off"
-        Switch.BackgroundColor3 = Toggled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
-        callback(Toggled)
+    UICorner.CornerRadius = UDim.new(0.05, 0)
+    UICorner.Parent = ToggleButton
+
+    local isOn = false
+    ToggleButton.MouseButton1Click:Connect(function()
+        isOn = not isOn
+        ToggleButton.Text = isOn and "On" or "Off"
+        ToggleButton.BackgroundColor3 = isOn and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+        if callback then callback(isOn) end
     end)
 end
 
-return OrionLibrary
+-- Slider (เลื่อนค่า)
+function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
+    local SliderFrame = Instance.new("Frame")
+    local Label = Instance.new("TextLabel")
+    local SliderBar = Instance.new("Frame")
+    local SliderKnob = Instance.new("ImageButton")
+
+    SliderFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
+    SliderFrame.Position = UDim2.new(0.05, 0, 0.25, 0)
+    SliderFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    SliderFrame.Parent = parent
+
+    Label.Size = UDim2.new(0.3, 0, 1, 0)
+    Label.Position = UDim2.new(0, 10, 0, 0)
+    Label.Text = labelText or "Slider"
+    Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Label.BackgroundTransparency = 1
+    Label.Font = Enum.Font.Gotham
+    Label.TextScaled = true
+    Label.Parent = SliderFrame
+
+    SliderBar.Size = UDim2.new(0.5, 0, 0.2, 0)
+    SliderBar.Position = UDim2.new(0.35, 0, 0.4, 0)
+    SliderBar.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    SliderBar.Parent = SliderFrame
+
+    SliderKnob.Size = UDim2.new(0, 15, 0, 15)
+    SliderKnob.Position = UDim2.new(0, 0, -0.25, 0)
+    SliderKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SliderKnob.Parent = SliderBar
+
+    local function updateSlider(input)
+        local x = math.clamp(input.Position.X, SliderBar.AbsolutePosition.X, SliderBar.AbsolutePosition.X + SliderBar.AbsoluteSize.X)
+        local percentage = (x - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X
+        local value = math.floor(minValue + ((maxValue - minValue) * percentage))
+        SliderKnob.Position = UDim2.new(percentage, -7, -0.25, 0)
+        if callback then callback(value) end
+    end
+
+    SliderKnob.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local conn
+            conn = game:GetService("UserInputService").InputChanged:Connect(function(input2)
+                if input2.UserInputType == Enum.UserInputType.MouseMovement then
+                    updateSlider(input2)
+                end
+            end)
+            input.InputEnded:Connect(function()
+                conn:Disconnect()
+            end)
+        end
+    end)
+end
+
+return UILibrary
