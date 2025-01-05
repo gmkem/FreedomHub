@@ -1,166 +1,168 @@
-local UILibrary = {}
+local Library = {}
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
--- สร้างหน้าต่างหลัก
-function UILibrary:CreateWindow(title)
+-- Dragging System
+function Library:EnableDragging(frame)
+    local dragging, dragStart, startPos
+
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
+    end)
+
+    frame.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+end
+
+-- Create Main Window
+function Library:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
-    local Title = Instance.new("TextLabel")
-    local ToggleButton = Instance.new("ImageButton")
+    local TitleBar = Instance.new("TextLabel")
 
-    -- ScreenGui
-    ScreenGui.Name = "CustomUILibrary"
+    ScreenGui.Name = "UI_Library"
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    -- MainFrame
-    MainFrame.Size = UDim2.new(0.6, 0, 0.7, 0)  -- ขนาด UI หลัก
-    MainFrame.Position = UDim2.new(0.2, 0, 0.15, 0)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    MainFrame.BorderSizePixel = 0
-    MainFrame.Visible = true
+    MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
+    MainFrame.Size = UDim2.new(0, 450, 0, 550)
+    MainFrame.Position = UDim2.new(0.5, -225, 0.5, -275)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BorderSizePixel = 0
+    MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 
-    -- Title
-    Title.Size = UDim2.new(1, 0, 0.1, 0)
-    Title.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    Title.Text = title or "UI Library"
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Font = Enum.Font.GothamBold
-    Title.TextScaled = true
-    Title.Parent = MainFrame
+    TitleBar.Name = "TitleBar"
+    TitleBar.Parent = MainFrame
+    TitleBar.Size = UDim2.new(1, 0, 0, 30)
+    TitleBar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    TitleBar.Text = title or "Orion UI"
+    TitleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleBar.Font = Enum.Font.GothamBold
+    TitleBar.TextSize = 16
+    TitleBar.BorderSizePixel = 0
 
-    -- Floating Toggle Button
-    ToggleButton.Size = UDim2.new(0, 40, 0, 40)
-    ToggleButton.Position = UDim2.new(0.05, 0, 0.05, 0)
-    ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    ToggleButton.Image = "rbxassetid://6031068420" -- ไอคอนเปิด/ปิด
-    ToggleButton.Parent = ScreenGui
+    self:EnableDragging(MainFrame)
 
-    -- ระบบ Toggle UI
-    local dragging = false
-    local offset = Vector2.new(0, 0)
-    ToggleButton.MouseButton1Down:Connect(function(input)
-        dragging = true
-        offset = ToggleButton.Position - UDim2.fromOffset(input.Position.X, input.Position.Y)
-    end)
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            ToggleButton.Position = UDim2.fromOffset(input.Position.X, input.Position.Y) + offset
-        end
-    end)
-    ToggleButton.MouseButton1Up:Connect(function()
-        dragging = false
-    end)
-    ToggleButton.MouseButton1Click:Connect(function()
-        MainFrame.Visible = not MainFrame.Visible
-    end)
-
-    return { ScreenGui = ScreenGui, MainFrame = MainFrame }
+    return MainFrame
 end
 
--- Check Box Toggle
-function UILibrary:CreateCheckBox(parent, labelText, callback)
-    local Frame = Instance.new("Frame")
-    local Label = Instance.new("TextLabel")
-    local CheckBox = Instance.new("TextButton")
+-- Add Tab System
+function Library:AddTab(parent, tabs)
+    local TabContainer = Instance.new("Frame")
+    TabContainer.Name = "TabContainer"
+    TabContainer.Parent = parent
+    TabContainer.Size = UDim2.new(1, 0, 0, 30)
+    TabContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    TabContainer.BorderSizePixel = 0
 
-    -- Frame
-    Frame.Size = UDim2.new(0.8, 0, 0.1, 0)  -- ขนาดของ Checkbox
-    Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Frame.Position = UDim2.new(0.1, 0, 0.2, 0)
-    Frame.Parent = parent
+    local TabButtons = {}
+    local TabPages = {}
 
-    -- Label
-    Label.Size = UDim2.new(0.75, 0, 1, 0)
-    Label.Text = labelText or "Check Box"
-    Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Label.Font = Enum.Font.Gotham
-    Label.TextScaled = true
-    Label.BackgroundTransparency = 1
-    Label.Parent = Frame
+    for _, tabName in pairs(tabs) do
+        local TabButton = Instance.new("TextButton")
+        TabButton.Parent = TabContainer
+        TabButton.Size = UDim2.new(1 / #tabs, 0, 1, 0)
+        TabButton.Text = tabName
+        TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TabButton.Font = Enum.Font.Gotham
+        TabButton.TextSize = 14
 
-    -- CheckBox
-    CheckBox.Size = UDim2.new(0.2, 0, 0.8, 0)  -- ขนาดของ Checkbox
-    CheckBox.Position = UDim2.new(0.8, 0, 0.1, 0)
-    CheckBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    CheckBox.Text = ""
-    CheckBox.Parent = Frame
+        local TabPage = Instance.new("Frame")
+        TabPage.Name = tabName
+        TabPage.Parent = parent
+        TabPage.Size = UDim2.new(1, 0, 1, -30)
+        TabPage.Position = UDim2.new(0, 0, 0, 30)
+        TabPage.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        TabPage.BorderSizePixel = 0
+        TabPage.Visible = false
 
-    local isChecked = false
-    CheckBox.MouseButton1Click:Connect(function()
-        isChecked = not isChecked
-        CheckBox.BackgroundColor3 = isChecked and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(70, 70, 70)
-        if callback then callback(isChecked) end
-    end)
-end
+        TabButton.MouseButton1Click:Connect(function()
+            for _, page in pairs(TabPages) do
+                page.Visible = false
+            end
+            TabPage.Visible = true
+        end)
 
--- Slider with Input Box
-function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
-    local Frame = Instance.new("Frame")
-    local Label = Instance.new("TextLabel")
-    local SliderBar = Instance.new("Frame")
-    local SliderKnob = Instance.new("Frame")
-    local InputBox = Instance.new("TextBox")
-
-    -- Frame
-    Frame.Size = UDim2.new(0.8, 0, 0.1, 0)  -- ขนาดของ Slider
-    Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Frame.Position = UDim2.new(0.1, 0, 0.35, 0)
-    Frame.Parent = parent
-
-    -- Label
-    Label.Size = UDim2.new(0.3, 0, 1, 0)
-    Label.Text = labelText or "Slider"
-    Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Label.Font = Enum.Font.Gotham
-    Label.TextScaled = true
-    Label.BackgroundTransparency = 1
-    Label.Parent = Frame
-
-    -- SliderBar
-    SliderBar.Size = UDim2.new(0.6, 0, 0.3, 0)  -- ขนาดของแถบ Slider
-    SliderBar.Position = UDim2.new(0.35, 0, 0.35, 0)
-    SliderBar.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    SliderBar.Parent = Frame
-
-    -- SliderKnob
-    SliderKnob.Size = UDim2.new(0, 10, 1, 0)
-    SliderKnob.Position = UDim2.new(0, 0, 0, 0)
-    SliderKnob.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-    SliderKnob.Parent = SliderBar
-
-    -- InputBox
-    InputBox.Size = UDim2.new(0.2, 0, 1, 0)
-    InputBox.Position = UDim2.new(0.88, 0, 0, 0)
-    InputBox.Text = tostring(minValue)
-    InputBox.Font = Enum.Font.Gotham
-    InputBox.TextScaled = true
-    InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    InputBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    InputBox.Parent = Frame
-
-    local function updateSlider(value)
-        local percentage = (value - minValue) / (maxValue - minValue)
-        SliderKnob.Position = UDim2.new(percentage, 0, 0, 0)
-        InputBox.Text = tostring(value)
-        if callback then callback(value) end
+        table.insert(TabButtons, TabButton)
+        table.insert(TabPages, TabPage)
     end
 
-    SliderBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local mousePos = game:GetService("UserInputService"):GetMouseLocation().X
-            local barPos = SliderBar.AbsolutePosition.X
-            local barSize = SliderBar.AbsoluteSize.X
-            local percentage = math.clamp((mousePos - barPos) / barSize, 0, 1)
-            local value = math.floor(minValue + (percentage * (maxValue - minValue)))
-            updateSlider(value)
-        end
-    end)
+    TabPages[1].Visible = true -- Show first tab by default
+    return TabPages
+end
 
-    InputBox.FocusLost:Connect(function()
-        local value = tonumber(InputBox.Text) or minValue
-        value = math.clamp(value, minValue, maxValue)
-        updateSlider(value)
+-- Add Component Function
+function Library:AddButton(parent, text, callback)
+    local Button = Instance.new("TextButton")
+    Button.Parent = parent
+    Button.Size = UDim2.new(0.8, 0, 0, 40)
+    Button.Position = UDim2.new(0.1, 0, 0.1, 0)
+    Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Button.Text = text
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.Font = Enum.Font.Gotham
+    Button.TextSize = 14
+
+    Button.MouseButton1Click:Connect(function()
+        if callback then callback() end
     end)
 end
 
-return UILibrary
+function Library:AddToggle(parent, text, default, callback)
+    local Frame = Instance.new("Frame")
+    local Label = Instance.new("TextLabel")
+    local ToggleButton = Instance.new("TextButton")
+
+    Frame.Parent = parent
+    Frame.Size = UDim2.new(0.8, 0, 0, 40)
+    Frame.Position = UDim2.new(0.1, 0, 0.2, 0)
+    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Frame.BorderSizePixel = 0
+
+    Label.Parent = Frame
+    Label.Size = UDim2.new(0.7, 0, 1, 0)
+    Label.Text = text
+    Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Label.Font = Enum.Font.Gotham
+    Label.TextSize = 14
+
+    ToggleButton.Parent = Frame
+    ToggleButton.Size = UDim2.new(0.3, 0, 1, 0)
+    ToggleButton.Position = UDim2.new(0.7, 0, 0, 0)
+    ToggleButton.Text = default and "ON" or "OFF"
+    ToggleButton.BackgroundColor3 = default and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+    ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleButton.Font = Enum.Font.Gotham
+    ToggleButton.TextSize = 14
+
+    ToggleButton.MouseButton1Click:Connect(function()
+        default = not default
+        ToggleButton.Text = default and "ON" or "OFF"
+        ToggleButton.BackgroundColor3 = default and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+        if callback then callback(default) end
+    end)
+end
+
+-- Add More Components: Dropdown, Slider, Notification, etc.
+
+return Library
