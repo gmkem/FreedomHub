@@ -6,36 +6,36 @@ function UILibrary:CreateWindow(title)
     local MainFrame = Instance.new("Frame")
     local Title = Instance.new("TextLabel")
     local ToggleButton = Instance.new("ImageButton")
-    
+
     -- ScreenGui
     ScreenGui.Name = "CustomUILibrary"
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
     -- MainFrame
-    MainFrame.Size = UDim2.new(0.6, 0, 0.75, 0)
+    MainFrame.Size = UDim2.new(0.6, 0, 0.7, 0)  -- ขนาด UI หลัก
     MainFrame.Position = UDim2.new(0.2, 0, 0.15, 0)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     MainFrame.BorderSizePixel = 0
     MainFrame.Visible = true
     MainFrame.Parent = ScreenGui
 
     -- Title
     Title.Size = UDim2.new(1, 0, 0.1, 0)
-    Title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Title.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     Title.Text = title or "UI Library"
     Title.TextColor3 = Color3.fromRGB(255, 255, 255)
     Title.Font = Enum.Font.GothamBold
     Title.TextScaled = true
     Title.Parent = MainFrame
 
-    -- Floating Toggle Button (small and draggable)
+    -- Floating Toggle Button
     ToggleButton.Size = UDim2.new(0, 40, 0, 40)
     ToggleButton.Position = UDim2.new(0.05, 0, 0.05, 0)
-    ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     ToggleButton.Image = "rbxassetid://6031068420" -- ไอคอนเปิด/ปิด
     ToggleButton.Parent = ScreenGui
 
-    -- Toggle UI Functionality
+    -- ระบบ Toggle UI
     local dragging = false
     local offset = Vector2.new(0, 0)
     ToggleButton.MouseButton1Down:Connect(function(input)
@@ -57,19 +57,20 @@ function UILibrary:CreateWindow(title)
     return { ScreenGui = ScreenGui, MainFrame = MainFrame }
 end
 
--- Checkbox Toggle (smaller size)
+-- Check Box Toggle
 function UILibrary:CreateCheckBox(parent, labelText, callback)
     local Frame = Instance.new("Frame")
     local Label = Instance.new("TextLabel")
     local CheckBox = Instance.new("TextButton")
 
     -- Frame
-    Frame.Size = UDim2.new(0.9, 0, 0.1, 0)
-    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Frame.Size = UDim2.new(0.8, 0, 0.1, 0)  -- ขนาดของ Checkbox
+    Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Frame.Position = UDim2.new(0.1, 0, 0.2, 0)
     Frame.Parent = parent
 
     -- Label
-    Label.Size = UDim2.new(0.8, 0, 1, 0)
+    Label.Size = UDim2.new(0.75, 0, 1, 0)
     Label.Text = labelText or "Check Box"
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
     Label.Font = Enum.Font.Gotham
@@ -77,9 +78,9 @@ function UILibrary:CreateCheckBox(parent, labelText, callback)
     Label.BackgroundTransparency = 1
     Label.Parent = Frame
 
-    -- CheckBox (smaller size)
-    CheckBox.Size = UDim2.new(0.1, 0, 0.7, 0)
-    CheckBox.Position = UDim2.new(0.85, 0, 0.15, 0)
+    -- CheckBox
+    CheckBox.Size = UDim2.new(0.2, 0, 0.8, 0)  -- ขนาดของ Checkbox
+    CheckBox.Position = UDim2.new(0.8, 0, 0.1, 0)
     CheckBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     CheckBox.Text = ""
     CheckBox.Parent = Frame
@@ -92,7 +93,7 @@ function UILibrary:CreateCheckBox(parent, labelText, callback)
     end)
 end
 
--- Slider with Input Box and mobile compatibility
+-- Slider with Input Box
 function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
     local Frame = Instance.new("Frame")
     local Label = Instance.new("TextLabel")
@@ -101,12 +102,13 @@ function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
     local InputBox = Instance.new("TextBox")
 
     -- Frame
-    Frame.Size = UDim2.new(0.9, 0, 0.15, 0)
-    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Frame.Size = UDim2.new(0.8, 0, 0.1, 0)  -- ขนาดของ Slider
+    Frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Frame.Position = UDim2.new(0.1, 0, 0.35, 0)
     Frame.Parent = parent
 
     -- Label
-    Label.Size = UDim2.new(0.4, 0, 1, 0)
+    Label.Size = UDim2.new(0.3, 0, 1, 0)
     Label.Text = labelText or "Slider"
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
     Label.Font = Enum.Font.Gotham
@@ -115,8 +117,8 @@ function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
     Label.Parent = Frame
 
     -- SliderBar
-    SliderBar.Size = UDim2.new(0.5, 0, 0.2, 0)
-    SliderBar.Position = UDim2.new(0.45, 0, 0.4, 0)
+    SliderBar.Size = UDim2.new(0.6, 0, 0.3, 0)  -- ขนาดของแถบ Slider
+    SliderBar.Position = UDim2.new(0.35, 0, 0.35, 0)
     SliderBar.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     SliderBar.Parent = Frame
 
@@ -126,14 +128,14 @@ function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
     SliderKnob.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
     SliderKnob.Parent = SliderBar
 
-    -- InputBox (small box for the value)
-    InputBox.Size = UDim2.new(0.15, 0, 1, 0)
+    -- InputBox
+    InputBox.Size = UDim2.new(0.2, 0, 1, 0)
     InputBox.Position = UDim2.new(0.88, 0, 0, 0)
     InputBox.Text = tostring(minValue)
     InputBox.Font = Enum.Font.Gotham
     InputBox.TextScaled = true
     InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    InputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    InputBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     InputBox.Parent = Frame
 
     local function updateSlider(value)
@@ -143,25 +145,12 @@ function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
         if callback then callback(value) end
     end
 
-    -- Update slider and input box
     SliderBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             local mousePos = game:GetService("UserInputService"):GetMouseLocation().X
             local barPos = SliderBar.AbsolutePosition.X
             local barSize = SliderBar.AbsoluteSize.X
             local percentage = math.clamp((mousePos - barPos) / barSize, 0, 1)
-            local value = math.floor(minValue + (percentage * (maxValue - minValue)))
-            updateSlider(value)
-        end
-    end)
-
-    -- Mobile support: Allow touch input
-    SliderBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            local touchPos = input.Position.X
-            local barPos = SliderBar.AbsolutePosition.X
-            local barSize = SliderBar.AbsoluteSize.X
-            local percentage = math.clamp((touchPos - barPos) / barSize, 0, 1)
             local value = math.floor(minValue + (percentage * (maxValue - minValue)))
             updateSlider(value)
         end
