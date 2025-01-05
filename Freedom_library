@@ -1,70 +1,94 @@
 local UILibrary = {}
 
--- สร้างหน้าต่างหลัก
+-- ฟังก์ชันสร้าง UI หลัก
 function UILibrary:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
-    local Title = Instance.new("TextLabel")
+    local TitleBar = Instance.new("TextLabel")
+    local MinimizeButton = Instance.new("TextButton")
+    local UICorner = Instance.new("UICorner")
 
+    -- UI หลัก
     ScreenGui.Name = "CustomUILibrary"
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+    MainFrame.Name = "MainFrame"
     MainFrame.Size = UDim2.new(0.4, 0, 0.6, 0)
     MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    MainFrame.Visible = true
+    MainFrame.Active = true
+    MainFrame.Draggable = true
     MainFrame.Parent = ScreenGui
 
-    Title.Size = UDim2.new(1, 0, 0.1, 0)
-    Title.Position = UDim2.new(0, 0, 0, 0)
-    Title.Text = title or "UI Library"
-    Title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Font = Enum.Font.GothamBold
-    Title.TextScaled = true
-    Title.Parent = MainFrame
+    UICorner.CornerRadius = UDim.new(0.05, 0)
+    UICorner.Parent = MainFrame
+
+    -- แถบหัวข้อ
+    TitleBar.Name = "TitleBar"
+    TitleBar.Size = UDim2.new(1, 0, 0.1, 0)
+    TitleBar.Position = UDim2.new(0, 0, 0, 0)
+    TitleBar.Text = title or "UI Library"
+    TitleBar.Font = Enum.Font.GothamBold
+    TitleBar.TextScaled = true
+    TitleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    TitleBar.Parent = MainFrame
+
+    -- ปุ่มย่อ/ขยาย UI
+    MinimizeButton.Name = "MinimizeButton"
+    MinimizeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+    MinimizeButton.Position = UDim2.new(0.9, -10, 0, 5)
+    MinimizeButton.Text = "-"
+    MinimizeButton.Font = Enum.Font.GothamBold
+    MinimizeButton.TextScaled = true
+    MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MinimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    MinimizeButton.Parent = TitleBar
+
+    -- การย่อ/ขยาย UI
+    MinimizeButton.MouseButton1Click:Connect(function()
+        MainFrame.Visible = not MainFrame.Visible
+    end)
 
     return { ScreenGui = ScreenGui, MainFrame = MainFrame }
 end
 
--- Toggle (เปิด/ปิด)
-function UILibrary:CreateToggle(parent, labelText, callback)
-    local ToggleFrame = Instance.new("Frame")
+-- Checkbox (Toggle)
+function UILibrary:CreateCheckbox(parent, labelText, callback)
+    local CheckboxFrame = Instance.new("Frame")
     local Label = Instance.new("TextLabel")
-    local ToggleButton = Instance.new("TextButton")
+    local Checkbox = Instance.new("TextButton")
     local UICorner = Instance.new("UICorner")
 
-    ToggleFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
-    ToggleFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
-    ToggleFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    ToggleFrame.Parent = parent
+    CheckboxFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
+    CheckboxFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
+    CheckboxFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    CheckboxFrame.Parent = parent
 
     Label.Size = UDim2.new(0.7, 0, 1, 0)
     Label.Position = UDim2.new(0, 10, 0, 0)
-    Label.Text = labelText or "Toggle"
+    Label.Text = labelText or "Checkbox"
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
     Label.BackgroundTransparency = 1
     Label.Font = Enum.Font.Gotham
     Label.TextScaled = true
-    Label.Parent = ToggleFrame
+    Label.Parent = CheckboxFrame
 
-    ToggleButton.Size = UDim2.new(0.2, 0, 0.8, 0)
-    ToggleButton.Position = UDim2.new(0.75, 0, 0.1, 0)
-    ToggleButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    ToggleButton.Text = "Off"
-    ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ToggleButton.Font = Enum.Font.Gotham
-    ToggleButton.TextScaled = true
-    ToggleButton.Parent = ToggleFrame
+    Checkbox.Size = UDim2.new(0.2, 0, 0.8, 0)
+    Checkbox.Position = UDim2.new(0.75, 0, 0.1, 0)
+    Checkbox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    Checkbox.Text = ""
+    Checkbox.Parent = CheckboxFrame
 
     UICorner.CornerRadius = UDim.new(0.05, 0)
-    UICorner.Parent = ToggleButton
+    UICorner.Parent = Checkbox
 
-    local isOn = false
-    ToggleButton.MouseButton1Click:Connect(function()
-        isOn = not isOn
-        ToggleButton.Text = isOn and "On" or "Off"
-        ToggleButton.BackgroundColor3 = isOn and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
-        if callback then callback(isOn) end
+    local isChecked = false
+    Checkbox.MouseButton1Click:Connect(function()
+        isChecked = not isChecked
+        Checkbox.BackgroundColor3 = isChecked and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(70, 70, 70)
+        if callback then callback(isChecked) end
     end)
 end
 
@@ -74,6 +98,7 @@ function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
     local Label = Instance.new("TextLabel")
     local SliderBar = Instance.new("Frame")
     local SliderKnob = Instance.new("ImageButton")
+    local ValueBox = Instance.new("TextBox")
 
     SliderFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
     SliderFrame.Position = UDim2.new(0.05, 0, 0.25, 0)
@@ -99,11 +124,21 @@ function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
     SliderKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     SliderKnob.Parent = SliderBar
 
+    ValueBox.Size = UDim2.new(0.1, 0, 0.6, 0)
+    ValueBox.Position = UDim2.new(0.87, 0, 0.2, 0)
+    ValueBox.Text = tostring(minValue)
+    ValueBox.Font = Enum.Font.Gotham
+    ValueBox.TextScaled = true
+    ValueBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    ValueBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ValueBox.Parent = SliderFrame
+
     local function updateSlider(input)
         local x = math.clamp(input.Position.X, SliderBar.AbsolutePosition.X, SliderBar.AbsolutePosition.X + SliderBar.AbsoluteSize.X)
         local percentage = (x - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X
         local value = math.floor(minValue + ((maxValue - minValue) * percentage))
         SliderKnob.Position = UDim2.new(percentage, -7, -0.25, 0)
+        ValueBox.Text = tostring(value)
         if callback then callback(value) end
     end
 
