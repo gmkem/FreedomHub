@@ -1,6 +1,6 @@
 -- Instances:
 
-local Monke = Instance.new("ScreenGui")
+local Power cat = Instance.new("ScreenGui")
 local Main = Instance.new("ImageLabel")
 local close = Instance.new("ImageButton")
 local minimize = Instance.new("ImageButton")
@@ -71,13 +71,13 @@ local G = Instance.new("TextBox")
 
 --Properties:
 
-Monke.Name = "Monke"
-Monke.Parent = game.CoreGui
-Monke.DisplayOrder = 59666
-Monke.ResetOnSpawn = false
+Power cat.Name = "Power cat"
+Power cat.Parent = game.CoreGui
+Power cat.DisplayOrder = 59666
+Power cat.ResetOnSpawn = false
 
 Main.Name = "Main"
-Main.Parent = Monke
+Main.Parent = Power cat
 Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Main.BorderSizePixel = 0
 Main.Position = UDim2.new(0.5, -225, 0.5, -175)
@@ -124,7 +124,7 @@ title.Position = UDim2.new(0, 7, 0, 0)
 title.Size = UDim2.new(1, -7, 1, 0)
 title.ZIndex = 3
 title.Font = Enum.Font.SourceSans
-title.Text = "Monke Hub"
+title.Text = "Power cat Hub"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextSize = 20.000
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -212,18 +212,18 @@ settingstab.ZIndex = 2
 settingstab.ScrollBarThickness = 0
 settingstab.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-monketheme.Name = "monketheme"
-monketheme.Parent = settingstab
-monketheme.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-monketheme.BorderSizePixel = 0
-monketheme.Position = UDim2.new(0.5, -100, 0, 59)
-monketheme.Size = UDim2.new(0, 200, 0, 35)
-monketheme.ZIndex = 3
-monketheme.AutoButtonColor = false
-monketheme.Font = Enum.Font.SourceSans
-monketheme.Text = "Monke theme"
-monketheme.TextColor3 = Color3.fromRGB(255, 255, 255)
-monketheme.TextSize = 20.000
+cattheme.Name = "cattheme"
+cattheme.Parent = settingstab
+cattheme.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+cattheme.BorderSizePixel = 0
+cattheme.Position = UDim2.new(0.5, -100, 0, 59)
+cattheme.Size = UDim2.new(0, 200, 0, 35)
+cattheme.ZIndex = 3
+cattheme.AutoButtonColor = false
+cattheme.Font = Enum.Font.SourceSans
+cattheme.Text = "Power cat theme"
+cattheme.TextColor3 = Color3.fromRGB(255, 255, 255)
+cattheme.TextSize = 20.000
 
 blacktheme.Name = "blacktheme"
 blacktheme.Parent = settingstab
@@ -772,7 +772,7 @@ tabsample.Visible=false
 dropdownsample.Visible=false
 ColorpickerFrame.Position=UDim2.new(0, 20,0,10)
 local titel = Instance.new('TextLabel')
-Monke.Enabled = true
+Power cat.Enabled = true
 tabsample.CanvasSize = UDim2.new(0,0,100,0)
 Dropdownoptions.CanvasSize = UDim2.new(0,0,100,0)
 Tabslist.CanvasSize = UDim2.new(0,0,100,0)
@@ -820,17 +820,17 @@ end))
 
 --// Other UI Stuff
 minimize.MouseButton1Click:Connect(function()
-	Monke.Enabled=false
+	Power cat.Enabled=false
 end)
 
 uis.InputBegan:Connect(function(k)
 	if k.KeyCode==Enum.KeyCode.LeftAlt then
-		Monke.Enabled=not Monke.Enabled
+		Power cat.Enabled=not Power cat.Enabled
 	end
 end)
 
 close.MouseButton1Click:Connect(function()
-	Monke:Destroy()
+	Power cat:Destroy()
 end)
 
 --// Resizing + Dragging
@@ -1210,3 +1210,66 @@ library.newSlider = function(parent,text,startValue,endValue,callback)
 end
 
 return library
+-- Example script for a mobile-compatible slider
+local function makeSliderMobileFriendly(slider)
+    slider.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            local moveConnection
+            moveConnection = slider.InputChanged:Connect(function(moveInput)
+                if moveInput.UserInputType == Enum.UserInputType.Touch then
+                    local newValue = math.clamp(moveInput.Position.X, slider.AbsolutePosition.X, slider.AbsolutePosition.X + slider.AbsoluteSize.X)
+                    -- Logic to update slider value
+                    print(newValue)
+                end
+            end)
+        end
+    end)
+end
+
+-- Toggle UI visibility
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 50, 0, 50)
+toggleButton.Position = UDim2.new(0, 10, 0, 10) -- Adjust to preferred position
+toggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+toggleButton.Text = "Toggle"
+
+toggleButton.MouseButton1Click:Connect(function()
+    Main.Visible = not Main.Visible
+end)
+
+toggleButton.Parent = PowerCat
+
+-- Dragging functionality
+local UIS = game:GetService("UserInputService")
+local dragToggle = nil
+local dragSpeed = 0.125
+local dragInput = nil
+local dragStart = nil
+local startPos = nil
+
+Main.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragToggle = true
+        dragStart = input.Position
+        startPos = Main.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragToggle = false
+            end
+        end)
+    end
+end)
+
+Main.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if input == dragInput and dragToggle then
+        local delta = input.Position - dragStart
+        Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
