@@ -1,159 +1,163 @@
 local UILibrary = {}
 
--- ฟังก์ชันสร้าง UI หลัก
+-- สร้างหน้าต่างหลัก
 function UILibrary:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
-    local TitleBar = Instance.new("TextLabel")
-    local MinimizeButton = Instance.new("TextButton")
-    local UICorner = Instance.new("UICorner")
+    local Title = Instance.new("TextLabel")
+    local ToggleButton = Instance.new("ImageButton")
 
-    -- UI หลัก
+    -- ScreenGui
     ScreenGui.Name = "CustomUILibrary"
     ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    MainFrame.Name = "MainFrame"
-    MainFrame.Size = UDim2.new(0.4, 0, 0.6, 0)
-    MainFrame.Position = UDim2.new(0.3, 0, 0.2, 0)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    -- MainFrame
+    MainFrame.Size = UDim2.new(0.5, 0, 0.7, 0)
+    MainFrame.Position = UDim2.new(0.25, 0, 0.15, 0)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BorderSizePixel = 0
     MainFrame.Visible = true
-    MainFrame.Active = true
-    MainFrame.Draggable = true
     MainFrame.Parent = ScreenGui
 
-    UICorner.CornerRadius = UDim.new(0.05, 0)
-    UICorner.Parent = MainFrame
+    -- Title
+    Title.Size = UDim2.new(1, 0, 0.1, 0)
+    Title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Title.Text = title or "UI Library"
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextScaled = true
+    Title.Parent = MainFrame
 
-    -- แถบหัวข้อ
-    TitleBar.Name = "TitleBar"
-    TitleBar.Size = UDim2.new(1, 0, 0.1, 0)
-    TitleBar.Position = UDim2.new(0, 0, 0, 0)
-    TitleBar.Text = title or "UI Library"
-    TitleBar.Font = Enum.Font.GothamBold
-    TitleBar.TextScaled = true
-    TitleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    TitleBar.Parent = MainFrame
+    -- Floating Toggle Button
+    ToggleButton.Size = UDim2.new(0, 50, 0, 50)
+    ToggleButton.Position = UDim2.new(0.05, 0, 0.05, 0)
+    ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    ToggleButton.Image = "rbxassetid://6031068420" -- ไอคอนเปิด/ปิด
+    ToggleButton.Parent = ScreenGui
 
-    -- ปุ่มย่อ/ขยาย UI
-    MinimizeButton.Name = "MinimizeButton"
-    MinimizeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
-    MinimizeButton.Position = UDim2.new(0.9, -10, 0, 5)
-    MinimizeButton.Text = "-"
-    MinimizeButton.Font = Enum.Font.GothamBold
-    MinimizeButton.TextScaled = true
-    MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    MinimizeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-    MinimizeButton.Parent = TitleBar
-
-    -- การย่อ/ขยาย UI
-    MinimizeButton.MouseButton1Click:Connect(function()
+    -- ระบบ Toggle UI
+    local dragging = false
+    local offset = Vector2.new(0, 0)
+    ToggleButton.MouseButton1Down:Connect(function(input)
+        dragging = true
+        offset = ToggleButton.Position - UDim2.fromOffset(input.Position.X, input.Position.Y)
+    end)
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            ToggleButton.Position = UDim2.fromOffset(input.Position.X, input.Position.Y) + offset
+        end
+    end)
+    ToggleButton.MouseButton1Up:Connect(function()
+        dragging = false
+    end)
+    ToggleButton.MouseButton1Click:Connect(function()
         MainFrame.Visible = not MainFrame.Visible
     end)
 
     return { ScreenGui = ScreenGui, MainFrame = MainFrame }
 end
 
--- Checkbox (Toggle)
-function UILibrary:CreateCheckbox(parent, labelText, callback)
-    local CheckboxFrame = Instance.new("Frame")
+-- Check Box Toggle
+function UILibrary:CreateCheckBox(parent, labelText, callback)
+    local Frame = Instance.new("Frame")
     local Label = Instance.new("TextLabel")
-    local Checkbox = Instance.new("TextButton")
-    local UICorner = Instance.new("UICorner")
+    local CheckBox = Instance.new("TextButton")
 
-    CheckboxFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
-    CheckboxFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
-    CheckboxFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    CheckboxFrame.Parent = parent
+    -- Frame
+    Frame.Size = UDim2.new(0.9, 0, 0.1, 0)
+    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Frame.Parent = parent
 
-    Label.Size = UDim2.new(0.7, 0, 1, 0)
-    Label.Position = UDim2.new(0, 10, 0, 0)
-    Label.Text = labelText or "Checkbox"
+    -- Label
+    Label.Size = UDim2.new(0.8, 0, 1, 0)
+    Label.Text = labelText or "Check Box"
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Label.BackgroundTransparency = 1
     Label.Font = Enum.Font.Gotham
     Label.TextScaled = true
-    Label.Parent = CheckboxFrame
+    Label.BackgroundTransparency = 1
+    Label.Parent = Frame
 
-    Checkbox.Size = UDim2.new(0.2, 0, 0.8, 0)
-    Checkbox.Position = UDim2.new(0.75, 0, 0.1, 0)
-    Checkbox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    Checkbox.Text = ""
-    Checkbox.Parent = CheckboxFrame
-
-    UICorner.CornerRadius = UDim.new(0.05, 0)
-    UICorner.Parent = Checkbox
+    -- CheckBox
+    CheckBox.Size = UDim2.new(0.1, 0, 0.7, 0)
+    CheckBox.Position = UDim2.new(0.85, 0, 0.15, 0)
+    CheckBox.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    CheckBox.Text = ""
+    CheckBox.Parent = Frame
 
     local isChecked = false
-    Checkbox.MouseButton1Click:Connect(function()
+    CheckBox.MouseButton1Click:Connect(function()
         isChecked = not isChecked
-        Checkbox.BackgroundColor3 = isChecked and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(70, 70, 70)
+        CheckBox.BackgroundColor3 = isChecked and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(70, 70, 70)
         if callback then callback(isChecked) end
     end)
 end
 
--- Slider (เลื่อนค่า)
+-- Slider with Input Box
 function UILibrary:CreateSlider(parent, labelText, minValue, maxValue, callback)
-    local SliderFrame = Instance.new("Frame")
+    local Frame = Instance.new("Frame")
     local Label = Instance.new("TextLabel")
     local SliderBar = Instance.new("Frame")
-    local SliderKnob = Instance.new("ImageButton")
-    local ValueBox = Instance.new("TextBox")
+    local SliderKnob = Instance.new("Frame")
+    local InputBox = Instance.new("TextBox")
 
-    SliderFrame.Size = UDim2.new(0.9, 0, 0.1, 0)
-    SliderFrame.Position = UDim2.new(0.05, 0, 0.25, 0)
-    SliderFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    SliderFrame.Parent = parent
+    -- Frame
+    Frame.Size = UDim2.new(0.9, 0, 0.1, 0)
+    Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Frame.Parent = parent
 
-    Label.Size = UDim2.new(0.3, 0, 1, 0)
-    Label.Position = UDim2.new(0, 10, 0, 0)
+    -- Label
+    Label.Size = UDim2.new(0.4, 0, 1, 0)
     Label.Text = labelText or "Slider"
     Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Label.BackgroundTransparency = 1
     Label.Font = Enum.Font.Gotham
     Label.TextScaled = true
-    Label.Parent = SliderFrame
+    Label.BackgroundTransparency = 1
+    Label.Parent = Frame
 
-    SliderBar.Size = UDim2.new(0.5, 0, 0.2, 0)
-    SliderBar.Position = UDim2.new(0.35, 0, 0.4, 0)
+    -- SliderBar
+    SliderBar.Size = UDim2.new(0.4, 0, 0.3, 0)
+    SliderBar.Position = UDim2.new(0.45, 0, 0.35, 0)
     SliderBar.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-    SliderBar.Parent = SliderFrame
+    SliderBar.Parent = Frame
 
-    SliderKnob.Size = UDim2.new(0, 15, 0, 15)
-    SliderKnob.Position = UDim2.new(0, 0, -0.25, 0)
-    SliderKnob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    -- SliderKnob
+    SliderKnob.Size = UDim2.new(0, 10, 1, 0)
+    SliderKnob.Position = UDim2.new(0, 0, 0, 0)
+    SliderKnob.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
     SliderKnob.Parent = SliderBar
 
-    ValueBox.Size = UDim2.new(0.1, 0, 0.6, 0)
-    ValueBox.Position = UDim2.new(0.87, 0, 0.2, 0)
-    ValueBox.Text = tostring(minValue)
-    ValueBox.Font = Enum.Font.Gotham
-    ValueBox.TextScaled = true
-    ValueBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    ValueBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ValueBox.Parent = SliderFrame
+    -- InputBox
+    InputBox.Size = UDim2.new(0.15, 0, 1, 0)
+    InputBox.Position = UDim2.new(0.88, 0, 0, 0)
+    InputBox.Text = tostring(minValue)
+    InputBox.Font = Enum.Font.Gotham
+    InputBox.TextScaled = true
+    InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    InputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    InputBox.Parent = Frame
 
-    local function updateSlider(input)
-        local x = math.clamp(input.Position.X, SliderBar.AbsolutePosition.X, SliderBar.AbsolutePosition.X + SliderBar.AbsoluteSize.X)
-        local percentage = (x - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X
-        local value = math.floor(minValue + ((maxValue - minValue) * percentage))
-        SliderKnob.Position = UDim2.new(percentage, -7, -0.25, 0)
-        ValueBox.Text = tostring(value)
+    local function updateSlider(value)
+        local percentage = (value - minValue) / (maxValue - minValue)
+        SliderKnob.Position = UDim2.new(percentage, 0, 0, 0)
+        InputBox.Text = tostring(value)
         if callback then callback(value) end
     end
 
-    SliderKnob.InputBegan:Connect(function(input)
+    SliderBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            local conn
-            conn = game:GetService("UserInputService").InputChanged:Connect(function(input2)
-                if input2.UserInputType == Enum.UserInputType.MouseMovement then
-                    updateSlider(input2)
-                end
-            end)
-            input.InputEnded:Connect(function()
-                conn:Disconnect()
-            end)
+            local mousePos = game:GetService("UserInputService"):GetMouseLocation().X
+            local barPos = SliderBar.AbsolutePosition.X
+            local barSize = SliderBar.AbsoluteSize.X
+            local percentage = math.clamp((mousePos - barPos) / barSize, 0, 1)
+            local value = math.floor(minValue + (percentage * (maxValue - minValue)))
+            updateSlider(value)
         end
+    end)
+
+    InputBox.FocusLost:Connect(function()
+        local value = tonumber(InputBox.Text) or minValue
+        value = math.clamp(value, minValue, maxValue)
+        updateSlider(value)
     end)
 end
 
