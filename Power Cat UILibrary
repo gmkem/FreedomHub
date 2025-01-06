@@ -1,6 +1,6 @@
 -- Instances:
 
-local Power cat = Instance.new("ScreenGui")
+local PowerCat = Instance.new("ScreenGui")
 local Main = Instance.new("ImageLabel")
 local close = Instance.new("ImageButton")
 local minimize = Instance.new("ImageButton")
@@ -19,15 +19,51 @@ local cattheme = Instance.new("TextButton")
 local blacktheme = Instance.new("TextButton")
 local rainbowtheme = Instance.new("TextButton")
 local fireicetheme = Instance.new("TextButton")
-local DropdownFrame = Instance.new("ImageLabel")
-local Dropdownglow = Instance.new("ImageLabel")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame = Instance.new("ImageLabel")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow = Instance.new("ImageLabel")
 local UIGradient_2 = Instance.new("UIGradient")
-local Dropdowntopbar = Instance.new("ImageLabel")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar = Instance.new("ImageLabel")
 local title_2 = Instance.new("TextLabel")
 local fade_2 = Instance.new("ImageLabel")
-local Dropdownclose = Instance.new("ImageButton")
-local Dropdownsearch = Instance.new("TextBox")
-local Dropdownoptions = Instance.new("ScrollingFrame")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close = Instance.new("ImageButton")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search = Instance.new("TextBox")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options = Instance.new("ScrollingFrame")
 local UIListLayout_2 = Instance.new("UIListLayout")
 local dropdownsample = Instance.new("TextButton")
 local Tabs = Instance.new("Frame")
@@ -56,9 +92,21 @@ local sliderpart = Instance.new("TextButton")
 local UICorner_5 = Instance.new("UICorner")
 local slidervalue = Instance.new("TextLabel")
 local ColorpickerFrame = Instance.new("ImageLabel")
-local Dropdownglow_2 = Instance.new("ImageLabel")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2 = Instance.new("ImageLabel")
 local UIGradient_3 = Instance.new("UIGradient")
-local Dropdowntopbar_2 = Instance.new("ImageLabel")
+local Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2 = Instance.new("ImageLabel")
 local title_3 = Instance.new("TextLabel")
 local fade_3 = Instance.new("ImageLabel")
 local Colorpickerclose = Instance.new("ImageButton")
@@ -71,17 +119,17 @@ local G = Instance.new("TextBox")
 
 --Properties:
 
-Power cat.Name = "Power cat"
-Power cat.Parent = game.CoreGui
-Power cat.DisplayOrder = 59666
-Power cat.ResetOnSpawn = false
+PowerCat.Name = "PowerCat"
+PowerCat.Parent = game.CoreGui
+PowerCat.DisplayOrder = 59666
+PowerCat.ResetOnSpawn = false
 
 Main.Name = "Main"
-Main.Parent = Power cat
+Main.Parent = PowerCat
 Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Main.BorderSizePixel = 0
-Main.Position = UDim2.fromScale(0.5, -225, 0.5, -175)
-Main.Size = UDim2.fromScale(0, 450, 0, 350)
+Main.Position = UDim2.new(0.5, -225, 0.5, -175)
+Main.Size = UDim2.new(0, 450, 0, 350)
 Main.Image = "http://www.roblox.com/asset/?id=6374072464"
 Main.ImageTransparency = 0.800
 Main.ScaleType = Enum.ScaleType.Crop
@@ -90,8 +138,8 @@ close.Name = "close"
 close.Parent = Main
 close.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 close.BorderSizePixel = 0
-close.Position = UDim2.fromScale(1, -44, -0, 0)
-close.Size = UDim2.fromScale(0, 44, 0, 28)
+close.Position = UDim2.new(1, -44, -0, 0)
+close.Size = UDim2.new(0, 44, 0, 28)
 close.ZIndex = 4
 close.AutoButtonColor = false
 close.Image = "http://www.roblox.com/asset/?id=6351038614"
@@ -100,8 +148,8 @@ minimize.Name = "minimize"
 minimize.Parent = Main
 minimize.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 minimize.BorderSizePixel = 0
-minimize.Position = UDim2.fromScale(1, -88, 0, 0)
-minimize.Size = UDim2.fromScale(0, 44, 0, 28)
+minimize.Position = UDim2.new(1, -88, 0, 0)
+minimize.Size = UDim2.new(0, 44, 0, 28)
 minimize.ZIndex = 4
 minimize.AutoButtonColor = false
 minimize.Image = "http://www.roblox.com/asset/?id=6351051603"
@@ -110,7 +158,7 @@ topbar.Name = "topbar"
 topbar.Parent = Main
 topbar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 topbar.BorderSizePixel = 0
-topbar.Size = UDim2.fromScale(1, 0, 0, 28)
+topbar.Size = UDim2.new(1, 0, 0, 28)
 topbar.ZIndex = 3
 topbar.Image = "http://www.roblox.com/asset/?id=6373963359"
 topbar.ImageColor3 = Color3.fromRGB(25, 25, 25)
@@ -120,11 +168,11 @@ title.Name = "title"
 title.Parent = topbar
 title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 title.BackgroundTransparency = 1.000
-title.Position = UDim2.fromScale(0, 7, 0, 0)
-title.Size = UDim2.fromScale(1, -7, 1, 0)
+title.Position = UDim2.new(0, 7, 0, 0)
+title.Size = UDim2.new(1, -7, 1, 0)
 title.ZIndex = 3
 title.Font = Enum.Font.SourceSans
-title.Text = "Power cat Hub"
+title.Text = "PowerCat Hub"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextSize = 20.000
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -133,8 +181,8 @@ fade.Name = "fade"
 fade.Parent = topbar
 fade.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 fade.BackgroundTransparency = 1.000
-fade.Position = UDim2.fromScale(0, 0, 1, 0)
-fade.Size = UDim2.fromScale(1, 0, 0, 10)
+fade.Position = UDim2.new(0, 0, 1, 0)
+fade.Size = UDim2.new(1, 0, 0, 10)
 fade.Image = "http://www.roblox.com/asset/?id=6373963359"
 fade.ImageColor3 = Color3.fromRGB(25, 25, 25)
 
@@ -142,8 +190,8 @@ glow.Name = "glow"
 glow.Parent = Main
 glow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 glow.BackgroundTransparency = 1.000
-glow.Position = UDim2.fromScale(0, -15, 0, -15)
-glow.Size = UDim2.fromScale(1, 30, 1, 30)
+glow.Position = UDim2.new(0, -15, 0, -15)
+glow.Size = UDim2.new(1, 30, 1, 30)
 glow.ZIndex = 0
 glow.Image = "rbxassetid://5028857084"
 glow.ScaleType = Enum.ScaleType.Slice
@@ -157,8 +205,8 @@ resize.Name = "resize"
 resize.Parent = Main
 resize.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 resize.BackgroundTransparency = 1.000
-resize.Position = UDim2.fromScale(1, -10, 1, -10)
-resize.Size = UDim2.fromScale(0, 10, 0, 10)
+resize.Position = UDim2.new(1, -10, 1, -10)
+resize.Size = UDim2.new(0, 10, 0, 10)
 resize.ZIndex = 2
 resize.Font = Enum.Font.SourceSans
 resize.Text = ""
@@ -171,8 +219,8 @@ Tabslist.Active = true
 Tabslist.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Tabslist.BackgroundTransparency = 0.500
 Tabslist.BorderSizePixel = 0
-Tabslist.Position = UDim2.fromScale(0, 10, 0, 44)
-Tabslist.Size = UDim2.fromScale(0, 100, 1, -56)
+Tabslist.Position = UDim2.new(0, 10, 0, 44)
+Tabslist.Size = UDim2.new(0, 100, 1, -56)
 Tabslist.ScrollBarThickness = 0
 Tabslist.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
@@ -180,7 +228,7 @@ tablistsample.Name = "tablistsample"
 tablistsample.Parent = Tabslist
 tablistsample.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 tablistsample.BackgroundTransparency = 1.000
-tablistsample.Size = UDim2.fromScale(1, 0, 0, 28)
+tablistsample.Size = UDim2.new(1, 0, 0, 28)
 tablistsample.Visible = false
 tablistsample.Font = Enum.Font.SourceSans
 tablistsample.Text = "Main"
@@ -195,8 +243,8 @@ setting.Parent = Main
 setting.Active = false
 setting.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 setting.BorderSizePixel = 0
-setting.Position = UDim2.fromScale(1, -132, 0, 0)
-setting.Size = UDim2.fromScale(0, 44, 0, 28)
+setting.Position = UDim2.new(1, -132, 0, 0)
+setting.Size = UDim2.new(0, 44, 0, 28)
 setting.ZIndex = 3
 setting.AutoButtonColor = false
 setting.Image = "http://www.roblox.com/asset/?id=6374367619"
@@ -207,7 +255,7 @@ settingstab.Active = true
 settingstab.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 settingstab.BorderColor3 = Color3.fromRGB(27, 42, 53)
 settingstab.BorderSizePixel = 0
-settingstab.Size = UDim2.fromScale(1, 0, 0, 28)
+settingstab.Size = UDim2.new(1, 0, 0, 28)
 settingstab.ZIndex = 2
 settingstab.ScrollBarThickness = 0
 settingstab.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -216,12 +264,12 @@ cattheme.Name = "cattheme"
 cattheme.Parent = settingstab
 cattheme.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 cattheme.BorderSizePixel = 0
-cattheme.Position = UDim2.fromScale(0.5, -100, 0, 59)
-cattheme.Size = UDim2.fromScale(0, 200, 0, 35)
+cattheme.Position = UDim2.new(0.5, -100, 0, 59)
+cattheme.Size = UDim2.new(0, 200, 0, 35)
 cattheme.ZIndex = 3
 cattheme.AutoButtonColor = false
 cattheme.Font = Enum.Font.SourceSans
-cattheme.Text = "Power cat theme"
+cattheme.Text = "PowerCat theme"
 cattheme.TextColor3 = Color3.fromRGB(255, 255, 255)
 cattheme.TextSize = 20.000
 
@@ -229,8 +277,8 @@ blacktheme.Name = "blacktheme"
 blacktheme.Parent = settingstab
 blacktheme.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 blacktheme.BorderSizePixel = 0
-blacktheme.Position = UDim2.fromScale(0.5, -100, 0, 104)
-blacktheme.Size = UDim2.fromScale(0, 200, 0, 35)
+blacktheme.Position = UDim2.new(0.5, -100, 0, 104)
+blacktheme.Size = UDim2.new(0, 200, 0, 35)
 blacktheme.ZIndex = 3
 blacktheme.AutoButtonColor = false
 blacktheme.Font = Enum.Font.SourceSans
@@ -242,8 +290,8 @@ rainbowtheme.Name = "rainbowtheme"
 rainbowtheme.Parent = settingstab
 rainbowtheme.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 rainbowtheme.BorderSizePixel = 0
-rainbowtheme.Position = UDim2.fromScale(0.5, -100, 0, 149)
-rainbowtheme.Size = UDim2.fromScale(0, 200, 0, 35)
+rainbowtheme.Position = UDim2.new(0.5, -100, 0, 149)
+rainbowtheme.Size = UDim2.new(0, 200, 0, 35)
 rainbowtheme.ZIndex = 3
 rainbowtheme.AutoButtonColor = false
 rainbowtheme.Font = Enum.Font.SourceSans
@@ -255,8 +303,8 @@ fireicetheme.Name = "fireicetheme"
 fireicetheme.Parent = settingstab
 fireicetheme.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 fireicetheme.BorderSizePixel = 0
-fireicetheme.Position = UDim2.fromScale(0.5, -100, 0, 194)
-fireicetheme.Size = UDim2.fromScale(0, 200, 0, 35)
+fireicetheme.Position = UDim2.new(0.5, -100, 0, 194)
+fireicetheme.Size = UDim2.new(0, 200, 0, 35)
 fireicetheme.ZIndex = 3
 fireicetheme.AutoButtonColor = false
 fireicetheme.Font = Enum.Font.SourceSans
@@ -264,112 +312,592 @@ fireicetheme.Text = "Fire and ice theme"
 fireicetheme.TextColor3 = Color3.fromRGB(255, 255, 255)
 fireicetheme.TextSize = 20.000
 
-DropdownFrame.Name = "DropdownFrame"
-DropdownFrame.Parent = Main
-DropdownFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-DropdownFrame.BorderSizePixel = 0
-DropdownFrame.Position = UDim2.fromScale(1, 30, 0, 0)
-DropdownFrame.Size = UDim2.fromScale(0, 150, 1, 0)
-DropdownFrame.ZIndex = -2
-DropdownFrame.Image = "http://www.roblox.com/asset/?id=6374072464"
-DropdownFrame.ImageTransparency = 0.800
-DropdownFrame.ScaleType = Enum.ScaleType.Crop
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.Parent = Main
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.BorderSizePixel = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.Position = UDim2.new(1, 30, 0, 0)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.Size = UDim2.new(0, 150, 1, 0)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.ZIndex = -2
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.Image = "http://www.roblox.com/asset/?id=6374072464"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.ImageTransparency = 0.800
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.ScaleType = Enum.ScaleType.Crop
 
-Dropdownglow.Name = "Dropdownglow"
-Dropdownglow.Parent = DropdownFrame
-Dropdownglow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Dropdownglow.BackgroundTransparency = 1.000
-Dropdownglow.Position = UDim2.fromScale(0, -15, 0, -15)
-Dropdownglow.Size = UDim2.fromScale(1, 30, 1, 30)
-Dropdownglow.ZIndex = 0
-Dropdownglow.Image = "rbxassetid://5028857084"
-Dropdownglow.ScaleType = Enum.ScaleType.Slice
-Dropdownglow.SliceCenter = Rect.new(24, 24, 276, 276)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.BackgroundTransparency = 1.000
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.Position = UDim2.new(0, -15, 0, -15)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.Size = UDim2.new(1, 30, 1, 30)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.ZIndex = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.Image = "rbxassetid://5028857084"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.ScaleType = Enum.ScaleType.Slice
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.SliceCenter = Rect.new(24, 24, 276, 276)
 
 UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(51, 0, 255)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 106, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(51, 255, 0)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 255, 0)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(228, 137, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
 UIGradient_2.Rotation = 45
-UIGradient_2.Parent = Dropdownglow
+UIGradient_2.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow
 
-Dropdowntopbar.Name = "Dropdowntopbar"
-Dropdowntopbar.Parent = DropdownFrame
-Dropdowntopbar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Dropdowntopbar.BorderSizePixel = 0
-Dropdowntopbar.Size = UDim2.fromScale(1, 0, 0, 28)
-Dropdowntopbar.ZIndex = 0
-Dropdowntopbar.Image = "http://www.roblox.com/asset/?id=6373963359"
-Dropdowntopbar.ImageColor3 = Color3.fromRGB(25, 25, 25)
-Dropdowntopbar.ImageTransparency = 1.000
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.BorderSizePixel = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.Size = UDim2.new(1, 0, 0, 28)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.ZIndex = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.Image = "http://www.roblox.com/asset/?id=6373963359"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.ImageColor3 = Color3.fromRGB(25, 25, 25)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar.ImageTransparency = 1.000
 
 title_2.Name = "title"
-title_2.Parent = Dropdowntopbar
+title_2.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar
 title_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 title_2.BackgroundTransparency = 1.000
-title_2.Position = UDim2.fromScale(0, 7, 0, 0)
-title_2.Size = UDim2.fromScale(1, -7, 1, 0)
+title_2.Position = UDim2.new(0, 7, 0, 0)
+title_2.Size = UDim2.new(1, -7, 1, 0)
 title_2.ZIndex = 0
 title_2.Font = Enum.Font.SourceSans
-title_2.Text = "Dropdown"
+title_2.Text = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        "
 title_2.TextColor3 = Color3.fromRGB(255, 255, 255)
 title_2.TextSize = 20.000
 title_2.TextXAlignment = Enum.TextXAlignment.Left
 
 fade_2.Name = "fade"
-fade_2.Parent = Dropdowntopbar
+fade_2.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar
 fade_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 fade_2.BackgroundTransparency = 1.000
-fade_2.Position = UDim2.fromScale(0, 0, 1, 0)
-fade_2.Size = UDim2.fromScale(1, 0, 0, 10)
+fade_2.Position = UDim2.new(0, 0, 1, 0)
+fade_2.Size = UDim2.new(1, 0, 0, 10)
 fade_2.ZIndex = 0
 fade_2.Image = "http://www.roblox.com/asset/?id=6373963359"
 fade_2.ImageColor3 = Color3.fromRGB(25, 25, 25)
 
-Dropdownclose.Name = "Dropdownclose"
-Dropdownclose.Parent = DropdownFrame
-Dropdownclose.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Dropdownclose.BorderSizePixel = 0
-Dropdownclose.Position = UDim2.fromScale(1, -44, -0, 0)
-Dropdownclose.Size = UDim2.fromScale(0, 44, 0, 28)
-Dropdownclose.ZIndex = 0
-Dropdownclose.AutoButtonColor = false
-Dropdownclose.Image = "http://www.roblox.com/asset/?id=6351038614"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.BorderSizePixel = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.Position = UDim2.new(1, -44, -0, 0)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.Size = UDim2.new(0, 44, 0, 28)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.ZIndex = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.AutoButtonColor = false
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.Image = "http://www.roblox.com/asset/?id=6351038614"
 
-Dropdownsearch.Name = "Dropdownsearch"
-Dropdownsearch.Parent = DropdownFrame
-Dropdownsearch.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Dropdownsearch.BackgroundTransparency = 0.500
-Dropdownsearch.BorderSizePixel = 0
-Dropdownsearch.Position = UDim2.fromScale(0, 10, 0, 44)
-Dropdownsearch.Size = UDim2.fromScale(1, -20, 0, 28)
-Dropdownsearch.ZIndex = 0
-Dropdownsearch.Font = Enum.Font.SourceSans
-Dropdownsearch.PlaceholderText = "Search"
-Dropdownsearch.Text = ""
-Dropdownsearch.TextColor3 = Color3.fromRGB(255, 255, 255)
-Dropdownsearch.TextSize = 20.000
-Dropdownsearch.TextWrapped = true
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.BackgroundTransparency = 0.500
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.BorderSizePixel = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Position = UDim2.new(0, 10, 0, 44)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Size = UDim2.new(1, -20, 0, 28)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.ZIndex = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Font = Enum.Font.SourceSans
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.PlaceholderText = "Search"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Text = ""
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.TextColor3 = Color3.fromRGB(255, 255, 255)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.TextSize = 20.000
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.TextWrapped = true
 
-Dropdownoptions.Name = "Dropdownoptions"
-Dropdownoptions.Parent = DropdownFrame
-Dropdownoptions.Active = true
-Dropdownoptions.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Dropdownoptions.BackgroundTransparency = 0.500
-Dropdownoptions.BorderSizePixel = 0
-Dropdownoptions.Position = UDim2.fromScale(0, 10, 0, 78)
-Dropdownoptions.Size = UDim2.fromScale(1, -20, 1, -88)
-Dropdownoptions.ZIndex = -1
-Dropdownoptions.ScrollBarThickness = 0
-Dropdownoptions.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.Active = true
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.BackgroundTransparency = 0.500
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.BorderSizePixel = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.Position = UDim2.new(0, 10, 0, 78)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.Size = UDim2.new(1, -20, 1, -88)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.ZIndex = -1
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.ScrollBarThickness = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-UIListLayout_2.Parent = Dropdownoptions
+UIListLayout_2.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options
 UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout_2.Padding = UDim.new(0, 6)
 
 dropdownsample.Name = "dropdownsample"
-dropdownsample.Parent = Dropdownoptions
+dropdownsample.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options
 dropdownsample.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 dropdownsample.BackgroundTransparency = 1.000
 dropdownsample.BorderSizePixel = 0
-dropdownsample.Size = UDim2.fromScale(1, 0, 0, 28)
+dropdownsample.Size = UDim2.new(1, 0, 0, 28)
 dropdownsample.ZIndex = 0
 dropdownsample.Font = Enum.Font.SourceSans
 dropdownsample.Text = "example tonky"
@@ -382,8 +910,8 @@ Tabs.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Tabs.BackgroundTransparency = 0.500
 Tabs.BorderSizePixel = 0
 Tabs.ClipsDescendants = true
-Tabs.Position = UDim2.fromScale(0, 120, 0, 44)
-Tabs.Size = UDim2.fromScale(1, -130, 1, -56)
+Tabs.Position = UDim2.new(0, 120, 0, 44)
+Tabs.Size = UDim2.new(1, -130, 1, -56)
 
 tabsample.Name = "tabsample"
 tabsample.Parent = Tabs
@@ -391,7 +919,7 @@ tabsample.Active = true
 tabsample.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 tabsample.BackgroundTransparency = 1.000
 tabsample.BorderSizePixel = 0
-tabsample.Size = UDim2.fromScale(1, 0, 1, 0)
+tabsample.Size = UDim2.new(1, 0, 1, 0)
 tabsample.Visible = false
 tabsample.ScrollBarThickness = 0
 tabsample.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -400,8 +928,8 @@ positioning.Name = "positioning"
 positioning.Parent = tabsample
 positioning.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 positioning.BackgroundTransparency = 1.000
-positioning.Position = UDim2.fromScale(0, 5, 0, 5)
-positioning.Size = UDim2.fromScale(1, -10, 0, 0)
+positioning.Position = UDim2.new(0, 5, 0, 5)
+positioning.Size = UDim2.new(1, -10, 0, 0)
 
 UIListLayout_3.Parent = positioning
 UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
@@ -412,7 +940,7 @@ sampleheader.Parent = positioning
 sampleheader.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 sampleheader.BackgroundTransparency = 1.000
 sampleheader.BorderSizePixel = 0
-sampleheader.Size = UDim2.fromScale(1, 0, 0, 40)
+sampleheader.Size = UDim2.new(1, 0, 0, 40)
 sampleheader.Visible = false
 sampleheader.Font = Enum.Font.SourceSansSemibold
 sampleheader.Text = " Label"
@@ -426,7 +954,7 @@ samplelabel.Parent = positioning
 samplelabel.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 samplelabel.BackgroundTransparency = 1.000
 samplelabel.BorderSizePixel = 0
-samplelabel.Size = UDim2.fromScale(1, 0, 0, 40)
+samplelabel.Size = UDim2.new(1, 0, 0, 40)
 samplelabel.Visible = false
 samplelabel.Font = Enum.Font.SourceSans
 samplelabel.Text = "  Label"
@@ -440,7 +968,7 @@ samplebutton.Parent = positioning
 samplebutton.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 samplebutton.BackgroundTransparency = 0.800
 samplebutton.BorderSizePixel = 0
-samplebutton.Size = UDim2.fromScale(1, 0, 0, 40)
+samplebutton.Size = UDim2.new(1, 0, 0, 40)
 samplebutton.Visible = false
 samplebutton.AutoButtonColor = false
 samplebutton.Font = Enum.Font.SourceSans
@@ -454,7 +982,7 @@ samplecheckbox.Parent = positioning
 samplecheckbox.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 samplecheckbox.BackgroundTransparency = 0.800
 samplecheckbox.BorderSizePixel = 0
-samplecheckbox.Size = UDim2.fromScale(1, 0, 0, 40)
+samplecheckbox.Size = UDim2.new(1, 0, 0, 40)
 samplecheckbox.Visible = false
 samplecheckbox.AutoButtonColor = false
 samplecheckbox.Font = Enum.Font.SourceSans
@@ -468,8 +996,8 @@ checkbox.Parent = samplecheckbox
 checkbox.BackgroundColor3 = Color3.fromRGB(255, 35, 35)
 checkbox.BackgroundTransparency = 0.500
 checkbox.BorderSizePixel = 0
-checkbox.Position = UDim2.fromScale(1, -60, 0, 10)
-checkbox.Size = UDim2.fromScale(0, 50, 0, 20)
+checkbox.Position = UDim2.new(1, -60, 0, 10)
+checkbox.Size = UDim2.new(0, 50, 0, 20)
 checkbox.Font = Enum.Font.SourceSans
 checkbox.Text = ""
 checkbox.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -479,7 +1007,7 @@ checkboxbar.Name = "checkboxbar"
 checkboxbar.Parent = checkbox
 checkboxbar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 checkboxbar.BorderSizePixel = 0
-checkboxbar.Size = UDim2.fromScale(0, 20, 0, 20)
+checkboxbar.Size = UDim2.new(0, 20, 0, 20)
 checkboxbar.Font = Enum.Font.SourceSans
 checkboxbar.Text = ""
 checkboxbar.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -496,7 +1024,7 @@ sampletextbox.Parent = positioning
 sampletextbox.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 sampletextbox.BackgroundTransparency = 1.000
 sampletextbox.BorderSizePixel = 0
-sampletextbox.Size = UDim2.fromScale(1, -130, 0, 40)
+sampletextbox.Size = UDim2.new(1, -130, 0, 40)
 sampletextbox.Visible = false
 sampletextbox.Font = Enum.Font.SourceSans
 sampletextbox.Text = "  textbox stuff here"
@@ -510,8 +1038,8 @@ textholder.Parent = sampletextbox
 textholder.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 textholder.BackgroundTransparency = 0.800
 textholder.BorderSizePixel = 0
-textholder.Position = UDim2.fromScale(1, 0, 0, 0)
-textholder.Size = UDim2.fromScale(0, 130, 1, 0)
+textholder.Position = UDim2.new(1, 0, 0, 0)
+textholder.Size = UDim2.new(0, 130, 1, 0)
 textholder.Font = Enum.Font.SourceSans
 textholder.PlaceholderText = "type stuff here"
 textholder.Text = ""
@@ -524,7 +1052,7 @@ sampledropdown.Parent = positioning
 sampledropdown.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 sampledropdown.BackgroundTransparency = 1.000
 sampledropdown.BorderSizePixel = 0
-sampledropdown.Size = UDim2.fromScale(1, -130, 0, 40)
+sampledropdown.Size = UDim2.new(1, -130, 0, 40)
 sampledropdown.Visible = false
 sampledropdown.AutoButtonColor = false
 sampledropdown.Font = Enum.Font.SourceSans
@@ -538,8 +1066,8 @@ dropdownselect.Name = "dropdownselect"
 dropdownselect.Parent = sampledropdown
 dropdownselect.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 dropdownselect.BackgroundTransparency = 0.800
-dropdownselect.Position = UDim2.fromScale(1, 0, 0, 0)
-dropdownselect.Size = UDim2.fromScale(0, 130, 1, 0)
+dropdownselect.Position = UDim2.new(1, 0, 0, 0)
+dropdownselect.Size = UDim2.new(0, 130, 1, 0)
 dropdownselect.AutoButtonColor = false
 dropdownselect.Font = Enum.Font.SourceSans
 dropdownselect.Text = "[ select ]"
@@ -551,7 +1079,7 @@ samplecolorpicker.Parent = positioning
 samplecolorpicker.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 samplecolorpicker.BackgroundTransparency = 0.800
 samplecolorpicker.BorderSizePixel = 0
-samplecolorpicker.Size = UDim2.fromScale(1, 0, 0, 40)
+samplecolorpicker.Size = UDim2.new(1, 0, 0, 40)
 samplecolorpicker.Visible = false
 samplecolorpicker.AutoButtonColor = false
 samplecolorpicker.Font = Enum.Font.SourceSans
@@ -564,8 +1092,8 @@ checkbox_2.Name = "checkbox"
 checkbox_2.Parent = samplecolorpicker
 checkbox_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 checkbox_2.BorderSizePixel = 0
-checkbox_2.Position = UDim2.fromScale(1, -60, 0, 10)
-checkbox_2.Size = UDim2.fromScale(0, 50, 0, 20)
+checkbox_2.Position = UDim2.new(1, -60, 0, 10)
+checkbox_2.Size = UDim2.new(0, 50, 0, 20)
 checkbox_2.Font = Enum.Font.SourceSans
 checkbox_2.Text = ""
 checkbox_2.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -579,7 +1107,7 @@ sampleslider.Parent = positioning
 sampleslider.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 sampleslider.BackgroundTransparency = 1.000
 sampleslider.BorderSizePixel = 0
-sampleslider.Size = UDim2.fromScale(1, 0, 0, 40)
+sampleslider.Size = UDim2.new(1, 0, 0, 40)
 sampleslider.Visible = false
 sampleslider.Font = Enum.Font.SourceSans
 sampleslider.Text = "  Label"
@@ -594,8 +1122,8 @@ sliderfull.Parent = sampleslider
 sliderfull.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 sliderfull.BackgroundTransparency = 0.800
 sliderfull.BorderSizePixel = 0
-sliderfull.Position = UDim2.fromScale(0, 5, 1, -20)
-sliderfull.Size = UDim2.fromScale(1, -10, 0, 15)
+sliderfull.Position = UDim2.new(0, 5, 1, -20)
+sliderfull.Size = UDim2.new(1, -10, 0, 15)
 sliderfull.AutoButtonColor = false
 sliderfull.Font = Enum.Font.SourceSans
 sliderfull.Text = ""
@@ -609,7 +1137,7 @@ sliderpart.Name = "sliderpart"
 sliderpart.Parent = sliderfull
 sliderpart.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 sliderpart.BorderSizePixel = 0
-sliderpart.Size = UDim2.fromScale(0.5, 0, 1, 0)
+sliderpart.Size = UDim2.new(0.5, 0, 1, 0)
 sliderpart.AutoButtonColor = false
 sliderpart.Font = Enum.Font.SourceSans
 sliderpart.Text = ""
@@ -624,7 +1152,7 @@ slidervalue.Parent = sampleslider
 slidervalue.BackgroundColor3 = Color3.fromRGB(59, 59, 59)
 slidervalue.BackgroundTransparency = 1.000
 slidervalue.BorderSizePixel = 0
-slidervalue.Size = UDim2.fromScale(1, 0, 0, 40)
+slidervalue.Size = UDim2.new(1, 0, 0, 40)
 slidervalue.Font = Enum.Font.SourceSans
 slidervalue.Text = "value / value  "
 slidervalue.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -637,44 +1165,182 @@ ColorpickerFrame.Name = "ColorpickerFrame"
 ColorpickerFrame.Parent = Main
 ColorpickerFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 ColorpickerFrame.BorderSizePixel = 0
-ColorpickerFrame.Position = UDim2.fromScale(0, -230, 0, 0)
-ColorpickerFrame.Size = UDim2.fromScale(0, 200, 0, 235)
+ColorpickerFrame.Position = UDim2.new(0, -230, 0, 0)
+ColorpickerFrame.Size = UDim2.new(0, 200, 0, 235)
 ColorpickerFrame.ZIndex = -2
 ColorpickerFrame.Image = "http://www.roblox.com/asset/?id=6374072464"
 ColorpickerFrame.ImageTransparency = 0.800
 ColorpickerFrame.ScaleType = Enum.ScaleType.Crop
 
-Dropdownglow_2.Name = "Dropdownglow"
-Dropdownglow_2.Parent = ColorpickerFrame
-Dropdownglow_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Dropdownglow_2.BackgroundTransparency = 1.000
-Dropdownglow_2.Position = UDim2.fromScale(0, -15, 0, -15)
-Dropdownglow_2.Size = UDim2.fromScale(1, 30, 1, 30)
-Dropdownglow_2.ZIndex = 0
-Dropdownglow_2.Image = "rbxassetid://5028857084"
-Dropdownglow_2.ScaleType = Enum.ScaleType.Slice
-Dropdownglow_2.SliceCenter = Rect.new(24, 24, 276, 276)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.Parent = ColorpickerFrame
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.BackgroundTransparency = 1.000
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.Position = UDim2.new(0, -15, 0, -15)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.Size = UDim2.new(1, 30, 1, 30)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.ZIndex = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.Image = "rbxassetid://5028857084"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.ScaleType = Enum.ScaleType.Slice
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2.SliceCenter = Rect.new(24, 24, 276, 276)
 
 UIGradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(51, 0, 255)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 106, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(51, 255, 0)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 255, 0)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(228, 137, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
 UIGradient_3.Rotation = 45
-UIGradient_3.Parent = Dropdownglow_2
+UIGradient_3.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow_2
 
-Dropdowntopbar_2.Name = "Dropdowntopbar"
-Dropdowntopbar_2.Parent = ColorpickerFrame
-Dropdowntopbar_2.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-Dropdowntopbar_2.BorderSizePixel = 0
-Dropdowntopbar_2.Size = UDim2.fromScale(1, 0, 0, 28)
-Dropdowntopbar_2.ZIndex = 0
-Dropdowntopbar_2.Image = "http://www.roblox.com/asset/?id=6373963359"
-Dropdowntopbar_2.ImageColor3 = Color3.fromRGB(25, 25, 25)
-Dropdowntopbar_2.ImageTransparency = 1.000
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.Name = "Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.Parent = ColorpickerFrame
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.BorderSizePixel = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.Size = UDim2.new(1, 0, 0, 28)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.ZIndex = 0
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.Image = "http://www.roblox.com/asset/?id=6373963359"
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.ImageColor3 = Color3.fromRGB(25, 25, 25)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2.ImageTransparency = 1.000
 
 title_3.Name = "title"
-title_3.Parent = Dropdowntopbar_2
+title_3.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2
 title_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 title_3.BackgroundTransparency = 1.000
-title_3.Position = UDim2.fromScale(0, 7, 0, 0)
-title_3.Size = UDim2.fromScale(1, -7, 1, 0)
+title_3.Position = UDim2.new(0, 7, 0, 0)
+title_3.Size = UDim2.new(1, -7, 1, 0)
 title_3.ZIndex = 0
 title_3.Font = Enum.Font.SourceSans
 title_3.Text = "Colorpicker"
@@ -683,11 +1349,17 @@ title_3.TextSize = 20.000
 title_3.TextXAlignment = Enum.TextXAlignment.Left
 
 fade_3.Name = "fade"
-fade_3.Parent = Dropdowntopbar_2
+fade_3.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        topbar_2
 fade_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 fade_3.BackgroundTransparency = 1.000
-fade_3.Position = UDim2.fromScale(0, 0, 1, 0)
-fade_3.Size = UDim2.fromScale(1, 0, 0, 10)
+fade_3.Position = UDim2.new(0, 0, 1, 0)
+fade_3.Size = UDim2.new(1, 0, 0, 10)
 fade_3.ZIndex = 0
 fade_3.Image = "http://www.roblox.com/asset/?id=6373963359"
 fade_3.ImageColor3 = Color3.fromRGB(25, 25, 25)
@@ -696,8 +1368,8 @@ Colorpickerclose.Name = "Colorpickerclose"
 Colorpickerclose.Parent = ColorpickerFrame
 Colorpickerclose.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 Colorpickerclose.BorderSizePixel = 0
-Colorpickerclose.Position = UDim2.fromScale(1, -44, -0, 0)
-Colorpickerclose.Size = UDim2.fromScale(0, 44, 0, 28)
+Colorpickerclose.Position = UDim2.new(1, -44, -0, 0)
+Colorpickerclose.Size = UDim2.new(0, 44, 0, 28)
 Colorpickerclose.ZIndex = 0
 Colorpickerclose.AutoButtonColor = false
 Colorpickerclose.Image = "http://www.roblox.com/asset/?id=6351038614"
@@ -706,8 +1378,8 @@ pickerimg.Name = "pickerimg"
 pickerimg.Parent = ColorpickerFrame
 pickerimg.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 pickerimg.BorderSizePixel = 0
-pickerimg.Position = UDim2.fromScale(0, 10, 0, 44)
-pickerimg.Size = UDim2.fromScale(0, 145, 0, 145)
+pickerimg.Position = UDim2.new(0, 10, 0, 44)
+pickerimg.Size = UDim2.new(0, 145, 0, 145)
 pickerimg.ZIndex = 0
 pickerimg.Image = "http://www.roblox.com/asset/?id=5754197442"
 
@@ -716,7 +1388,7 @@ pickerimg_2.Parent = pickerimg
 pickerimg_2.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 pickerimg_2.BackgroundTransparency = 1.000
 pickerimg_2.BorderSizePixel = 0
-pickerimg_2.Size = UDim2.fromScale(1, 0, 1, 0)
+pickerimg_2.Size = UDim2.new(1, 0, 1, 0)
 pickerimg_2.ZIndex = 0
 pickerimg_2.Image = "http://www.roblox.com/asset/?id=5754197981"
 
@@ -724,8 +1396,8 @@ pickersmall.Name = "pickersmall"
 pickersmall.Parent = ColorpickerFrame
 pickersmall.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 pickersmall.BorderSizePixel = 0
-pickersmall.Position = UDim2.fromScale(1, -35, 0, 44)
-pickersmall.Size = UDim2.fromScale(0, 25, 0, 145)
+pickersmall.Position = UDim2.new(1, -35, 0, 44)
+pickersmall.Size = UDim2.new(0, 25, 0, 145)
 pickersmall.ZIndex = 0
 pickersmall.Image = "http://www.roblox.com/asset/?id=5753897628"
 
@@ -733,8 +1405,8 @@ R.Name = "R"
 R.Parent = ColorpickerFrame
 R.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 R.BorderSizePixel = 0
-R.Position = UDim2.fromScale(0.0500000007, 0, 0, 200)
-R.Size = UDim2.fromScale(0, 50, 0, 24)
+R.Position = UDim2.new(0.0500000007, 0, 0, 200)
+R.Size = UDim2.new(0, 50, 0, 24)
 R.ZIndex = 0
 R.Font = Enum.Font.SourceSans
 R.Text = "0"
@@ -745,8 +1417,8 @@ B.Name = "B"
 B.Parent = ColorpickerFrame
 B.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 B.BorderSizePixel = 0
-B.Position = UDim2.fromScale(0.699999988, 0, 0, 200)
-B.Size = UDim2.fromScale(0, 50, 0, 24)
+B.Position = UDim2.new(0.699999988, 0, 0, 200)
+B.Size = UDim2.new(0, 50, 0, 24)
 B.ZIndex = 0
 B.Font = Enum.Font.SourceSans
 B.Text = "0"
@@ -757,8 +1429,8 @@ G.Name = "G"
 G.Parent = ColorpickerFrame
 G.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 G.BorderSizePixel = 0
-G.Position = UDim2.fromScale(0.375, 0, 0, 200)
-G.Size = UDim2.fromScale(0, 50, 0, 24)
+G.Position = UDim2.new(0.375, 0, 0, 200)
+G.Size = UDim2.new(0, 50, 0, 24)
 G.ZIndex = 0
 G.Font = Enum.Font.SourceSans
 G.Text = "0"
@@ -766,20 +1438,37 @@ G.TextColor3 = Color3.fromRGB(255, 255, 255)
 G.TextSize = 20.000
 
 --// Fixes
-DropdownFrame.Position=UDim2.new(1,-150,0,10)
-DropdownFrame.Size=UDim2.new(0,130,1,-20)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.Position=UDim2.new(1,-150,0,10)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame.Size=UDim2.new(0,130,1,-20)
 tabsample.Visible=false
 dropdownsample.Visible=false
 ColorpickerFrame.Position=UDim2.new(0, 20,0,10)
 local titel = Instance.new('TextLabel')
-Power cat.Enabled = true
+PowerCat.Enabled = true
 tabsample.CanvasSize = UDim2.new(0,0,100,0)
-Dropdownoptions.CanvasSize = UDim2.new(0,0,100,0)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options.CanvasSize = UDim2.new(0,0,100,0)
 Tabslist.CanvasSize = UDim2.new(0,0,100,0)
 
 --// Vars
 local plr = game.Players.LocalPlayer
--- Ensure nil check or initialization here
 local ms = plr:GetMouse()
 local uis = game:GetService("UserInputService")
 local current = false
@@ -788,9 +1477,7 @@ local resizing = false
 local dragging = false
 local huepicking = false
 local satpicking = false
--- Ensure nil check or initialization here
 local colorpickerfocus = nil
--- Ensure nil check or initialization here
 local colorpickercallback = nil
 local dragX,dragY = 0,0
 local h,s,v = 0,1,1
@@ -815,25 +1502,37 @@ local anime=Instance.new("ImageLabel")anime.Name="anim";anime.BackgroundColor3=C
 coroutine.resume(coroutine.create(function()
 	while true do
 		tw(UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
-		tw(Dropdownglow.UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
-		tw(ColorpickerFrame.Dropdownglow.UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
+		tw(Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
+		tw(ColorpickerFrame.Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient,{Rotation=UIGradient.Rotation+360},"Linear","In",6)
 		wait(6)
 	end
 end))
 
 --// Other UI Stuff
 minimize.MouseButton1Click:Connect(function()
-	Power cat.Enabled=false
+	PowerCat.Enabled=false
 end)
 
 uis.InputBegan:Connect(function(k)
 	if k.KeyCode==Enum.KeyCode.LeftAlt then
-		Power cat.Enabled=not Power cat.Enabled
+		PowerCat.Enabled=not PowerCat.Enabled
 	end
 end)
 
 close.MouseButton1Click:Connect(function()
-	Power cat:Destroy()
+	PowerCat:Destroy()
 end)
 
 --// Resizing + Dragging
@@ -863,11 +1562,11 @@ uis.InputChanged:Connect(function()
 		local msX,msY = ms.X-Main.AbsolutePosition.X,ms.Y-Main.AbsolutePosition.Y
 		if msX<300 then msX=300 end
 		if msY<250 then msY=250 end
-		Main.Size = UDim2.fromScale(0,msX,0,msY)
+		Main.Size = UDim2.new(0,msX,0,msY)
 	end
 	if dragging then
 		local msX,msY = ms.X-dragX,ms.Y-dragY
-		Main.Position = UDim2.fromScale(0,msX,0,msY)
+		Main.Position = UDim2.new(0,msX,0,msY)
 	end
 end)
 
@@ -876,14 +1575,20 @@ colorHover(close,Color3.fromRGB(150,35,35),'BackgroundColor3')
 colorHover(minimize,Color3.fromRGB(55,55,55),'BackgroundColor3')
 colorHover(setting,Color3.fromRGB(55,55,55),'BackgroundColor3')
 colorHover(rainbowtheme,Color3.fromRGB(55,55,55),'BackgroundColor3')
-colorHover(monketheme,Color3.fromRGB(55,55,55),'BackgroundColor3')
+colorHover(cattheme,Color3.fromRGB(55,55,55),'BackgroundColor3')
 colorHover(blacktheme,Color3.fromRGB(55,55,55),'BackgroundColor3')
 colorHover(fireicetheme,Color3.fromRGB(55,55,55),'BackgroundColor3')
-colorHover(Dropdownclose,Color3.fromRGB(150,35,35),'BackgroundColor3')
+colorHover(Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close,Color3.fromRGB(150,35,35),'BackgroundColor3')
 colorHover(Colorpickerclose,Color3.fromRGB(150,35,35),'BackgroundColor3')
 
 --// Settings Tab
-settingstab.Size = UDim2.fromScale(1,0,0,28)
+settingstab.Size = UDim2.new(1,0,0,28)
 setting.MouseButton1Click:Connect(function()
 	if setting.Active then setting.Active = false
 		tw(settingstab,{Size=UDim2.new(1,0,0,28)},"Quint","Out",.4)
@@ -893,48 +1598,137 @@ setting.MouseButton1Click:Connect(function()
 end)
 rainbowtheme.MouseButton1Click:Connect(function()
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(51, 0, 255)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 106, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(51, 255, 0)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 255, 0)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(228, 137, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
-	Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(51, 0, 255)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 106, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(51, 255, 0)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 255, 0)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(228, 137, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
-	ColorpickerFrame.Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(51, 0, 255)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 106, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(51, 255, 0)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 255, 0)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(228, 137, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
+	Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(51, 0, 255)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 106, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(51, 255, 0)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 255, 0)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(228, 137, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
+	ColorpickerFrame.Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.10, Color3.fromRGB(255, 0, 153)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(204, 0, 255)), ColorSequenceKeypoint.new(0.30, Color3.fromRGB(51, 0, 255)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 106, 255)), ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 102)), ColorSequenceKeypoint.new(0.70, Color3.fromRGB(51, 255, 0)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(204, 255, 0)), ColorSequenceKeypoint.new(0.90, Color3.fromRGB(228, 137, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))}
 end)
 blacktheme.MouseButton1Click:Connect(function()
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
-	Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
-	ColorpickerFrame.Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
+	Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
+	ColorpickerFrame.Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
 end)
-monketheme.MouseButton1Click:Connect(function()
+cattheme.MouseButton1Click:Connect(function()
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
-	Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
-	ColorpickerFrame.Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
+	Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
+	ColorpickerFrame.Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 0, 0)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0))}
 end)
 fireicetheme.MouseButton1Click:Connect(function()
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))}
-	Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))}
-	ColorpickerFrame.Dropdownglow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))}
+	Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))}
+	ColorpickerFrame.Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        glow.UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)), ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 255))}
 end)
 
---// Dropdown Functions
+--// Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+         Functions
 local function dropdownVisible(open)
 	if open then
-		tw(DropdownFrame,{Position=UDim2.new(1,30,0,0),Size=UDim2.new(0,150,1,0)},'Quint','Out',.8)
+		tw(Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame,{Position=UDim2.new(1,30,0,0),Size=UDim2.new(0,150,1,0)},'Quint','Out',.8)
 	else
-		Dropdownsearch.Text = ''
-		tw(DropdownFrame,{Position=UDim2.new(1,-150,0,10),Size=UDim2.new(0,130,1,-20)},'Quint','Out',.8)
+		Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Text = ''
+		tw(Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        Frame,{Position=UDim2.new(1,-150,0,10),Size=UDim2.new(0,130,1,-20)},'Quint','Out',.8)
 	end
 	current = open
 end
 
-local function updateDropdown(content,target,callback)
-	for i,v in next,Dropdownoptions:GetChildren()do
+local function updateDropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        (content,target,callback)
+	for i,v in next,Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options:GetChildren()do
 		if v:IsA'TextButton' and v.Name~='dropdownsample'then
 			v:Destroy()
 		end
 	end
 	for i = 1, #content do
--- Ensure nil check or initialization here
 		local new = dropdownsample:Clone()
 		new.Visible = true
 		new.Name = content[i]
-		new.Parent = Dropdownoptions
+		new.Parent = Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options
 		new.Text = content[i]
 		new.MouseEnter:Connect(function()
 			tw(new,{BackgroundTransparency=.9},'Quint','Out',.3)
@@ -950,17 +1744,47 @@ local function updateDropdown(content,target,callback)
 	end
 end
 
-Dropdownsearch:GetPropertyChangedSignal('Text'):Connect(function()
-	if Dropdownsearch.Text=='' then
-		for i,v in next,Dropdownoptions:GetChildren()do
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search:GetPropertyChangedSignal('Text'):Connect(function()
+	if Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Text=='' then
+		for i,v in next,Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options:GetChildren()do
 			if v:IsA'TextButton'and v.Name~='dropdownsample'then
 				v.Visible=true
 			end
 		end
 	else
-		for i,v in next,Dropdownoptions:GetChildren()do
+		for i,v in next,Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        options:GetChildren()do
 			if v:IsA'TextButton'and v.Name~='dropdownsample'then
-				if string.find(tostring(v),Dropdownsearch.Text)then
+				if string.find(tostring(v),Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        search.Text)then
 					v.Visible=true
 				else
 					v.Visible=false
@@ -970,7 +1794,13 @@ Dropdownsearch:GetPropertyChangedSignal('Text'):Connect(function()
 	end
 end)
 
-Dropdownclose.MouseButton1Click:Connect(dropdownVisible)
+Dropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        close.MouseButton1Click:Connect(dropdownVisible)
 
 --// Colorpicker Functions
 local function colorpickerVisible(open)
@@ -1044,12 +1874,10 @@ titel:GetPropertyChangedSignal("Text"):Connect(function()
 end)
 
 library.newTab = function(name)
--- Ensure nil check or initialization here
 	local newb = tablistsample:Clone()
 	newb.Parent = Tabslist
 	newb.Text = name
 	newb.Visible = true
--- Ensure nil check or initialization here
 	local newt = tabsample:Clone()
 	newt.Parent = Tabs
 	library[name] = newt.positioning
@@ -1070,7 +1898,6 @@ library.newTab = function(name)
 end
 
 library.newHeader = function(parent,text)
--- Ensure nil check or initialization here
 	local new = sampleheader:Clone()
 	new.Visible = true
 	new.Parent = parent
@@ -1078,7 +1905,6 @@ library.newHeader = function(parent,text)
 end
 
 library.newLabel = function(parent,text)
--- Ensure nil check or initialization here
 	local new = samplelabel:Clone()
 	new.Visible = true
 	new.Parent = parent
@@ -1086,7 +1912,6 @@ library.newLabel = function(parent,text)
 end
 
 library.newButton = function(parent,text,callback)
--- Ensure nil check or initialization here
 	local new = samplebutton:Clone()
 	new.Visible = true
 	new.Parent = parent
@@ -1102,7 +1927,6 @@ library.newButton = function(parent,text,callback)
 end
 
 library.newCheckBox = function(parent,text,callback)
--- Ensure nil check or initialization here
 	local new = samplecheckbox:Clone()
 	new.Visible = true
 	new.Parent = parent
@@ -1127,7 +1951,6 @@ library.newCheckBox = function(parent,text,callback)
 end
 
 library.newTextBox = function(parent,text,emptytext,callback)
--- Ensure nil check or initialization here
 	local new = sampletextbox:Clone()
 	new.Visible = true
 	new.Parent = parent
@@ -1139,14 +1962,19 @@ library.newTextBox = function(parent,text,emptytext,callback)
 end
 
 library.newDropDown = function(parent,text,content,callback)
--- Ensure nil check or initialization here
 	local new = sampledropdown:Clone()
 	new.Visible = true
 	new.Parent = parent
 	new.Text = '  '..text
 	new.MouseButton1Click:Connect(function()
 		dropdownVisible(true)
-		updateDropdown(content,new.dropdownselect,callback)
+		updateDropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        (content,new.dropdownselect,callback)
 	end)
 	new.dropdownselect.MouseEnter:Connect(function()
 		tw(new.dropdownselect,{BackgroundTransparency=.7},'Quint','Out',.3)
@@ -1156,12 +1984,17 @@ library.newDropDown = function(parent,text,content,callback)
 	end)
 	new.dropdownselect.MouseButton1Click:Connect(function()
 		dropdownVisible(true)
-		updateDropdown(content,new.dropdownselect,callback)
+		updateDropdown -- Improved dropdown styling
+        local Dropdown = Instance.new("Frame")
+        Dropdown.Size = UDim2.new(0, 200, 0, 30)
+        Dropdown.BackgroundColor3 = Color3.new(1, 1, 1)
+        Dropdown.BorderSizePixel = 1
+        Dropdown.BorderColor3 = Color3.new(0.8, 0.8, 0.8)
+        (content,new.dropdownselect,callback)
 	end)
 end
 
 library.newColorPicker = function(parent,text,callback)
--- Ensure nil check or initialization here
 	local new = samplecolorpicker:Clone()
 	new.Visible = true
 	new.Parent = parent
@@ -1180,7 +2013,6 @@ library.newColorPicker = function(parent,text,callback)
 end
 
 library.newSlider = function(parent,text,startValue,endValue,callback)
--- Ensure nil check or initialization here
 	local new = sampleslider:Clone()
 	new.Visible = true
 	new.Parent = parent
@@ -1224,70 +2056,3 @@ library.newSlider = function(parent,text,startValue,endValue,callback)
 end
 
 return library
--- Example script for a mobile-compatible slider
-local function makeSliderMobileFriendly(slider)
-    slider.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            local moveConnection
-            moveConnection = slider.InputChanged:Connect(function(moveInput)
-                if moveInput.UserInputType == Enum.UserInputType.Touch then
-                    local newValue = math.clamp(moveInput.Position.X, slider.AbsolutePosition.X, slider.AbsolutePosition.X + slider.AbsoluteSize.X)
-                    -- Logic to update slider value
-                    print(newValue)
-                end
-            end)
-        end
-    end)
-end
-
--- Toggle UI visibility
-local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.fromScale(0, 50, 0, 50)
-toggleButton.Position = UDim2.fromScale(0, 10, 0, 10) -- Adjust to preferred position
-toggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-toggleButton.Text = "Toggle"
-
-toggleButton.MouseButton1Click:Connect(function()
-    Main.Visible = not Main.Visible
-end)
-
-toggleButton.Parent = PowerCat
-
--- Dragging functionality
-local UIS = game:GetService("UserInputService")
--- Ensure nil check or initialization here
-local dragToggle = nil
-local dragSpeed = 0.125
--- Ensure nil check or initialization here
-local dragInput = nil
--- Ensure nil check or initialization here
-local dragStart = nil
--- Ensure nil check or initialization here
-local startPos = nil
-
-Main.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragToggle = true
-        dragStart = input.Position
-        startPos = Main.Position
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragToggle = false
-            end
-        end)
-    end
-end)
-
-Main.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
-        dragInput = input
-    end
-end)
-
-UIS.InputChanged:Connect(function(input)
-    if input == dragInput and dragToggle then
-        local delta = input.Position - dragStart
-        Main.Position = UDim2.fromScale(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end)
