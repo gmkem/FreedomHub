@@ -1,6 +1,6 @@
 -- Instances:
 
-local Powercat = Instance.new("ScreenGui")
+local Power cat = Instance.new("ScreenGui")
 local Main = Instance.new("ImageLabel")
 local close = Instance.new("ImageButton")
 local minimize = Instance.new("ImageButton")
@@ -71,10 +71,10 @@ local G = Instance.new("TextBox")
 
 --Properties:
 
-Powercat.Name = "Power cat"
-Powercat.Parent = game.CoreGui
-Powercat.DisplayOrder = 59666
-Powercat.ResetOnSpawn = false
+Power cat.Name = "Power cat"
+Power cat.Parent = game.CoreGui
+Power cat.DisplayOrder = 59666
+Power cat.ResetOnSpawn = false
 
 Main.Name = "Main"
 Main.Parent = Power cat
@@ -772,7 +772,7 @@ tabsample.Visible=false
 dropdownsample.Visible=false
 ColorpickerFrame.Position=UDim2.new(0, 20,0,10)
 local titel = Instance.new('TextLabel')
-Powercat.Enabled = true
+Power cat.Enabled = true
 tabsample.CanvasSize = UDim2.new(0,0,100,0)
 Dropdownoptions.CanvasSize = UDim2.new(0,0,100,0)
 Tabslist.CanvasSize = UDim2.new(0,0,100,0)
@@ -823,17 +823,17 @@ end))
 
 --// Other UI Stuff
 minimize.MouseButton1Click:Connect(function()
-	Powercat.Enabled=false
+	Power cat.Enabled=false
 end)
 
 uis.InputBegan:Connect(function(k)
 	if k.KeyCode==Enum.KeyCode.LeftAlt then
-		Powercat.Enabled=not Power cat.Enabled
+		Power cat.Enabled=not Power cat.Enabled
 	end
 end)
 
 close.MouseButton1Click:Connect(function()
-	Powercat:Destroy()
+	Power cat:Destroy()
 end)
 
 --// Resizing + Dragging
@@ -1224,3 +1224,70 @@ library.newSlider = function(parent,text,startValue,endValue,callback)
 end
 
 return library
+-- Example script for a mobile-compatible slider
+local function makeSliderMobileFriendly(slider)
+    slider.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            local moveConnection
+            moveConnection = slider.InputChanged:Connect(function(moveInput)
+                if moveInput.UserInputType == Enum.UserInputType.Touch then
+                    local newValue = math.clamp(moveInput.Position.X, slider.AbsolutePosition.X, slider.AbsolutePosition.X + slider.AbsoluteSize.X)
+                    -- Logic to update slider value
+                    print(newValue)
+                end
+            end)
+        end
+    end)
+end
+
+-- Toggle UI visibility
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.fromScale(0, 50, 0, 50)
+toggleButton.Position = UDim2.fromScale(0, 10, 0, 10) -- Adjust to preferred position
+toggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+toggleButton.Text = "Toggle"
+
+toggleButton.MouseButton1Click:Connect(function()
+    Main.Visible = not Main.Visible
+end)
+
+toggleButton.Parent = PowerCat
+
+-- Dragging functionality
+local UIS = game:GetService("UserInputService")
+-- Ensure nil check or initialization here
+local dragToggle = nil
+local dragSpeed = 0.125
+-- Ensure nil check or initialization here
+local dragInput = nil
+-- Ensure nil check or initialization here
+local dragStart = nil
+-- Ensure nil check or initialization here
+local startPos = nil
+
+Main.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragToggle = true
+        dragStart = input.Position
+        startPos = Main.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragToggle = false
+            end
+        end)
+    end
+end)
+
+Main.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if input == dragInput and dragToggle then
+        local delta = input.Position - dragStart
+        Main.Position = UDim2.fromScale(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
