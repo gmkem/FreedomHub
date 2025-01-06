@@ -1,6 +1,6 @@
 -- Instances:
 
-local Power cat = Instance.new("ScreenGui")
+local Powercat = Instance.new("ScreenGui")
 local Main = Instance.new("ImageLabel")
 local close = Instance.new("ImageButton")
 local minimize = Instance.new("ImageButton")
@@ -15,7 +15,7 @@ local tablistsample = Instance.new("TextButton")
 local UIListLayout = Instance.new("UIListLayout")
 local setting = Instance.new("ImageButton")
 local settingstab = Instance.new("ScrollingFrame")
-local monketheme = Instance.new("TextButton")
+local cattheme = Instance.new("TextButton")
 local blacktheme = Instance.new("TextButton")
 local rainbowtheme = Instance.new("TextButton")
 local fireicetheme = Instance.new("TextButton")
@@ -71,10 +71,10 @@ local G = Instance.new("TextBox")
 
 --Properties:
 
-Power cat.Name = "Power cat"
-Power cat.Parent = game.CoreGui
-Power cat.DisplayOrder = 59666
-Power cat.ResetOnSpawn = false
+Powercat.Name = "Power cat"
+Powercat.Parent = game.CoreGui
+Powercat.DisplayOrder = 59666
+Powercat.ResetOnSpawn = false
 
 Main.Name = "Main"
 Main.Parent = Power cat
@@ -772,7 +772,7 @@ tabsample.Visible=false
 dropdownsample.Visible=false
 ColorpickerFrame.Position=UDim2.new(0, 20,0,10)
 local titel = Instance.new('TextLabel')
-Power cat.Enabled = true
+Powercat.Enabled = true
 tabsample.CanvasSize = UDim2.new(0,0,100,0)
 Dropdownoptions.CanvasSize = UDim2.new(0,0,100,0)
 Tabslist.CanvasSize = UDim2.new(0,0,100,0)
@@ -823,17 +823,17 @@ end))
 
 --// Other UI Stuff
 minimize.MouseButton1Click:Connect(function()
-	Power cat.Enabled=false
+	Powercat.Enabled=false
 end)
 
 uis.InputBegan:Connect(function(k)
 	if k.KeyCode==Enum.KeyCode.LeftAlt then
-		Power cat.Enabled=not Power cat.Enabled
+		Powercat.Enabled=not Power cat.Enabled
 	end
 end)
 
 close.MouseButton1Click:Connect(function()
-	Power cat:Destroy()
+	Powercat:Destroy()
 end)
 
 --// Resizing + Dragging
