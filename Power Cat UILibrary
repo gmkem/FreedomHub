@@ -34,12 +34,12 @@ local Success, Response = pcall(function()
 	Icons = HttpService:JSONDecode(game:HttpGetAsync("https://raw.githubusercontent.com/evoincorp/lucideblox/master/src/modules/util/icons.json")).icons
 end)
 
-if not Success then
+if not Success  then
 	warn("\nPowerCat Library - Failed to load Feather Icons. Error code: " .. Response .. "\n")
 end	
 
 local function GetIcon(IconName)
-	if Icons[IconName] ~= nil then
+	if Icons[IconName] ~= nil  then
 		return Icons[IconName]
 	else
 		return nil
@@ -48,29 +48,29 @@ end
 
 local PowerCat = Instance.new("ScreenGui")
 PowerCat.Name = "PowerCat"
-if syn then
+if syn  then
 	syn.protect_gui(PowerCat)
 	PowerCat.Parent = game.CoreGui
 else
 	PowerCat.Parent = gethui() or game.CoreGui
 end
 
-if gethui then
+if gethui  then
 	for _, Interface in ipairs(gethui():GetChildren()) do
-		if Interface.Name == PowerCat.Name and Interface ~= PowerCat then
+		if Interface.Name == PowerCat.Name and Interface ~= PowerCat  then
 			Interface:Destroy()
 		end
 	end
 else
 	for _, Interface in ipairs(game.CoreGui:GetChildren()) do
-		if Interface.Name == PowerCat.Name and Interface ~= PowerCat then
+		if Interface.Name == PowerCat.Name and Interface ~= PowerCat  then
 			Interface:Destroy()
 		end
 	end
 end
 
 function PowerCatLib:IsRunning()
-	if gethui then
+	if gethui  then
 		return PowerCat.Parent == gethui()
 	else
 		return PowerCat.Parent == game:GetService("CoreGui")
@@ -79,7 +79,7 @@ function PowerCatLib:IsRunning()
 end
 
 local function AddConnection(Signal, Function)
-	if (not PowerCatLib:IsRunning()) then
+	if (not PowerCatLib:IsRunning())  then
 		return
 	end
 	local SignalConnect = Signal:Connect(Function)
@@ -101,25 +101,25 @@ local function AddDraggingFunctionality(DragPoint, Main)
 	pcall(function()
 		local Dragging, DragInput, MousePos, FramePos = false
 		DragPoint.InputBegan:Connect(function(Input)
-			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if Input.UserInputType == Enum.UserInputType.MouseButton1  then
 				Dragging = true
 				MousePos = Input.Position
 				FramePos = Main.Position
 
 				Input.Changed:Connect(function()
-					if Input.UserInputState == Enum.UserInputState.End then
+					if Input.UserInputState == Enum.UserInputState.End  then
 						Dragging = false
 					end
 				end)
 			end
 		end)
 		DragPoint.InputChanged:Connect(function(Input)
-			if Input.UserInputType == Enum.UserInputType.MouseMovement then
+			if Input.UserInputType == Enum.UserInputType.MouseMovement  then
 				DragInput = Input
 			end
 		end)
 		UserInputService.InputChanged:Connect(function(Input)
-			if Input == DragInput and Dragging then
+			if Input == DragInput and Dragging  then
 				local Delta = Input.Position - MousePos
 				TweenService:Create(Main, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position  = UDim2.new(FramePos.X.Scale,FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y)}):Play()
 			end
@@ -165,30 +165,30 @@ end
 
 local function Round(Number, Factor)
 	local Result = math.floor(Number/Factor + (math.sign(Number) * 0.5)) * Factor
-	if Result < 0 then Result = Result + Factor end
+	if Result < 0  then Result = Result + Factor end
 	return Result
 end
 
 local function ReturnProperty(Object)
-	if Object:IsA("Frame") or Object:IsA("TextButton") then
+	if Object:IsA("Frame") or Object:IsA("TextButton")  then
 		return "BackgroundColor3"
 	end 
-	if Object:IsA("ScrollingFrame") then
+	if Object:IsA("ScrollingFrame")  then
 		return "ScrollBarImageColor3"
 	end 
-	if Object:IsA("UIStroke") then
+	if Object:IsA("UIStroke")  then
 		return "Color"
 	end 
-	if Object:IsA("TextLabel") or Object:IsA("TextBox") then
+	if Object:IsA("TextLabel") or Object:IsA("TextBox")  then
 		return "TextColor3"
 	end   
-	if Object:IsA("ImageLabel") or Object:IsA("ImageButton") then
+	if Object:IsA("ImageLabel") or Object:IsA("ImageButton")  then
 		return "ImageColor3"
 	end   
 end
 
 local function AddThemeObject(Object, Type)
-	if not PowerCatLib.ThemeObjects[Type] then
+	if not PowerCatLib.ThemeObjects[Type]  then
 		PowerCatLib.ThemeObjects[Type] = {}
 	end    
 	table.insert(PowerCatLib.ThemeObjects[Type], Object)
@@ -215,9 +215,9 @@ end
 local function LoadCfg(Config)
 	local Data = HttpService:JSONDecode(Config)
 	table.foreach(Data, function(a,b)
-		if PowerCatLib.Flags[a] then
+		if PowerCatLib.Flags[a]  then
 			spawn(function() 
-				if PowerCatLib.Flags[a].Type == "Colorpicker" then
+				if PowerCatLib.Flags[a].Type == "Colorpicker"  then
 					PowerCatLib.Flags[a]:Set(UnpackColor(b))
 				else
 					PowerCatLib.Flags[a]:Set(b)
@@ -232,8 +232,8 @@ end
 local function SaveCfg(Name)
 	local Data = {}
 	for i,v in pairs(PowerCatLib.Flags) do
-		if v.Save then
-			if v.Type == "Colorpicker" then
+		if v.Save  then
+			if v.Type == "Colorpicker"  then
 				Data[i] = PackColor(v.Value)
 			else
 				Data[i] = v.Value
@@ -248,7 +248,7 @@ local BlacklistedKeys = {Enum.KeyCode.Unknown,Enum.KeyCode.W,Enum.KeyCode.A,Enum
 
 local function CheckKey(Table, Key)
 	for _, v in next, Table do
-		if v == Key then
+		if v == Key  then
 			return true
 		end
 	end
@@ -344,7 +344,7 @@ CreateElement("Image", function(ImageID)
 		BackgroundTransparency = 1
 	})
 
-	if GetIcon(ImageID) ~= nil then
+	if GetIcon(ImageID) ~= nil  then
 		ImageNew.Image = GetIcon(ImageID)
 	end	
 
@@ -449,9 +449,9 @@ function PowerCatLib:MakeNotification(NotificationConfig)
 end    
 
 function PowerCatLib:Init()
-	if PowerCatLib.SaveCfg then	
+	if PowerCatLib.SaveCfg  then	
 		pcall(function()
-			if isfile(PowerCatLib.Folder .. "/" .. game.GameId .. ".txt") then
+			if isfile(PowerCatLib.Folder .. "/" .. game.GameId .. ".txt")  then
 				LoadCfg(readfile(PowerCatLib.Folder .. "/" .. game.GameId .. ".txt"))
 				PowerCatLib:MakeNotification({
 					Name = "Configuration",
@@ -474,7 +474,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 	WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
 	WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
 	WindowConfig.HidePremium = WindowConfig.HidePremium or false
-	if WindowConfig.IntroEnabled == nil then
+	if WindowConfig.IntroEnabled == nil  then
 		WindowConfig.IntroEnabled = true
 	end
 	WindowConfig.IntroText = WindowConfig.IntroText or "PowerCat Library"
@@ -485,8 +485,8 @@ function PowerCatLib:MakeWindow(WindowConfig)
 	PowerCatLib.Folder = WindowConfig.ConfigFolder
 	PowerCatLib.SaveCfg = WindowConfig.SaveConfig
 
-	if WindowConfig.SaveConfig then
-		if not isfolder(WindowConfig.ConfigFolder) then
+	if WindowConfig.SaveConfig  then
+		if not isfolder(WindowConfig.ConfigFolder)  then
 			makefolder(WindowConfig.ConfigFolder)
 		end	
 	end
@@ -635,7 +635,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 		WindowStuff
 	}), "Main")
 
-	if WindowConfig.ShowIcon then
+	if WindowConfig.ShowIcon  then
 		WindowName.Position = UDim2.new(0, 50, 0, -24)
 		local WindowIcon = SetProps(MakeElement("Image", WindowConfig.Icon), {
 			Size = UDim2.new(0, 20, 0, 20),
@@ -658,13 +658,13 @@ function PowerCatLib:MakeWindow(WindowConfig)
 	end)
 
 	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
+		if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden  then
 			MainWindow.Visible = true
 		end
 	end)
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
-		if Minimized then
+		if Minimized  then
 			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 615, 0, 344)}):Play()
 			MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
 			wait(.02)
@@ -716,7 +716,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 		LoadSequenceText:Destroy()
 	end 
 
-	if WindowConfig.IntroEnabled then
+	if WindowConfig.IntroEnabled  then
 		LoadSequence()
 	end	
 
@@ -747,7 +747,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 			}), "Text")
 		})
 
-		if GetIcon(TabConfig.Icon) ~= nil then
+		if GetIcon(TabConfig.Icon) ~= nil  then
 			TabFrame.Ico.Image = GetIcon(TabConfig.Icon)
 		end	
 
@@ -766,7 +766,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 			Container.CanvasSize = UDim2.new(0, 0, 0, Container.UIListLayout.AbsoluteContentSize.Y + 30)
 		end)
 
-		if FirstTab then
+		if FirstTab  then
 			FirstTab = false
 			TabFrame.Ico.ImageTransparency = 0
 			TabFrame.Title.TextTransparency = 0
@@ -776,14 +776,14 @@ function PowerCatLib:MakeWindow(WindowConfig)
 
 		AddConnection(TabFrame.MouseButton1Click, function()
 			for _, Tab in next, TabHolder:GetChildren() do
-				if Tab:IsA("TextButton") then
+				if Tab:IsA("TextButton")  then
 					Tab.Title.Font = Enum.Font.GothamSemibold
 					TweenService:Create(Tab.Ico, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0.4}):Play()
 					TweenService:Create(Tab.Title, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
 				end    
 			end
 			for _, ItemContainer in next, MainWindow:GetChildren() do
-				if ItemContainer.Name == "ItemContainer" then
+				if ItemContainer.Name == "ItemContainer"  then
 					ItemContainer.Visible = false
 				end    
 			end  
@@ -986,7 +986,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 					TweenService:Create(ToggleFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(PowerCatLib.Themes[PowerCatLib.SelectedTheme].Second.R * 255 + 6, PowerCatLib.Themes[PowerCatLib.SelectedTheme].Second.G * 255 + 6, PowerCatLib.Themes[PowerCatLib.SelectedTheme].Second.B * 255 + 6)}):Play()
 				end)
 
-				if ToggleConfig.Flag then
+				if ToggleConfig.Flag  then
 					PowerCatLib.Flags[ToggleConfig.Flag] = Toggle
 				end	
 				return Toggle
@@ -1054,18 +1054,18 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				}), "Second")
 
 				SliderBar.InputBegan:Connect(function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then 
+					if Input.UserInputType == Enum.UserInputType.MouseButton1  then 
 						Dragging = true 
 					end 
 				end)
 				SliderBar.InputEnded:Connect(function(Input) 
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then 
+					if Input.UserInputType == Enum.UserInputType.MouseButton1  then 
 						Dragging = false 
 					end 
 				end)
 
 				UserInputService.InputChanged:Connect(function(Input)
-					if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then 
+					if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement  then 
 						local SizeScale = math.clamp((Input.Position.X - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X, 0, 1)
 						Slider:Set(SliderConfig.Min + ((SliderConfig.Max - SliderConfig.Min) * SizeScale)) 
 						SaveCfg(game.GameId)
@@ -1081,7 +1081,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end      
 
 				Slider:Set(Slider.Value)
-				if SliderConfig.Flag then				
+				if SliderConfig.Flag  then				
 					PowerCatLib.Flags[SliderConfig.Flag] = Slider
 				end
 				return Slider
@@ -1098,7 +1098,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				local Dropdown = {Value = DropdownConfig.Default, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save}
 				local MaxElements = 5
 
-				if not table.find(Dropdown.Options, Dropdown.Value) then
+				if not table.find(Dropdown.Options, Dropdown.Value)  then
 					Dropdown.Value = "..."
 				end
 
@@ -1189,7 +1189,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end	
 
 				function Dropdown:Refresh(Options, Delete)
-					if Delete then
+					if Delete  then
 						for _,v in pairs(Dropdown.Buttons) do
 							v:Destroy()
 						end    
@@ -1201,7 +1201,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end  
 
 				function Dropdown:Set(Value)
-					if not table.find(Dropdown.Options, Value) then
+					if not table.find(Dropdown.Options, Value)  then
 						Dropdown.Value = "..."
 						DropdownFrame.F.Selected.Text = Dropdown.Value
 						for _, v in pairs(Dropdown.Buttons) do
@@ -1227,7 +1227,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 					Dropdown.Toggled = not Dropdown.Toggled
 					DropdownFrame.F.Line.Visible = Dropdown.Toggled
 					TweenService:Create(DropdownFrame.F.Ico,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Rotation = Dropdown.Toggled and 180 or 0}):Play()
-					if #Dropdown.Options > MaxElements then
+					if #Dropdown.Options > MaxElements  then
 						TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, 38 + (MaxElements * 28)) or UDim2.new(1, 0, 0, 38)}):Play()
 					else
 						TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, DropdownList.AbsoluteContentSize.Y + 38) or UDim2.new(1, 0, 0, 38)}):Play()
@@ -1236,7 +1236,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 
 				Dropdown:Refresh(Dropdown.Options, false)
 				Dropdown:Set(Dropdown.Value)
-				if DropdownConfig.Flag then				
+				if DropdownConfig.Flag  then				
 					PowerCatLib.Flags[DropdownConfig.Flag] = Dropdown
 				end
 				return Dropdown
@@ -1291,31 +1291,31 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end)
 
 				AddConnection(Click.InputEnded, function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-						if Bind.Binding then return end
+					if Input.UserInputType == Enum.UserInputType.MouseButton1  then
+						if Bind.Binding  then return end
 						Bind.Binding = true
 						BindBox.Value.Text = ""
 					end
 				end)
 
 				AddConnection(UserInputService.InputBegan, function(Input)
-					if UserInputService:GetFocusedTextBox() then return end
-					if (Input.KeyCode.Name == Bind.Value or Input.UserInputType.Name == Bind.Value) and not Bind.Binding then
-						if BindConfig.Hold then
+					if UserInputService:GetFocusedTextBox()  then return end
+					if (Input.KeyCode.Name == Bind.Value or Input.UserInputType.Name == Bind.Value) and not Bind.Binding  then
+						if BindConfig.Hold  then
 							Holding = true
 							BindConfig.Callback(Holding)
 						else
 							BindConfig.Callback()
 						end
-					elseif Bind.Binding then
+					elseif Bind.Binding  then
 						local Key
 						pcall(function()
-							if not CheckKey(BlacklistedKeys, Input.KeyCode) then
+							if not CheckKey(BlacklistedKeys, Input.KeyCode)  then
 								Key = Input.KeyCode
 							end
 						end)
 						pcall(function()
-							if CheckKey(WhitelistedMouse, Input.UserInputType) and not Key then
+							if CheckKey(WhitelistedMouse, Input.UserInputType) and not Key  then
 								Key = Input.UserInputType
 							end
 						end)
@@ -1326,8 +1326,8 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end)
 
 				AddConnection(UserInputService.InputEnded, function(Input)
-					if Input.KeyCode.Name == Bind.Value or Input.UserInputType.Name == Bind.Value then
-						if BindConfig.Hold and Holding then
+					if Input.KeyCode.Name == Bind.Value or Input.UserInputType.Name == Bind.Value  then
+						if BindConfig.Hold and Holding  then
 							Holding = false
 							BindConfig.Callback(Holding)
 						end
@@ -1358,7 +1358,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end
 
 				Bind:Set(BindConfig.Default)
-				if BindConfig.Flag then				
+				if BindConfig.Flag  then				
 					PowerCatLib.Flags[BindConfig.Flag] = Bind
 				end
 				return Bind
@@ -1418,7 +1418,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 
 				AddConnection(TextboxActual.FocusLost, function()
 					TextboxConfig.Callback(TextboxActual.Text)
-					if TextboxConfig.TextDisappear then
+					if TextboxConfig.TextDisappear  then
 						TextboxActual.Text = ""
 					end	
 				end)
@@ -1567,8 +1567,8 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				ColorV = 1 - (math.clamp(ColorSelection.AbsolutePosition.Y - Color.AbsolutePosition.Y, 0, Color.AbsoluteSize.Y) / Color.AbsoluteSize.Y)
 
 				AddConnection(Color.InputBegan, function(input)
-					if input.UserInputType == Enum.UserInputType.MouseButton1 then
-						if ColorInput then
+					if input.UserInputType == Enum.UserInputType.MouseButton1  then
+						if ColorInput  then
 							ColorInput:Disconnect()
 						end
 						ColorInput = AddConnection(RunService.RenderStepped, function()
@@ -1583,16 +1583,16 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end)
 
 				AddConnection(Color.InputEnded, function(input)
-					if input.UserInputType == Enum.UserInputType.MouseButton1 then
-						if ColorInput then
+					if input.UserInputType == Enum.UserInputType.MouseButton1  then
+						if ColorInput  then
 							ColorInput:Disconnect()
 						end
 					end
 				end)
 
 				AddConnection(Hue.InputBegan, function(input)
-					if input.UserInputType == Enum.UserInputType.MouseButton1 then
-						if HueInput then
+					if input.UserInputType == Enum.UserInputType.MouseButton1  then
+						if HueInput  then
 							HueInput:Disconnect()
 						end;
 
@@ -1608,8 +1608,8 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end)
 
 				AddConnection(Hue.InputEnded, function(input)
-					if input.UserInputType == Enum.UserInputType.MouseButton1 then
-						if HueInput then
+					if input.UserInputType == Enum.UserInputType.MouseButton1  then
+						if HueInput  then
 							HueInput:Disconnect()
 						end
 					end
@@ -1622,7 +1622,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 				end
 
 				Colorpicker:Set(Colorpicker.Value)
-				if ColorpickerConfig.Flag then				
+				if ColorpickerConfig.Flag  then				
 					PowerCatLib.Flags[ColorpickerConfig.Flag] = Colorpicker
 				end
 				return Colorpicker
@@ -1670,7 +1670,7 @@ function PowerCatLib:MakeWindow(WindowConfig)
 			ElementFunction[i] = v 
 		end
 
-		if TabConfig.PremiumOnly then
+		if TabConfig.PremiumOnly  then
 			for i, v in next, ElementFunction do
 				ElementFunction[i] = function() end
 			end    
