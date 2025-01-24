@@ -10,8 +10,8 @@ function UILibrary:CreateMainUI(title)
     -- Main Frame
     local MainFrame = Instance.new("Frame")
     MainFrame.Name = "MainFrame"
-    MainFrame.Size = UDim2.new(0, 400, 0, 300)
-    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -150)
+    MainFrame.Size = UDim2.new(0.8, 0, 0.6, 0) -- ปรับให้เหมาะกับขนาดหน้าจอมือถือ
+    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     MainFrame.BorderSizePixel = 0
@@ -21,13 +21,15 @@ function UILibrary:CreateMainUI(title)
     UICorner.CornerRadius = UDim.new(0, 10)
     UICorner.Parent = MainFrame
 
-    -- Draggable functionality
+    -- Dragging functionality
     local dragging = false
     local dragStart
     local startPos
 
+    local UserInputService = game:GetService("UserInputService")
+
     MainFrame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
             startPos = MainFrame.Position
@@ -40,7 +42,7 @@ function UILibrary:CreateMainUI(title)
     end)
 
     MainFrame.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
             local delta = input.Position - dragStart
             MainFrame.Position = UDim2.new(
                 startPos.X.Scale,
@@ -51,25 +53,26 @@ function UILibrary:CreateMainUI(title)
         end
     end)
 
-    -- Toggle Visibility Button
-    local ToggleButton = Instance.new("ImageButton")
-    ToggleButton.Name = "ToggleButton"
-    ToggleButton.Size = UDim2.new(0, 50, 0, 50)
-    ToggleButton.Position = UDim2.new(0.05, 0, 0.05, 0)
-    ToggleButton.BackgroundTransparency = 1
-    ToggleButton.Image = "rbxassetid://12345678" -- Replace with your image asset ID
-    ToggleButton.Parent = ScreenGui
+    -- Title Bar
+    local TitleBar = Instance.new("TextLabel")
+    TitleBar.Name = "TitleBar"
+    TitleBar.Size = UDim2.new(1, 0, 0, 50)
+    TitleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    TitleBar.Text = title or "Executor"
+    TitleBar.Font = Enum.Font.GothamBold
+    TitleBar.TextSize = 18
+    TitleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleBar.Parent = MainFrame
 
-    local isVisible = true
-    ToggleButton.MouseButton1Click:Connect(function()
-        isVisible = not isVisible
-        MainFrame.Visible = isVisible
-    end)
+    local UICornerTitle = Instance.new("UICorner")
+    UICornerTitle.CornerRadius = UDim.new(0, 10)
+    UICornerTitle.Parent = TitleBar
 
-    -- Scrolling Frame
+    -- Scrolling Frame for Content
     local ScrollingFrame = Instance.new("ScrollingFrame")
-    ScrollingFrame.Size = UDim2.new(1, -20, 1, -60)
-    ScrollingFrame.Position = UDim2.new(0, 10, 0, 50)
+    ScrollingFrame.Name = "ScrollingFrame"
+    ScrollingFrame.Size = UDim2.new(1, 0, 1, -50)
+    ScrollingFrame.Position = UDim2.new(0, 0, 0, 50)
     ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
     ScrollingFrame.ScrollBarThickness = 5
     ScrollingFrame.BackgroundTransparency = 1
@@ -89,70 +92,6 @@ function UILibrary:CreateMainUI(title)
         MainFrame = MainFrame,
         ScrollingFrame = ScrollingFrame
     }
-end
-
-function UILibrary:AddButton(parent, buttonText, callback)
-    local Button = Instance.new("TextButton")
-    Button.Size = UDim2.new(1, 0, 0, 40)
-    Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Button.Text = buttonText
-    Button.Font = Enum.Font.Gotham
-    Button.TextSize = 16
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Parent = parent
-
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 5)
-    UICorner.Parent = Button
-
-    Button.MouseButton1Click:Connect(function()
-        if callback then
-            callback()
-        end
-    end)
-end
-
-function UILibrary:AddDropdown(parent, options, callback)
-    local Dropdown = Instance.new("TextButton")
-    Dropdown.Size = UDim2.new(1, 0, 0, 40)
-    Dropdown.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Dropdown.Text = "Select an option"
-    Dropdown.Font = Enum.Font.Gotham
-    Dropdown.TextSize = 16
-    Dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Dropdown.Parent = parent
-
-    local DropdownFrame = Instance.new("Frame")
-    DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
-    DropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    DropdownFrame.ClipsDescendants = true
-    DropdownFrame.Parent = parent
-
-    local UIListLayout = Instance.new("UIListLayout")
-    UIListLayout.Parent = DropdownFrame
-
-    for _, option in pairs(options) do
-        local OptionButton = Instance.new("TextButton")
-        OptionButton.Size = UDim2.new(1, 0, 0, 30)
-        OptionButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        OptionButton.Text = option
-        OptionButton.Font = Enum.Font.Gotham
-        OptionButton.TextSize = 14
-        OptionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        OptionButton.Parent = DropdownFrame
-
-        OptionButton.MouseButton1Click:Connect(function()
-            Dropdown.Text = option
-            DropdownFrame.Size = UDim2.new(1, 0, 0, 0)
-            if callback then
-                callback(option)
-            end
-        end)
-    end
-
-    Dropdown.MouseButton1Click:Connect(function()
-        DropdownFrame.Size = UDim2.new(1, 0, 0, #options * 30)
-    end)
 end
 
 return UILibrary
