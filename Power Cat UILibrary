@@ -1726,3 +1726,95 @@ function PowerCatLib:Destroy()
 end
 
 return PowerCatLib
+-- Circle Button for Toggle
+local toggleButton = Instance.new("ImageButton")
+toggleButton.Name = "ToggleButton"
+toggleButton.Size = UDim2.new(0, 50, 0, 50)
+toggleButton.Position = UDim2.new(0, 10, 0, 10)
+toggleButton.Image = "rbxassetid://112463062542593" -- Replace with your image asset ID
+toggleButton.BackgroundTransparency = 1
+toggleButton.Parent = game.CoreGui
+
+-- Draggable Function for Toggle Button
+local draggingToggle, dragStartToggle, startPosToggle
+
+toggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingToggle = true
+        dragStartToggle = input.Position
+        startPosToggle = toggleButton.Position
+    end
+end)
+
+toggleButton.InputChanged:Connect(function(input)
+    if draggingToggle and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStartToggle
+        toggleButton.Position = UDim2.new(startPosToggle.X.Scale, startPosToggle.X.Offset + delta.X, startPosToggle.Y.Scale, startPosToggle.Y.Offset + delta.Y)
+    end
+end)
+
+toggleButton.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingToggle = false
+    end
+end)
+
+-- Main UI Setup
+local mainUI = Instance.new("Frame")
+mainUI.Name = "MainUI"
+mainUI.Size = UDim2.new(0, 300, 0, 400)
+mainUI.Position = UDim2.new(0.5, -150, 0.5, -200)
+mainUI.BackgroundTransparency = 0.65 -- 35% transparent
+mainUI.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+mainUI.BorderSizePixel = 0
+mainUI.Parent = game.CoreGui
+
+-- Logo in Main UI
+local logo = Instance.new("ImageLabel")
+logo.Name = "Logo"
+logo.Size = UDim2.new(0, 100, 0, 100)
+logo.Position = UDim2.new(0.5, -50, 0, 10)
+logo.Image = "rbxassetid://112463062542593" -- Replace with your logo asset ID
+logo.BackgroundTransparency = 1
+logo.Parent = mainUI
+
+-- Draggable Main UI
+local draggingMain, dragStartMain, startPosMain
+
+mainUI.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingMain = true
+        dragStartMain = input.Position
+        startPosMain = mainUI.Position
+    end
+end)
+
+mainUI.InputChanged:Connect(function(input)
+    if draggingMain and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStartMain
+        mainUI.Position = UDim2.new(startPosMain.X.Scale, startPosMain.X.Offset + delta.X, startPosMain.Y.Scale, startPosMain.Y.Offset + delta.Y)
+    end
+end)
+
+mainUI.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingMain = false
+    end
+end)
+
+-- Theme Changer
+local themes = {
+    Default = {Main = Color3.fromRGB(25, 25, 25)},
+    Light = {Main = Color3.fromRGB(240, 240, 240)}
+}
+
+local currentTheme = "Default"
+
+local function applyTheme(themeName)
+    if themes[themeName] then
+        mainUI.BackgroundColor3 = themes[themeName].Main
+        currentTheme = themeName
+    end
+end
+
+applyTheme("Default") -- Set initial theme
