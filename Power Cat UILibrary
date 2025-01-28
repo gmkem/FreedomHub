@@ -1725,7 +1725,7 @@ function PowerCatLib:Destroy()
 	PowerCat:Destroy()
 end
 
-return PowerCatLib
+
 -- Circle Button for Toggle
 local toggleButton = Instance.new("ImageButton")
 toggleButton.Name = "ToggleButton"
@@ -1818,3 +1818,5 @@ local function applyTheme(themeName)
 end
 
 applyTheme("Default") -- Set initial theme
+
+return PowerCatLib
