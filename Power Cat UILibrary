@@ -1731,7 +1731,7 @@ local toggleButton = Instance.new("ImageButton")
 toggleButton.Name = "ToggleButton"
 toggleButton.Size = UDim2.new(0, 50, 0, 50)
 toggleButton.Position = UDim2.new(0, 10, 0, 10)
-toggleButton.Image = "rbxassetid://YOUR_CIRCLE_IMAGE_ID" -- Replace with your image asset ID
+toggleButton.Image = "rbxassetid://112463062542593" -- Replace with your image asset ID
 toggleButton.BackgroundTransparency = 1
 toggleButton.Parent = game.CoreGui
 
@@ -1774,7 +1774,7 @@ local logo = Instance.new("ImageLabel")
 logo.Name = "Logo"
 logo.Size = UDim2.new(0, 100, 0, 100)
 logo.Position = UDim2.new(0.5, -50, 0, 10)
-logo.Image = "rbxassetid://YOUR_LOGO_IMAGE_ID" -- Replace with your logo asset ID
+logo.Image = "rbxassetid://112463062542593" -- Replace with your logo asset ID
 logo.BackgroundTransparency = 1
 logo.Parent = mainUI
 
