@@ -1,180 +1,135 @@
--- UI Library Full Script
-local UI = {}
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Create Button Function
-function UI:CreateButton(parent, text, callback)
-    local button = Instance.new("TextButton")
-    button.Text = text
-    button.Size = UDim2.new(0, 200, 0, 50)
-    button.BackgroundColor3 = Color3.fromRGB(255, 182, 193)
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Font = Enum.Font.Gotham
-    button.TextSize = 24
-    button.Parent = parent
+-- รีโมทอีเวนต์
+local scooterRemote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1NoMoto1rVehicle1s")
+local carRemote = ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Player1sCa1r")
 
-    button.MouseButton1Click:Connect(callback)
-    return button
-end
+-- UI
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
--- Create Panel Function
-function UI:CreatePanel(parent)
-    local panel = Instance.new("Frame")
-    panel.Size = UDim2.new(0, 400, 0, 600)
-    panel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    panel.BackgroundTransparency = 0.3
-    panel.Parent = parent
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = playerGui
 
-    -- Add UIListLayout for automatic position management
-    local layout = Instance.new("UIListLayout")
-    layout.FillDirection = Enum.FillDirection.Vertical
-    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    layout.VerticalAlignment = Enum.VerticalAlignment.Center
-    layout.Padding = UDim.new(0, 10)
-    layout.Parent = panel
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 320, 0, 200)
+frame.Position = UDim2.new(0.5, -160, 0.4, -100)
+frame.BackgroundColor3 = Color3.fromRGB(255, 192, 203) -- สีชมพูพาสเทล
+frame.BackgroundTransparency = 0.4 -- ทำให้โปร่งใส
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
 
-    return panel
-end
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 35)
+title.BackgroundColor3 = Color3.fromRGB(255, 160, 180) -- สีชมพูอ่อน
+title.BackgroundTransparency = 0.3 -- โปร่งใส
+title.Text = "♡ Boombox Player ♡"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+title.Parent = frame
 
--- Create Tabs
-function UI:CreateTabs(parent, tabs, callback)
-    local tabContainer = Instance.new("Frame")
-    tabContainer.Size = UDim2.new(0, 400, 0, 50)
-    tabContainer.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    tabContainer.Parent = parent
+local textBox = Instance.new("TextBox")
+textBox.Size = UDim2.new(1, -20, 0, 30)
+textBox.Position = UDim2.new(0, 10, 0, 45)
+textBox.PlaceholderText = "Enter Music ID ♫"
+textBox.Text = ""
+textBox.Font = Enum.Font.Gotham
+textBox.TextSize = 16
+textBox.TextColor3 = Color3.new(1, 1, 1)
+textBox.BackgroundColor3 = Color3.fromRGB(255, 182, 193)
+textBox.BackgroundTransparency = 0.3
+textBox.Parent = frame
 
-    local tabLayout = Instance.new("UIListLayout")
-    tabLayout.FillDirection = Enum.FillDirection.Horizontal
-    tabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    tabLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    tabLayout.Parent = tabContainer
+local playButton = Instance.new("TextButton")
+playButton.Size = UDim2.new(1, -20, 0, 30)
+playButton.Position = UDim2.new(0, 10, 0, 85)
+playButton.Text = "► Play"
+playButton.Font = Enum.Font.GothamBold
+playButton.TextSize = 18
+playButton.TextColor3 = Color3.new(1, 1, 1)
+playButton.BackgroundColor3 = Color3.fromRGB(255, 105, 180)
+playButton.BackgroundTransparency = 0.2
+playButton.Parent = frame
 
-    local currentTab
-    for _, tabName in ipairs(tabs) do
-        local tabButton = Instance.new("TextButton")
-        tabButton.Text = tabName
-        tabButton.Size = UDim2.new(0, 100, 0, 40)
-        tabButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        tabButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-        tabButton.Font = Enum.Font.Gotham
-        tabButton.TextSize = 20
-        tabButton.Parent = tabContainer
+local scooterActive = true
+local carActive = false
 
-        tabButton.MouseButton1Click:Connect(function()
-            if currentTab then
-                currentTab.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            end
-            tabButton.BackgroundColor3 = Color3.fromRGB(200, 200, 255)
-            currentTab = tabButton
-            callback(tabName)
-        end)
-    end
+local scooterButton = Instance.new("TextButton")
+scooterButton.Size = UDim2.new(0.5, -15, 0, 30)
+scooterButton.Position = UDim2.new(0, 10, 0, 130)
+scooterButton.Text = "Scooter: ON"
+scooterButton.Font = Enum.Font.Gotham
+scooterButton.TextSize = 16
+scooterButton.TextColor3 = Color3.new(1, 1, 1)
+scooterButton.BackgroundColor3 = Color3.fromRGB(255, 140, 180)
+scooterButton.BackgroundTransparency = 0.3
+scooterButton.Parent = frame
 
-    return tabContainer
-end
+local carButton = Instance.new("TextButton")
+carButton.Size = UDim2.new(0.5, -15, 0, 30)
+carButton.Position = UDim2.new(0.5, 5, 0, 130)
+carButton.Text = "Car: OFF"
+carButton.Font = Enum.Font.Gotham
+carButton.TextSize = 16
+carButton.TextColor3 = Color3.new(1, 1, 1)
+carButton.BackgroundColor3 = Color3.fromRGB(200, 100, 150)
+carButton.BackgroundTransparency = 0.5
+carButton.Parent = frame
 
--- Create Notification
-function UI:CreateNotification(parent, text, duration)
-    local notification = Instance.new("Frame")
-    notification.Size = UDim2.new(0, 400, 0, 50)
-    notification.Position = UDim2.new(0.5, -200, 0, -100)
-    notification.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    notification.BackgroundTransparency = 0.8
-    notification.Parent = parent
+-- ปุ่มเปิด/ปิด UI (มุมขวาบน)
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 80, 0, 30)
+toggleButton.Position = UDim2.new(1, -90, 0, 10)
+toggleButton.AnchorPoint = Vector2.new(1, 0) -- ยึดมุมขวาบน
+toggleButton.Text = "🎵 Boombox"
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 14
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.BackgroundColor3 = Color3.fromRGB(255, 160, 180)
+toggleButton.BackgroundTransparency = 0.2
+toggleButton.Parent = screenGui
 
-    local message = Instance.new("TextLabel")
-    message.Text = text
-    message.Size = UDim2.new(1, 0, 1, 0)
-    message.BackgroundTransparency = 1
-    message.TextColor3 = Color3.fromRGB(0, 0, 0)
-    message.Font = Enum.Font.Gotham
-    message.TextSize = 20
-    message.Parent = notification
+frame.Visible = false
 
-    -- Animation to show the notification
-    notification.Position = UDim2.new(0.5, -200, 0, 10)
-    game:GetService("TweenService"):Create(notification, TweenInfo.new(0.5), {Position = UDim2.new(0.5, -200, 0, 80)}):Play()
+toggleButton.MouseButton1Click:Connect(function()
+    frame.Visible = not frame.Visible
+end)
 
-    -- Close animation
-    wait(duration)
-    game:GetService("TweenService"):Create(notification, TweenInfo.new(0.5), {Position = UDim2.new(0.5, -200, 0, -100)}):Play()
-    wait(0.5)
-    notification:Destroy()
-end
-
--- Create Loading Screen
-function UI:CreateLoadingScreen(parent)
-    local loadingScreen = Instance.new("Frame")
-    loadingScreen.Size = UDim2.new(1, 0, 1, 0)
-    loadingScreen.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    loadingScreen.BackgroundTransparency = 0.5
-    loadingScreen.Parent = parent
-
-    local loadingText = Instance.new("TextLabel")
-    loadingText.Text = "Loading..."
-    loadingText.Size = UDim2.new(0, 200, 0, 50)
-    loadingText.Position = UDim2.new(0.5, -100, 0.5, -25)
-    loadingText.BackgroundTransparency = 1
-    loadingText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    loadingText.Font = Enum.Font.Gotham
-    loadingText.TextSize = 30
-    loadingText.Parent = loadingScreen
-
-    return loadingScreen
-end
-
--- Theme Manager
-function UI:SetTheme(theme)
-    -- Set UI components based on theme
-    if theme == "Light" then
-        return Color3.fromRGB(255, 255, 255)
-    elseif theme == "Dark" then
-        return Color3.fromRGB(30, 30, 30)
-    elseif theme == "Pink" then
-        return Color3.fromRGB(255, 182, 193)
+-- เปลี่ยนสถานะ Scooter
+scooterButton.MouseButton1Click:Connect(function()
+    scooterActive = not scooterActive
+    if scooterActive then
+        scooterButton.Text = "Scooter: ON"
+        scooterButton.BackgroundColor3 = Color3.fromRGB(255, 140, 180)
     else
-        return Color3.fromRGB(240, 240, 240)
+        scooterButton.Text = "Scooter: OFF"
+        scooterButton.BackgroundColor3 = Color3.fromRGB(200, 100, 150)
     end
-end
+end)
 
--- Function to Close UI with Animation
-function UI:CloseUI(uiElement)
-    game:GetService("TweenService"):Create(uiElement, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
-    wait(0.5)
-    uiElement:Destroy()
-end
-
--- Function to Open UI with Animation
-function UI:OpenUI(parent, uiElement)
-    uiElement.Parent = parent
-    uiElement.BackgroundTransparency = 1
-    game:GetService("TweenService"):Create(uiElement, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
-end
-
--- Handle Multiple Windows
-function UI:CreateMultipleWindows(parent, windows)
-    local windowContainer = Instance.new("Frame")
-    windowContainer.Size = UDim2.new(0, 600, 0, 400)
-    windowContainer.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    windowContainer.Parent = parent
-
-    -- Automatically generate buttons for each window
-    for _, window in ipairs(windows) do
-        local windowButton = Instance.new("TextButton")
-        windowButton.Text = window.name
-        windowButton.Size = UDim2.new(0, 100, 0, 40)
-        windowButton.BackgroundColor3 = Color3.fromRGB(200, 200, 255)
-        windowButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        windowButton.Font = Enum.Font.Gotham
-        windowButton.TextSize = 18
-        windowButton.Parent = windowContainer
-
-        windowButton.MouseButton1Click:Connect(function()
-            -- Handle window activation
-            print("Switching to window: " .. window.name)
-        end)
+-- เปลี่ยนสถานะ Car
+carButton.MouseButton1Click:Connect(function()
+    carActive = not carActive
+    if carActive then
+        carButton.Text = "Car: ON"
+        carButton.BackgroundColor3 = Color3.fromRGB(255, 140, 180)
+    else
+        carButton.Text = "Car: OFF"
+        carButton.BackgroundColor3 = Color3.fromRGB(200, 100, 150)
     end
+end)
 
-    return windowContainer
-end
-
-return UI
+-- ฟังก์ชันส่งเพลงไปยังเซิร์ฟเวอร์
+playButton.MouseButton1Click:Connect(function()
+    local musicID = textBox.Text
+    if musicID ~= "" then
+        if scooterActive then
+            scooterRemote:FireServer("PickingScooterMusicText", musicID)
+        end
+        if carActive then
+            carRemote:FireServer("PickingCarMusicText", musicID)
+        end
+    end
+end)
