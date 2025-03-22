@@ -1,65 +1,146 @@
 local GuiLibrary = {}
 
-function GuiLibrary:CreateWindow(title)
-    local ScreenGui = Instance.new("ScreenGui")
-    local Frame = Instance.new("Frame")
-    local UIStroke = Instance.new("UIStroke")
-    local TitleLabel = Instance.new("TextLabel")
-    local OutputBox = Instance.new("TextLabel")
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
 
-    -- GUI Properties
-    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    
-    Frame.Size = UDim2.new(0, 300, 0, 150)
-    Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    Frame.Parent = ScreenGui
-    Frame.ClipsDescendants = true
-    
-    UIStroke.Parent = Frame
+function GuiLibrary:CreateWindow(title)
+    local Player = Players.LocalPlayer
+    local PlayerGui = Player:WaitForChild("PlayerGui")
+
+    -- สร้าง ScreenGui
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = PlayerGui
+
+    -- ปุ่มเปิด/ปิด GUI
+    local OpenButton = Instance.new("TextButton")
+    OpenButton.Size = UDim2.new(0, 120, 0, 40)
+    OpenButton.Position = UDim2.new(0, 20, 0.5, -20)
+    OpenButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    OpenButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    OpenButton.Text = "Open GUI"
+    OpenButton.Font = Enum.Font.GothamBold
+    OpenButton.TextSize = 16
+    OpenButton.Parent = ScreenGui
+
+    -- สร้าง GUI หลัก
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 320, 0, 250)
+    MainFrame.Position = UDim2.new(0.5, -160, 0.5, -125)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    MainFrame.Visible = false
+    MainFrame.Parent = ScreenGui
+
+    local UIStroke = Instance.new("UIStroke")
     UIStroke.Thickness = 2
     UIStroke.Color = Color3.fromRGB(0, 255, 255)
-    
-    TitleLabel.Parent = Frame
+    UIStroke.Parent = MainFrame
+
+    local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Size = UDim2.new(1, 0, 0, 30)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = title
     TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.TextSize = 18
-    
-    OutputBox.Parent = Frame
-    OutputBox.Size = UDim2.new(1, -20, 0, 50)
-    OutputBox.Position = UDim2.new(0, 10, 0, 40)
-    OutputBox.BackgroundTransparency = 1
-    OutputBox.TextColor3 = Color3.fromRGB(200, 255, 200)
-    OutputBox.Text = "Output: Waiting..."
-    OutputBox.Font = Enum.Font.Gotham
-    OutputBox.TextSize = 16
+    TitleLabel.Parent = MainFrame
+
+    -- ปุ่มปิด GUI
+    local CloseButton = Instance.new("TextButton")
+    CloseButton.Size = UDim2.new(0, 80, 0, 30)
+    CloseButton.Position = UDim2.new(1, -90, 0, 5)
+    CloseButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+    CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseButton.Text = "Close"
+    CloseButton.Font = Enum.Font.GothamBold
+    CloseButton.TextSize = 14
+    CloseButton.Parent = MainFrame
+
+    -- เฟรม Scroll สำหรับ Output
+    local ScrollFrame = Instance.new("ScrollingFrame")
+    ScrollFrame.Size = UDim2.new(1, -20, 1, -50)
+    ScrollFrame.Position = UDim2.new(0, 10, 0, 40)
+    ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+    ScrollFrame.ScrollBarThickness = 5
+    ScrollFrame.Parent = MainFrame
+
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.Parent = ScrollFrame
+    UIListLayout.Padding = UDim.new(0, 5)
+
+    -- ปุ่มเปิด/ปิด GUI
+    OpenButton.MouseButton1Click:Connect(function()
+        MainFrame.Visible = not MainFrame.Visible
+    end)
+
+    CloseButton.MouseButton1Click:Connect(function()
+        MainFrame.Visible = false
+    end)
+
+    -- ระบบแจ้งเตือน
+    local function SendNotification(title, text, duration)
+        StarterGui:SetCore("SendNotification", {
+            Title = title;
+            Text = text;
+            Duration = duration or 3;
+        })
+    end
+
+    -- ฟังก์ชันเพิ่ม Output
+    local function AddOutput(name)
+        local OutputBox = Instance.new("TextLabel")
+        OutputBox.Size = UDim2.new(1, 0, 0, 30)
+        OutputBox.BackgroundTransparency = 1
+        OutputBox.TextColor3 = Color3.fromRGB(200, 255, 200)
+        OutputBox.Text = name .. ": Waiting..."
+        OutputBox.Font = Enum.Font.Gotham
+        OutputBox.TextSize = 16
+        OutputBox.Parent = ScrollFrame
+        
+        ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 10)
+
+        return function(value)
+            OutputBox.Text = name .. ": " .. value
+        end
+    end
 
     return {
-        SetOutput = function(self, text)
-            OutputBox.Text = "Output: " .. text
-        end,
+        AddOutput = AddOutput,
         AddToggle = function(self, text, callback)
             local ToggleButton = Instance.new("TextButton")
             local toggleState = false
 
-            ToggleButton.Parent = Frame
-            ToggleButton.Size = UDim2.new(0, 100, 0, 30)
-            ToggleButton.Position = UDim2.new(0.5, -50, 1, -40)
+            ToggleButton.Size = UDim2.new(1, 0, 0, 30)
             ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
             ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
             ToggleButton.Text = text .. " [OFF]"
             ToggleButton.Font = Enum.Font.GothamBold
             ToggleButton.TextSize = 14
+            ToggleButton.Parent = ScrollFrame
+            
+            ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 10)
 
             ToggleButton.MouseButton1Click:Connect(function()
                 toggleState = not toggleState
                 ToggleButton.Text = text .. (toggleState and " [ON]" or " [OFF]")
                 callback(toggleState)
             end)
-        end
+        end,
+        AddButton = function(self, text, callback)
+            local Button = Instance.new("TextButton")
+
+            Button.Size = UDim2.new(1, 0, 0, 30)
+            Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Button.Text = text
+            Button.Font = Enum.Font.GothamBold
+            Button.TextSize = 14
+            Button.Parent = ScrollFrame
+            
+            ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 10)
+
+            Button.MouseButton1Click:Connect(callback)
+        end,
+        Notify = SendNotification
     }
 end
 
