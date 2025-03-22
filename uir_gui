@@ -1,0 +1,66 @@
+local GuiLibrary = {}
+
+function GuiLibrary:CreateWindow(title)
+    local ScreenGui = Instance.new("ScreenGui")
+    local Frame = Instance.new("Frame")
+    local UIStroke = Instance.new("UIStroke")
+    local TitleLabel = Instance.new("TextLabel")
+    local OutputBox = Instance.new("TextLabel")
+
+    -- GUI Properties
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    
+    Frame.Size = UDim2.new(0, 300, 0, 150)
+    Frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Frame.Parent = ScreenGui
+    Frame.ClipsDescendants = true
+    
+    UIStroke.Parent = Frame
+    UIStroke.Thickness = 2
+    UIStroke.Color = Color3.fromRGB(0, 255, 255)
+    
+    TitleLabel.Parent = Frame
+    TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = title
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.TextSize = 18
+    
+    OutputBox.Parent = Frame
+    OutputBox.Size = UDim2.new(1, -20, 0, 50)
+    OutputBox.Position = UDim2.new(0, 10, 0, 40)
+    OutputBox.BackgroundTransparency = 1
+    OutputBox.TextColor3 = Color3.fromRGB(200, 255, 200)
+    OutputBox.Text = "Output: Waiting..."
+    OutputBox.Font = Enum.Font.Gotham
+    OutputBox.TextSize = 16
+
+    return {
+        SetOutput = function(self, text)
+            OutputBox.Text = "Output: " .. text
+        end,
+        AddToggle = function(self, text, callback)
+            local ToggleButton = Instance.new("TextButton")
+            local toggleState = false
+
+            ToggleButton.Parent = Frame
+            ToggleButton.Size = UDim2.new(0, 100, 0, 30)
+            ToggleButton.Position = UDim2.new(0.5, -50, 1, -40)
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            ToggleButton.Text = text .. " [OFF]"
+            ToggleButton.Font = Enum.Font.GothamBold
+            ToggleButton.TextSize = 14
+
+            ToggleButton.MouseButton1Click:Connect(function()
+                toggleState = not toggleState
+                ToggleButton.Text = text .. (toggleState and " [ON]" or " [OFF]")
+                callback(toggleState)
+            end)
+        end
+    }
+end
+
+return GuiLibrary
