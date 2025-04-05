@@ -51,13 +51,16 @@ function MobileUILibrary.new(name)
         self.toggleButton.Text = self.mainFrame.Visible and "ปิดเมนู" or "เปิดเมนู"
     end)
 
-    -- เพิ่ม Tabs Bar
-    self.tabsBar = Instance.new("Frame")
+    -- เพิ่ม ScrollingFrame สำหรับ Tabs Bar เพื่อให้เลื่อนได้เมื่อหมวดหมู่เยอะ
+    self.tabsBar = Instance.new("ScrollingFrame")
     self.tabsBar.Size = UDim2.new(1, 0, 0, 50)
     self.tabsBar.BackgroundColor3 = Color3.fromRGB(255, 195, 215)  -- สีชมพูเข้มขึ้น
     self.tabsBar.BorderSizePixel = 1
     self.tabsBar.BorderColor3 = Color3.fromRGB(255, 128, 191)
     self.tabsBar.Parent = self.mainFrame
+    self.tabsBar.HorizontalScrollBarPosition = Enum.ScrollingDirection.Left
+    self.tabsBar.CanvasSize = UDim2.new(0, 0, 0, 0)
+    self.tabsBar.ScrollBarThickness = 6
 
     -- มุมมน
     Instance.new("UICorner", self.tabsBar).CornerRadius = UDim.new(0, 16)
@@ -188,9 +191,11 @@ function MobileUILibrary:AddToggleToTab(tabName, labelText, default, callback)
         local state = default
 
         toggleBtn.MouseButton1Click:Connect(function()
+            
             state = not state
             toggleBtn.BackgroundColor3 = state and Color3.fromRGB(255, 128, 191) or Color3.fromRGB(230, 230, 230)
-            circle:TweenPosition(state and UDim2.new(1, -28, 0.5, -12) or UDim2.new(0, 2, 0.5, -12), "Out", "Quad", 0.2, true)
+            circle.Position = state and UDim2.new(1, -28, 0.5, -12) or UDim2.new(0, 2, 0.5, -12)
+            -- เรียก callback เมื่อมีการเปลี่ยนแปลง
             callback(state)
         end)
     end
