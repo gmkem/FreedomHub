@@ -1,155 +1,199 @@
+-- สร้าง UI Library ที่ใช้ซ้ำได้
 local MobileUILibrary = {}
 MobileUILibrary.__index = MobileUILibrary
 
--- สร้าง UI ใหม่
-function MobileUILibrary.new(title)
+-- ฟังก์ชันสร้าง UI ใหม่
+function MobileUILibrary.new(name)
     local self = setmetatable({}, MobileUILibrary)
-
-    -- สร้าง GUI
+    
+    self.name = name or "Mobile UI"  -- ตั้งชื่อให้ UI ถ้าไม่ได้ตั้งชื่อ
+    
+    -- สร้าง ScreenGui
     self.screenGui = Instance.new("ScreenGui")
-    self.screenGui.Name = "MobileUI"
-    self.screenGui.Parent = game.Players.LocalPlayer.PlayerGui
+    self.screenGui.Name = self.name
+    self.screenGui.ResetOnSpawn = false
+    self.screenGui.IgnoreGuiInset = true
+    self.screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+    -- Main Frame
     self.mainFrame = Instance.new("Frame")
-    self.mainFrame.Size = UDim2.new(0, 400, 0, 500)
-    self.mainFrame.Position = UDim2.new(0.5, -200, 0.5, -250)
-    self.mainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    self.mainFrame.BackgroundTransparency = 0.1
+    self.mainFrame.Size = UDim2.new(0.8, 0, 0.65, 0)
+    self.mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    self.mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    self.mainFrame.BackgroundColor3 = Color3.fromRGB(255, 230, 245)  -- สีชมพูอ่อน
     self.mainFrame.BorderSizePixel = 2
-    self.mainFrame.BorderColor3 = Color3.fromRGB(255, 128, 191)
+    self.mainFrame.BorderColor3 = Color3.fromRGB(255, 128, 191)  -- ขอบชมพูเข้ม
+    self.mainFrame.Visible = false
+    self.mainFrame.Active = true
+    self.mainFrame.Draggable = true
     self.mainFrame.Parent = self.screenGui
 
-    -- ส่วนหมวดหมู่ (Tabs) ที่สามารถเลื่อนซ้ายขวา
-    self.tabsBar = Instance.new("ScrollingFrame")
-    self.tabsBar.Size = UDim2.new(1, 0, 0, 50)
-    self.tabsBar.BackgroundColor3 = Color3.fromRGB(255, 195, 215)  -- สีชมพูเข้มขึ้น
-    self.tabsBar.BorderSizePixel = 1
-    self.tabsBar.BorderColor3 = Color3.fromRGB(255, 128, 191)
-    self.tabsBar.ScrollBarThickness = 8
-    self.tabsBar.ScrollDirection = Enum.ScrollingDirection.XY  -- เลื่อนซ้ายขวาได้
-    self.tabsBar.ClipsDescendants = false  -- ไม่ให้ตัดข้อความหากมันเกิน
-    self.tabsBar.Parent = self.mainFrame
+    -- มุมมน
+    Instance.new("UICorner", self.mainFrame).CornerRadius = UDim.new(0, 16)
 
-    -- UIListLayout สำหรับการจัดวาง Tabs
-    self.tabsLayout = Instance.new("UIListLayout", self.tabsBar)
-    self.tabsLayout.FillDirection = Enum.FillDirection.Horizontal
-    self.tabsLayout.Padding = UDim.new(0, 6)
-    self.tabsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
-
-    -- ปรับ CanvasSize ให้เหมาะสมกับขนาดของ Tabs
-    self.tabsLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        self.tabsBar.CanvasSize = UDim2.new(0, self.tabsLayout.AbsoluteContentSize.X + 10, 0, 0)
-    end)
-
-    -- สร้างปุ่ม Toggle
+    -- เพิ่มปุ่ม Toggle เพื่อเปิด/ปิดเมนู
     self.toggleButton = Instance.new("TextButton")
-    self.toggleButton.Size = UDim2.new(0, 100, 0, 30)
-    self.toggleButton.Position = UDim2.new(1, -110, 0, 10)
+    self.toggleButton.Size = UDim2.new(0, 150, 0, 45)
+    self.toggleButton.Position = UDim2.new(0.5, 0, 0.05, 0)
+    self.toggleButton.AnchorPoint = Vector2.new(0.5, 0)
+    self.toggleButton.BackgroundColor3 = Color3.fromRGB(255, 165, 180)  -- สีชมพูหวาน
     self.toggleButton.Text = "เปิดเมนู"
-    self.toggleButton.BackgroundColor3 = Color3.fromRGB(255, 128, 191)
-    self.toggleButton.BorderSizePixel = 0
-    self.toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    self.toggleButton.Font = Enum.Font.Gotham
-    self.toggleButton.Parent = self.mainFrame
+    self.toggleButton.TextSize = 20
+    self.toggleButton.TextColor3 = Color3.new(1,1,1)
+    self.toggleButton.Active = true
+    self.toggleButton.Draggable = true
+    self.toggleButton.Parent = self.screenGui
 
-    -- สร้างส่วนเนื้อหาหมวดหมู่
-    self.contentFrame = Instance.new("Frame")
-    self.contentFrame.Size = UDim2.new(1, 0, 1, -60)
-    self.contentFrame.Position = UDim2.new(0, 0, 0, 60)
-    self.contentFrame.BackgroundColor3 = Color3.fromRGB(255, 240, 255)
-    self.contentFrame.BackgroundTransparency = 0.8
-    self.contentFrame.Parent = self.mainFrame
+    Instance.new("UICorner", self.toggleButton).CornerRadius = UDim.new(0, 12)
 
-    -- UIListLayout สำหรับเนื้อหาหมวดหมู่
-    self.contentLayout = Instance.new("UIListLayout", self.contentFrame)
-    self.contentLayout.FillDirection = Enum.FillDirection.Vertical
-    self.contentLayout.Padding = UDim.new(0, 8)
-
-    -- ฟังก์ชันการเปิด/ปิดเมนู
     self.toggleButton.MouseButton1Click:Connect(function()
         self.mainFrame.Visible = not self.mainFrame.Visible
         self.toggleButton.Text = self.mainFrame.Visible and "ปิดเมนู" or "เปิดเมนู"
     end)
 
+    -- เพิ่ม Tabs Bar
+    self.tabsBar = Instance.new("Frame")
+    self.tabsBar.Size = UDim2.new(1, 0, 0, 50)
+    self.tabsBar.BackgroundColor3 = Color3.fromRGB(255, 195, 215)  -- สีชมพูเข้มขึ้น
+    self.tabsBar.BorderSizePixel = 1
+    self.tabsBar.BorderColor3 = Color3.fromRGB(255, 128, 191)
+    self.tabsBar.Parent = self.mainFrame
+
+    -- มุมมน
+    Instance.new("UICorner", self.tabsBar).CornerRadius = UDim.new(0, 16)
+
+    self.tabsLayout = Instance.new("UIListLayout", self.tabsBar)
+    self.tabsLayout.FillDirection = Enum.FillDirection.Horizontal
+    self.tabsLayout.Padding = UDim.new(0, 6)
+    self.tabsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+
+    -- เพิ่ม Content Frame
+    self.contentFrame = Instance.new("Frame")
+    self.contentFrame.Size = UDim2.new(1, -20, 1, -70)
+    self.contentFrame.Position = UDim2.new(0, 10, 0, 60)
+    self.contentFrame.BackgroundTransparency = 1
+    self.contentFrame.ClipsDescendants = true
+    self.contentFrame.Parent = self.mainFrame
+
     return self
 end
 
 -- ฟังก์ชันเพิ่ม Tab ใหม่
-function MobileUILibrary:AddTab(tabName)
+function MobileUILibrary:AddTab(name)
     local tabButton = Instance.new("TextButton")
-    tabButton.Size = UDim2.new(0, 100, 0, 40)
-    tabButton.Text = tabName
-    tabButton.BackgroundColor3 = Color3.fromRGB(255, 128, 191)
-    tabButton.BorderSizePixel = 1
-    tabButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+    tabButton.Size = UDim2.new(0, 120, 1, 0)
+    tabButton.BackgroundColor3 = Color3.fromRGB(255, 195, 215)  -- สีชมพูเข้ม
     tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    tabButton.Font = Enum.Font.Gotham
+    tabButton.Text = name
+    tabButton.TextSize = 18
     tabButton.Parent = self.tabsBar
+    Instance.new("UICorner", tabButton).CornerRadius = UDim.new(0, 12)
+
+    -- เพิ่มขอบแบ่งหมวดหมู่
+    tabButton.BorderSizePixel = 1
+    tabButton.BorderColor3 = Color3.fromRGB(255, 128, 191)
+
+    local tabContent = Instance.new("ScrollingFrame")
+    tabContent.Size = UDim2.new(1, 0, 1, 0)
+    tabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
+    tabContent.ScrollBarThickness = 6
+    tabContent.BackgroundTransparency = 1
+    tabContent.Visible = false
+    tabContent.Parent = self.contentFrame
+
+    local layout = Instance.new("UIListLayout", tabContent)
+    layout.Padding = UDim.new(0, 8)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        tabContent.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+    end)
 
     tabButton.MouseButton1Click:Connect(function()
-        -- ทำให้ Tab ที่เลือกแสดงผลและยกเลิกการแสดงของ Tab อื่นๆ
-        for _, button in pairs(self.tabsBar:GetChildren()) do
-            if button:IsA("TextButton") then
-                button.BackgroundColor3 = Color3.fromRGB(255, 128, 191)
-            end
+        for _, t in pairs(self.tabs) do
+            t.Frame.Visible = false
         end
-        tabButton.BackgroundColor3 = Color3.fromRGB(255, 195, 215)  -- สีเมื่อเลือก
+        tabContent.Visible = true
     end)
+
+    -- จัดเก็บ tab
+    self.tabs = self.tabs or {}
+    self.tabs[name] = { Button = tabButton, Frame = tabContent }
+
+    return self.tabs[name]
 end
 
 -- ฟังก์ชันเพิ่มปุ่มใน Tab
-function MobileUILibrary:AddButtonToTab(tabName, buttonName, callback)
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0, 200, 0, 40)
-    button.Text = buttonName
-    button.BackgroundColor3 = Color3.fromRGB(255, 128, 191)
-    button.BorderSizePixel = 1
-    button.BorderColor3 = Color3.fromRGB(255, 255, 255)
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Font = Enum.Font.Gotham
-    button.Parent = self.contentFrame
+function MobileUILibrary:AddButtonToTab(tabName, buttonText, callback)
+    local tab = self.tabs[tabName]
+    if tab then
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1, -10, 0, 45)
+        btn.Text = buttonText
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.TextSize = 20
+        btn.BackgroundColor3 = Color3.fromRGB(255, 170, 185)  -- สีชมพูหวานอีกระดับ
+        btn.Parent = tab.Frame
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 12)
 
-    button.MouseButton1Click:Connect(function()
-        callback()
-    end)
+        -- เพิ่มขอบ
+        btn.BorderSizePixel = 1
+        btn.BorderColor3 = Color3.fromRGB(255, 128, 191)
+
+        btn.MouseButton1Click:Connect(callback)
+    end
 end
 
 -- ฟังก์ชันเพิ่ม Toggle ใน Tab
-function MobileUILibrary:AddToggleToTab(tabName, toggleName, defaultState, callback)
-    local toggleFrame = Instance.new("Frame")
-    toggleFrame.Size = UDim2.new(0, 200, 0, 40)
-    toggleFrame.BackgroundTransparency = 1
-    toggleFrame.Parent = self.contentFrame
+function MobileUILibrary:AddToggleToTab(tabName, labelText, default, callback)
+    local tab = self.tabs[tabName]
+    if tab then
+        local holder = Instance.new("Frame")
+        holder.Size = UDim2.new(1, -10, 0, 50)
+        holder.BackgroundColor3 = Color3.fromRGB(255, 170, 185)  -- สีชมพูอ่อน
+        holder.Parent = tab.Frame
+        holder.BackgroundTransparency = 0
+        holder.BorderSizePixel = 0
 
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0, 150, 0, 40)
-    label.Text = toggleName
-    label.BackgroundTransparency = 1
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.Font = Enum.Font.Gotham
-    label.TextSize = 14
-    label.Parent = toggleFrame
+        local uiCorner = Instance.new("UICorner", holder)
+        uiCorner.CornerRadius = UDim.new(0, 12)
 
-    local toggleBtn = Instance.new("TextButton")
-    toggleBtn.Size = UDim2.new(0, 40, 0, 20)
-    toggleBtn.Position = UDim2.new(1, -50, 0, 10)
-    toggleBtn.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
-    toggleBtn.Text = ""
-    toggleBtn.BorderSizePixel = 0
-    toggleBtn.Parent = toggleFrame
+        local label = Instance.new("TextLabel")
+        label.Text = labelText
+        label.Size = UDim2.new(0.7, 0, 1, 0)
+        label.BackgroundTransparency = 1
+        label.TextColor3 = Color3.new(1, 1, 1)
+        label.Font = Enum.Font.Gotham
+        label.TextSize = 18
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.Position = UDim2.new(0.05, 0, 0, 0)
+        label.Parent = holder
 
-    local circle = Instance.new("Frame")
-    circle.Size = UDim2.new(0, 18, 0, 18)
-    circle.Position = defaultState and UDim2.new(1, -28, 0.5, -12) or UDim2.new(0, 2, 0.5, -12)
-    circle.BackgroundColor3 = Color3.fromRGB(255, 128, 191)
-    circle.BorderSizePixel = 0
-    circle.Parent = toggleBtn
+        local toggleBtn = Instance.new("TextButton")
+        toggleBtn.Size = UDim2.new(0, 60, 0, 30)
+        toggleBtn.Position = UDim2.new(1, -70, 0.5, -15)
+        toggleBtn.BackgroundColor3 = default and Color3.fromRGB(255, 128, 191) or Color3.fromRGB(230, 230, 230)
+        toggleBtn.Text = ""
+        toggleBtn.Parent = holder
 
-    toggleBtn.MouseButton1Click:Connect(function()
-        defaultState = not defaultState
-        circle.Position = defaultState and UDim2.new(1, -28, 0.5, -12) or UDim2.new(0, 2, 0.5, -12)
-        callback(defaultState)
-    end)
+        Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
+
+        local circle = Instance.new("Frame")
+        circle.Size = UDim2.new(0, 24, 0, 24)
+        circle.Position = default and UDim2.new(1, -28, 0.5, -12) or UDim2.new(0, 2, 0.5, -12)
+        circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        circle.Parent = toggleBtn
+        Instance.new("UICorner", circle).CornerRadius = UDim.new(1, 0)
+
+        local state = default
+
+        toggleBtn.MouseButton1Click:Connect(function()
+            state = not state
+            toggleBtn.BackgroundColor3 = state and Color3.fromRGB(255, 128, 191) or Color3.fromRGB(230, 230, 230)
+            circle:TweenPosition(state and UDim2.new(1, -28, 0.5, -12) or UDim2.new(0, 2, 0.5, -12), "Out", "Quad", 0.2, true)
+            callback(state)
+        end)
+    end
 end
 
 return MobileUILibrary
