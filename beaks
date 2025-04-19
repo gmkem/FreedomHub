@@ -57,24 +57,25 @@ fpsLabel.BackgroundTransparency = 0.4
 fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
 fpsLabel.TextStrokeTransparency = 0.6
+fpsLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+fpsLabel.BorderSizePixel = 0
 fpsLabel.Font = Enum.Font.Code
 fpsLabel.TextSize = 16
 fpsLabel.Text = "FPS: ..."
-fpsLabel.BorderSizePixel = 0
-fpsLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
 fpsLabel.Parent = gui
 
-local lastUpdate = tick()
+local accumulatedTime = 0
 local frameCount = 0
 
-RunService.RenderStepped:Connect(function()
+RunService.RenderStepped:Connect(function(deltaTime)
+	accumulatedTime += deltaTime
 	frameCount += 1
-	local now = tick()
-	if now - lastUpdate >= 0.5 then
-		local fps = math.floor(frameCount / (now - lastUpdate))
-		fpsLabel.Text = "FPS: " .. tostring(fps)
+	
+	if accumulatedTime >= 1 then
+		local fps = math.floor(frameCount / accumulatedTime)
+		fpsLabel.Text = "FPS: " .. fps
+		accumulatedTime = 0
 		frameCount = 0
-		lastUpdate = now
 	end
 end)
 
