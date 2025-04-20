@@ -52,7 +52,7 @@ local function scaleModels()
 			if primary and not model:GetAttribute("Scaled") then
 				model:SetAttribute("Scaled", true)
 				pcall(function()
-					model:ScaleTo(5)
+					model:ScaleTo(3)
 				end)
 			end
 		end
