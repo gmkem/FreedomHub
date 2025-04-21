@@ -1,0 +1,10 @@
+task.wait() until game:IsLoaded()
+
+local GameId = game.GameId
+
+local GameList = {
+      [7095682825] = "Beaks.lua" 
+}
+
+local scriptUrl = GameList[GameId] if scriptUrl then loadstring(game:HttpGet("https://raw.githubusercontent.com/gmkem/FreedomHub/refs/heads/main/%s"):format(scriptUrl)))() else warn("ไม่พบสคริปต์สำหรับแมพนี้") end
+
