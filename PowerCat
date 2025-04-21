@@ -9,9 +9,9 @@ local function notify(title, text, duration)
 end
 
 local Maps = {
-    [123456789] = function()
-        notify("Beaks", "กำลังโหลดสคริปต์สำหรับ Map 1", 4)
-        loadstring(game:HttpGet("https://example.com/script1.lua"))()
+    [122678592501168] = function()
+        notify("Beaks", "กำลังโหลดสคริปต์สำหรับแมพ beaks", 4)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/gmkem/FreedomHub/refs/heads/main/beaks.lua"))()
     end,
   
 }
@@ -21,5 +21,5 @@ local placeId = game.PlaceId
 if Maps[placeId] then
     Maps[placeId]()
 else
-    notify("Beaks", "ไม่พบสคริปต์สำหรับแมพนี้", 3)
+    notify("❎", "ไม่พบสคริปต์สำหรับแมพนี้", 3)
 end
