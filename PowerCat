@@ -1,10 +1,25 @@
-task.wait() until game:IsLoaded()
+local StarterGui = game:GetService("StarterGui")
 
-local GameId = game.GameId
+local function notify(title, text, duration)
+    StarterGui:SetCore("SendNotification", {
+        Title = title,
+        Text = text,
+        Duration = duration or 5
+    })
+end
 
-local GameList = {
-      [7095682825] = "Beaks.lua" 
+local Maps = {
+    [123456789] = function()
+        notify("Beaks", "กำลังโหลดสคริปต์สำหรับ Map 1", 4)
+        loadstring(game:HttpGet("https://example.com/script1.lua"))()
+    end,
+  
 }
 
-local scriptUrl = GameList[GameId] if scriptUrl then loadstring(game:HttpGet("https://raw.githubusercontent.com/gmkem/FreedomHub/refs/heads/main/%s"):format(scriptUrl)))() else warn("ไม่พบสคริปต์สำหรับแมพนี้") end
+local placeId = game.PlaceId
 
+if Maps[placeId] then
+    Maps[placeId]()
+else
+    notify("Beaks", "ไม่พบสคริปต์สำหรับแมพนี้", 3)
+end
