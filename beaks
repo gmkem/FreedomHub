@@ -216,7 +216,7 @@ end)
 
 -- Toggle GUI Button
 local toggleButton = Instance.new("TextButton", ScreenGui)
-toggleButton.Text = "Toggle UI"
+toggleButton.Text = "Menu"
 toggleButton.Size = UDim2.new(0, 80, 0, 30)
 toggleButton.Position = UDim2.new(0.10, 0, 0.5, -50)
 toggleButton.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
