@@ -196,8 +196,8 @@ task.spawn(function()
 			local topbar = LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("Hud"):WaitForChild("Topbar")
 			local currency = topbar:FindFirstChild("Currency")
 			local level = topbar:FindFirstChild("Level")
-			if currency then CurrencyLabel.Text = "เงิน: " .. currency.Text end
-			if level then LevelLabel.Text = "เลเวล: " .. level.Text:gsub("<[^>]+>", "") end
+			if currency then CurrencyLabel.Text = "Bucks: " .. currency.Text end
+			if level then LevelLabel.Text ="" .. level.Text:gsub("<[^>]+>", "") end
 		end)
 		if not success then warn("อัปเดตเงิน/เลเวลผิดพลาด: ", err) end
 		task.wait(0.5)
