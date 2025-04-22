@@ -22,6 +22,9 @@ local GunList = require(ReplicatedStorage.Configuration.Guns)
 --// Variables
 local autoFarmEnabled = false
 local autoSellEnabled = false
+local autoBuyEnabled = false
+local selectedZone = "Beakwoods"
+local availableZones = { "Beakwoods", "Quill Lake", "Mount Beaks", "Deadlands" }
 local shootDelay = 0.2
 local currentTarget = nil
 local targetStartTime = 0
@@ -36,7 +39,7 @@ ScreenGui.ResetOnSpawn = false
 
 -- Main Frame
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.Size = UDim2.new(0, 260, 0, 200)
+MainFrame.Size = UDim2.new(0, 260, 0, 260)
 MainFrame.Position = UDim2.new(0.03, 0, 0.6, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
 MainFrame.BorderSizePixel = 0
@@ -88,7 +91,7 @@ end
 local function CreateInfoLabel()
 	local Info = Instance.new("TextLabel", MainFrame)
 	Info.Size = UDim2.new(1, -20, 0, 20)
-	Info.Position = UDim2.new(0, 10, 0, 105)
+	Info.Position = UDim2.new(0, 10, 0, 170)
 	Info.BackgroundTransparency = 1
 	Info.Font = Enum.Font.Gotham
 	Info.TextSize = 14
@@ -120,6 +123,86 @@ local AutoSellToggle = ToggleTemplate("Auto Sell", function(val)
 end)
 AutoSellToggle.Position = UDim2.new(0, 10, 0, 45)
 AutoSellToggle.Parent = MainFrame
+
+local AutoBuyToggle = ToggleTemplate("Auto Buy Darts", function(val)
+    autoBuyEnabled = val
+end)
+AutoBuyToggle.Position = UDim2.new(0, 10, 0, 80) -- ปรับตาม layout GUI ที่มีอยู่
+AutoBuyToggle.Parent = MainFrame
+
+local ZoneDropdown = Instance.new("TextButton", MainFrame)
+ZoneDropdown.Size = UDim2.new(0.9, 0, 0, 25)
+ZoneDropdown.Position = UDim2.new(0.05, 0, 0, 115)
+ZoneDropdown.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+ZoneDropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+ZoneDropdown.TextSize = 12
+ZoneDropdown.Font = Enum.Font.Gotham
+ZoneDropdown.Text = "Zone: " .. selectedZone
+Instance.new("UICorner", ZoneDropdown).CornerRadius = UDim.new(0, 6)
+
+ZoneDropdown.MouseButton1Click:Connect(function()
+    local currentIndex = table.find(availableZones, selectedZone) or 1
+    local nextIndex = (currentIndex % #availableZones) + 1
+    selectedZone = availableZones[nextIndex]
+    ZoneDropdown.Text = "Zone: " .. selectedZone
+end)
+
+-- กำหนดรายการโซนที่สามารถเลือกได้
+local availableZones = {"Beakwoods", "Quill Lake", "Mount Beaks", "Deadlands"}
+local selectedZone = availableZones[1]  -- กำหนดค่าเริ่มต้นให้เลือก "Beakwoods"
+
+-- สร้างปุ่ม Teleport
+local TeleportButton = Instance.new("TextButton", MainFrame)
+TeleportButton.Size = UDim2.new(0.9, 0, 0, 25)
+TeleportButton.Position = UDim2.new(0.05, 0, 0, 145)
+TeleportButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+TeleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TeleportButton.Font = Enum.Font.GothamBold
+TeleportButton.TextSize = 12
+TeleportButton.Text = "Teleport to " .. selectedZone
+Instance.new("UICorner", TeleportButton).CornerRadius = UDim.new(0, 6)
+
+-- สร้าง Dropdown สำหรับเลือกโซน
+local ZoneDropdown = Instance.new("TextButton", MainFrame)
+ZoneDropdown.Size = UDim2.new(0.9, 0, 0, 25)
+ZoneDropdown.Position = UDim2.new(0.05, 0, 0, 115)
+ZoneDropdown.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+ZoneDropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+ZoneDropdown.Font = Enum.Font.GothamBold
+ZoneDropdown.TextSize = 12
+ZoneDropdown.Text = "Zone: " .. selectedZone
+Instance.new("UICorner", ZoneDropdown).CornerRadius = UDim.new(0, 6)
+
+-- ฟังก์ชันเปลี่ยนโซนใน Dropdown
+ZoneDropdown.MouseButton1Click:Connect(function()
+    local currentIndex = table.find(availableZones, selectedZone) or 1
+    local nextIndex = (currentIndex % #availableZones) + 1
+    selectedZone = availableZones[nextIndex]
+    ZoneDropdown.Text = "Zone: " .. selectedZone
+    TeleportButton.Text = "Teleport to " .. selectedZone
+end)
+
+-- Teleport to zone
+local function teleportToZone(zoneName)
+    local zones = {
+        ["Beakwoods"] = Vector3.new(528, 157, 72),
+        ["Quill Lake"] = Vector3.new(-67, 122, -366),
+        ["Mount Beaks"] = Vector3.new(89, 228, 399),
+        ["Deadlands"] = Vector3.new(-1350, 18, -1636)
+    }
+
+    local targetPosition = zones[zoneName]
+    if targetPosition then
+        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+    else
+        warn("ไม่พบโซน: " .. zoneName)
+    end
+end
+
+-- ฟังก์ชันเมื่อคลิกปุ่ม Teleport
+TeleportButton.MouseButton1Click:Connect(function()
+    teleportToZone(selectedZone)
+end)
 
 CreateCredits()
 local BirdInfoLabel = CreateInfoLabel()
@@ -171,10 +254,51 @@ task.spawn(function()
 	end
 end)
 
+local function autoBuyDarts(zone)
+    local success, err = pcall(function()
+        local dartRoll = ReplicatedStorage:WaitForChild("Util"):WaitForChild("Net"):WaitForChild("RF/DartRoll")
+        dartRoll:InvokeServer(zone)
+    end)
+    if not success then
+        warn("ซื้อดอกล้มเหลว: ", err)
+    end
+end
+
+local function teleportToZone(zoneName)
+    local zoneFolder = workspace:FindFirstChild("Regions")
+    if not zoneFolder then
+        warn("หา Regions ไม่เจอใน workspace")
+        return
+    end
+
+    local zone = zoneFolder:FindFirstChild(zoneName)
+    if not zone then
+        warn("หาโซนชื่อ '" .. zoneName .. "' ไม่เจอใน Regions")
+        return
+    end
+
+    local spawnsFolder = zone:FindFirstChild("Spawns")
+    if not spawnsFolder then
+        warn("หา Spawns ไม่เจอในโซน '" .. zoneName .. "'")
+        return
+    end
+
+    local spawnPoint = spawnsFolder:FindFirstChildWhichIsA("BasePart")
+    if not spawnPoint then
+        warn("ไม่มี BasePart ใน Spawns ของโซน '" .. zoneName .. "'")
+        return
+    end
+
+    local character = Players.LocalPlayer.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character:MoveTo(spawnPoint.Position + Vector3.new(0, 5, 0)) 
+    end
+end
+
 -- Currency + Level Labels
 local CurrencyLabel = Instance.new("TextLabel", MainFrame)
 CurrencyLabel.Size = UDim2.new(1, -20, 0, 18)
-CurrencyLabel.Position = UDim2.new(0, 10, 0, 130)
+CurrencyLabel.Position = UDim2.new(0, 10, 0, 190)
 CurrencyLabel.BackgroundTransparency = 1
 CurrencyLabel.Font = Enum.Font.Gotham
 CurrencyLabel.TextSize = 14
@@ -183,7 +307,7 @@ CurrencyLabel.Text = "Bucks: Loading..."
 
 local LevelLabel = Instance.new("TextLabel", MainFrame)
 LevelLabel.Size = UDim2.new(1, -20, 0, 18)
-LevelLabel.Position = UDim2.new(0, 10, 0, 150)
+LevelLabel.Position = UDim2.new(0, 10, 0, 210)
 LevelLabel.BackgroundTransparency = 1
 LevelLabel.Font = Enum.Font.Gotham
 LevelLabel.TextSize = 14
@@ -212,6 +336,16 @@ task.spawn(function()
 			SellInventory:InvokeServer("All")
 		end
 	end
+end)
+
+-- Auto Buy
+task.spawn(function()
+    while true do
+        task.wait(1)
+        if autoBuyEnabled then
+            autoBuyDarts(selectedZone)
+        end
+    end
 end)
 
 -- Toggle GUI Button
@@ -272,7 +406,8 @@ RunService.RenderStepped:Connect(function()
 	end
 end)
 
-for _, obj in ipairs(workspace:GetDescendants()) do
+-- ฟังก์ชันลดลายละเอียดวัตถุเดียว
+local function optimizeObject(obj)
 	if obj:IsA("BasePart") then
 		obj.Material = Enum.Material.Plastic
 		obj.Reflectance = 0
@@ -281,6 +416,19 @@ for _, obj in ipairs(workspace:GetDescendants()) do
 		obj:Destroy()
 	end
 end
+
+-- ลดลายละเอียดวัตถุที่มีอยู่แล้ว
+for _, obj in ipairs(workspace:GetDescendants()) do
+	optimizeObject(obj)
+end
+
+-- ลดลายละเอียดวัตถุใหม่ที่ถูกโหลดเข้ามาในภายหลัง
+workspace.DescendantAdded:Connect(function(obj)
+	-- รอให้วัตถุโหลดเสร็จ (ป้องกันกรณีวัตถุยังไม่พร้อมเปลี่ยนค่าทันที)
+	task.defer(function()
+		optimizeObject(obj)
+	end)
+end)
 
 for _, name in pairs({ "Beakwoods", "Deadlands", "Mount Beaks", "Quill Lake" }) do
 	local region = workspace:FindFirstChild("Regions") and workspace.Regions:FindFirstChild(name)
